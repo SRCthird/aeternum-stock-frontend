@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ProductProfile {
+  id               Int            @id @default(autoincrement())
+  lotNumber        String         @unique
+  description      String
+  productLocations ProductLocation[]
+  activityLogs     ActivityLog[]  
+}
+
+model Warehouse {
+  id               Int              @id @default(autoincrement())
+  name             String
+  inventorySpaces  InventorySpace[]
+}
+
+model InventorySpace {
+  id               Int              @id @default(autoincrement())
+  warehouseId      Int
+  maxUniqueLots    Int
+  productLocations ProductLocation[]
+  warehouse        Warehouse        @relation(fields: [warehouseId], references: [id])
+  activityLogsFrom ActivityLog[]    @relation("FromLocation") 
+  activityLogsTo   ActivityLog[]    @relation("ToLocation")  
+}
+
+model ProductLocation {
+  id               Int            @id @default(autoincrement())
+  productProfileId Int
+  inventorySpaceId Int
+  quantity         Int
+  createdAt        DateTime       @default(now())
+  createdBy        String
+  updatedAt        DateTime       @updatedAt
+  updatedBy        String
+
+  productProfile   ProductProfile @relation(fields: [productProfileId], references: [id])
+  inventorySpace   InventorySpace @relation(fields: [inventorySpaceId], references: [id])
+}
+
+model ActivityLog {
+  id               Int            @id @default(autoincrement())
+  fromLocationId   Int
+  toLocationId     Int
+  dateTime         DateTime       @default(now())
+  userId           String
+  productProfileId Int
+  quantityMoved    Int
+  comments         String?
+
+  fromLocation     InventorySpace @relation("FromLocation", fields: [fromLocationId], references: [id])
+  toLocation       InventorySpace @relation("ToLocation", fields: [toLocationId], references: [id])
+  productProfile   ProductProfile @relation(fields: [productProfileId], references: [id])
+}
+
