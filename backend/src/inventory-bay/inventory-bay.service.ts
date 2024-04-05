@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { CreateInventoryBayDto } from './dto/create-inventory-bay.dto';
-import { UpdateInventoryBayDto } from './dto/update-inventory-bay.dto';
+import { Prisma } from '@prisma/client';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class InventoryBayService {
-  create(createInventoryBayDto: CreateInventoryBayDto) {
-    return 'This action adds a new inventoryBay';
+
+  constructor(readonly databaseService: DatabaseService) { }
+
+  create(createDto: Prisma.InventoryBayCreateInput) {
+    return this.databaseService.inventoryBay.create({ data: createDto });
   }
 
   findAll() {
-    return `This action returns all inventoryBay`;
+    return this.databaseService.inventoryBay.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} inventoryBay`;
+    return this.databaseService.inventoryBay.findUnique({ where: { id } });
   }
 
-  update(id: number, updateInventoryBayDto: UpdateInventoryBayDto) {
-    return `This action updates a #${id} inventoryBay`;
+  update(id: number, updateDto: Prisma.InventoryBayUpdateInput) {
+    return this.databaseService.inventoryBay.update({ where: { id }, data: updateDto });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} inventoryBay`;
+    return this.databaseService.inventoryBay.delete({ where: { id } });
   }
 }

@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { CreateInventoryDto } from './dto/create-inventory.dto';
-import { UpdateInventoryDto } from './dto/update-inventory.dto';
+import { Prisma } from '@prisma/client';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class InventoryService {
-  create(createInventoryDto: CreateInventoryDto) {
-    return 'This action adds a new inventory';
+  
+  constructor(readonly databaseService: DatabaseService) {}
+
+  create(createDto: Prisma.InventoryCreateInput) {
+    return this.databaseService.inventory.create({ data: createDto });
   }
 
   findAll() {
-    return `This action returns all inventory`;
+    return this.databaseService.inventory.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} inventory`;
+    return this.databaseService.inventory.findUnique({ where: { id } });
   }
 
-  update(id: number, updateInventoryDto: UpdateInventoryDto) {
-    return `This action updates a #${id} inventory`;
+  update(id: number, updateDto: Prisma.InventoryUpdateInput) {
+    return this.databaseService.inventory.update({ where: { id }, data: updateDto });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} inventory`;
+    return this.databaseService.inventory.delete({ where: { id } });
   }
 }
