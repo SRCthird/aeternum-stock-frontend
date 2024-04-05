@@ -13,31 +13,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ProductProfile {
+model Product {
   id               Int            @id @default(autoincrement())
   lotNumber        String         @unique
   description      String
-  productLocations ProductLocation[]
-  activityLogs     ActivityLog[]  
+  productLocations Inventory[]
+  activityLogs     Log[]  
 }
 
 model Warehouse {
   id               Int              @id @default(autoincrement())
   name             String
-  inventorySpaces  InventorySpace[]
+  inventorySpaces  InventoryBay[]
 }
 
-model InventorySpace {
+model InventoryBay {
   id               Int              @id @default(autoincrement())
   warehouseId      Int
   maxUniqueLots    Int
-  productLocations ProductLocation[]
+  productLocations Inventory[]
   warehouse        Warehouse        @relation(fields: [warehouseId], references: [id])
-  activityLogsFrom ActivityLog[]    @relation("FromLocation") 
-  activityLogsTo   ActivityLog[]    @relation("ToLocation")  
+  activityLogsFrom Log[]    @relation("FromLocation") 
+  activityLogsTo   Log[]    @relation("ToLocation")  
 }
 
-model ProductLocation {
+model Inventory {
   id               Int            @id @default(autoincrement())
   productProfileId Int
   inventorySpaceId Int
@@ -47,11 +47,11 @@ model ProductLocation {
   updatedAt        DateTime       @updatedAt
   updatedBy        String
 
-  productProfile   ProductProfile @relation(fields: [productProfileId], references: [id])
-  inventorySpace   InventorySpace @relation(fields: [inventorySpaceId], references: [id])
+  productProfile   Product @relation(fields: [productProfileId], references: [id])
+  inventorySpace   InventoryBay @relation(fields: [inventorySpaceId], references: [id])
 }
 
-model ActivityLog {
+model Log {
   id               Int            @id @default(autoincrement())
   fromLocationId   Int
   toLocationId     Int
@@ -61,8 +61,8 @@ model ActivityLog {
   quantityMoved    Int
   comments         String?
 
-  fromLocation     InventorySpace @relation("FromLocation", fields: [fromLocationId], references: [id])
-  toLocation       InventorySpace @relation("ToLocation", fields: [toLocationId], references: [id])
-  productProfile   ProductProfile @relation(fields: [productProfileId], references: [id])
+  fromLocation     InventoryBay @relation("FromLocation", fields: [fromLocationId], references: [id])
+  toLocation       InventoryBay @relation("ToLocation", fields: [toLocationId], references: [id])
+  productProfile   Product @relation(fields: [productProfileId], references: [id])
 }
 
