@@ -4,10 +4,11 @@
     "module": "commonjs",
     "baseUrl": "./",
     "paths": {
-      "@src": ["src"],
-      "@components": ["src/components"],
-      "@config": ["src/config"],
-      "@screens": ["src/screens"]
+      "@src/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@config/*": ["src/config/*"],
+      "@screens/*": ["src/screens/*"],
+      "@styles": ["src/styles"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
