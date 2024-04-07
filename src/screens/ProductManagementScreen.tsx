@@ -1,9 +1,16 @@
-import { Text, View } from "react-native";
+import ProductList from "@components/ProductList";
+import Header from "@components/Header";
+import { View } from "react-native";
+import { styles } from "@src/styles";
 
 const ProductManagementScreen = () => {
+
   return (
-    <View>
-      <Text>Product Management Screen</Text>
+    <View style={styles.container}>
+      <Header title="" />
+      <View style={styles.body}>
+        <ProductList />
+      </View>
     </View>
   );
 }
