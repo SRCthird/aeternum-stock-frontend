@@ -8,6 +8,7 @@ import { InventoryBayModule } from './inventory-bay/inventory-bay.module';
 import { LogModule } from './log/log.module';
 import { ProductModule } from './product/product.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
+import { ProductLotModule } from './product-lot/product-lot.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { WarehouseModule } from './warehouse/warehouse.module';
     ProductModule,
     WarehouseModule,
     DatabaseModule,
+    ProductLotModule,
   ],
   controllers: [CoreController],
   providers: [CoreService],
