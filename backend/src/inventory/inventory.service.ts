@@ -22,10 +22,14 @@ export class InventoryService {
     const query: Prisma.InventoryFindManyArgs = {
       where: {
         productLot: {
-          lotNumber: logNumber
+          lotNumber: {
+            startsWith: logNumber 
+          } 
         },
         inventoryBay: {
-          name: inventoryBay
+          name: {
+            startsWith: inventoryBay
+          }
         },
         createdBy: createdBy,
         updatedBy: updatedBy,
