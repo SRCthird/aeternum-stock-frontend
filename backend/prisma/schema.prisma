@@ -35,7 +35,7 @@ model InventoryBay {
   id               Int              @id @default(autoincrement())
   name             String           @unique
   warehouseName    String
-  maxUniqueLots    Int
+  maxUniqueLots    Int              @default(1)
 
   warehouse        Warehouse        @relation(fields: [warehouseName], references: [name])
   inventoryRecords Inventory[]      
