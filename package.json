@@ -4,6 +4,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
+    "start:backend": "cd backend && npm run start:dev",
     "android": "expo start --android",
     "android:build": "expo build:android",
     "ios": "expo start --ios",
