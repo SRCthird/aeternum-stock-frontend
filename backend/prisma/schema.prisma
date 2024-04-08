@@ -8,8 +8,8 @@ datasource db {
 }
 
 model Product {
-  id               Int            @id @default(autoincrement())
-  name             String         @unique
+  id               Int             @id @default(autoincrement())
+  name             String          @unique
   description      String
   productLots      ProductLot[]
 }
@@ -18,56 +18,57 @@ model ProductLot {
   id                Int            @id @default(autoincrement())
   lotNumber         String         @unique
   internalReference String         @unique
-  productId         Int
-  product           Product        @relation(fields: [productId], references: [id])
+  productName       String
 
+  product           Product        @relation(fields: [productName], references: [name])
   inventoryRecords  Inventory[]
   activityLogs      Log[]  
 }
 
 model Warehouse {
   id               Int              @id @default(autoincrement())
-  name             String
+  name             String           @unique
   inventoryBays    InventoryBay[]
 }
 
 model InventoryBay {
   id               Int              @id @default(autoincrement())
-  warehouseId      Int
+  name             String           @unique
+  warehouseName    String
   maxUniqueLots    Int
-  warehouse        Warehouse        @relation(fields: [warehouseId], references: [id])
 
+  warehouse        Warehouse        @relation(fields: [warehouseName], references: [name])
   inventoryRecords Inventory[]      
   activityLogsFrom Log[]            @relation("FromLocation") 
   activityLogsTo   Log[]            @relation("ToLocation")  
 }
 
 model Inventory {
-  id               Int            @id @default(autoincrement())
-  productLotId     Int
-  inventoryBayId   Int
+  id               Int              @id @default(autoincrement())
+  lotNumber        String
+  location         String
   quantity         Int
-  createdAt        DateTime       @default(now())
+  createdAt        DateTime         @default(now())
   createdBy        String
-  updatedAt        DateTime       @updatedAt
+  updatedAt        DateTime         @updatedAt
   updatedBy        String
 
-  productLot       ProductLot     @relation(fields: [productLotId], references: [id])
-  inventoryBay     InventoryBay   @relation(fields: [inventoryBayId], references: [id])
+  productLot       ProductLot       @relation(fields: [lotNumber], references: [lotNumber])
+  inventoryBay     InventoryBay     @relation(fields: [location], references: [name])
 }
 
 model Log {
-  id               Int            @id @default(autoincrement())
-  fromLocationId   Int
-  toLocationId     Int
-  dateTime         DateTime       @default(now())
+  id               Int              @id @default(autoincrement())
+  fromLocation     String
+  toLocation       String
+  dateTime         DateTime         @default(now())
   userId           String
-  productLotId     Int
+  lotNumber        String
   quantityMoved    Int
-  comments         String?
+  comments         String           @default("")
 
-  fromLocation     InventoryBay @relation("FromLocation", fields: [fromLocationId], references: [id])
-  toLocation       InventoryBay @relation("ToLocation", fields: [toLocationId], references: [id])
-  productLot       ProductLot   @relation(fields: [productLotId], references: [id])
+  fromInventoryBay InventoryBay     @relation("FromLocation", fields: [fromLocation], references: [name])
+  toInventoryBay   InventoryBay     @relation("ToLocation", fields: [toLocation], references: [name])
+  productLot       ProductLot       @relation(fields: [lotNumber], references: [lotNumber])
 }
 
