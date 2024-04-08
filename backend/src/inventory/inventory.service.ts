@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -7,11 +7,33 @@ export class InventoryService {
 
   constructor(readonly databaseService: DatabaseService) { }
 
-  create(createDto: Prisma.InventoryCreateInput) {
+  async create(createDto: Prisma.InventoryCreateInput) {
+    const obj: Prisma.InventoryCreateInput & {lotNumber?: string, location?: string} = {...createDto};
+
+    const lot = await this.databaseService.productLot.findMany({
+      select: {
+        lotNumber: true,
+      }
+    });
+    const lotExist = lot.find((l) => l.lotNumber === obj.lotNumber);
+    if (!lotExist) {
+      throw new BadRequestException('Product lot does not exist');
+    }
+
+    const bay = await this.databaseService.inventoryBay.findMany({
+      select: {
+        name: true,
+      }
+    });
+    const bayExist = bay.find((b) => b.name === obj.location);
+    if (!bayExist) {
+      throw new BadRequestException('Inventory bay does not exist');
+    }
+
     return this.databaseService.inventory.create({ data: createDto });
   }
 
-  findAll(
+  async findAll(
     logNumber?: string,
     inventoryBay?: string,
     createdBy?: string,
@@ -45,15 +67,15 @@ export class InventoryService {
     return this.databaseService.inventory.findMany(query);
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.databaseService.inventory.findUnique({ where: { id } });
   }
 
-  update(id: number, updateDto: Prisma.InventoryUpdateInput) {
+  async update(id: number, updateDto: Prisma.InventoryUpdateInput) {
     return this.databaseService.inventory.update({ where: { id }, data: updateDto });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return this.databaseService.inventory.delete({ where: { id } });
   }
 }

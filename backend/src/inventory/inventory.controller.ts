@@ -3,18 +3,18 @@ import { InventoryService } from './inventory.service';
 import { Prisma } from '@prisma/client';
 
 /**
-model Inventory {
-  id             Int            @id @default(autoincrement())
-  lotNumber      String
-  inventoryBay   String
-  quantity       Int
-  createdAt      DateTime       @default(now())
-  createdBy      String
-  updatedAt      DateTime       @updatedAt
-  updatedBy      String
+*model Inventory {
+  id               Int              @id @default(autoincrement())
+  lotNumber        String
+  location         String
+  quantity         Int
+  createdAt        DateTime         @default(now())
+  createdBy        String
+  updatedAt        DateTime         @updatedAt
+  updatedBy        String
 
-  productLot     ProductLot     @relation(fields: [lotNumber], references: [lotNumber])
-  inventoryBay   InventoryBay   @relation(fields: [inventoryBay], references: [name])
+  productLot       ProductLot       @relation(fields: [lotNumber], references: [lotNumber])
+  inventoryBay     InventoryBay     @relation(fields: [location], references: [name])
 }
 */
 
