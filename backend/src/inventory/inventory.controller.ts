@@ -1,19 +1,51 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { Prisma } from '@prisma/client';
+
+/**
+model Inventory {
+  id             Int            @id @default(autoincrement())
+  lotNumber      String
+  inventoryBay   String
+  quantity       Int
+  createdAt      DateTime       @default(now())
+  createdBy      String
+  updatedAt      DateTime       @updatedAt
+  updatedBy      String
+
+  productLot     ProductLot     @relation(fields: [lotNumber], references: [lotNumber])
+  inventoryBay   InventoryBay   @relation(fields: [inventoryBay], references: [name])
+}
+*/
 
 @Controller('inventory')
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) { }
 
   @Post()
-  create(@Body() createDto: Prisma.InventoryCreateInput) {
+  create(
+    @Body() createDto: Prisma.InventoryCreateInput
+  ) {
     return this.inventoryService.create(createDto);
   }
 
   @Get()
-  findAll() {
-    return this.inventoryService.findAll();
+  findAll(
+    @Query('logNumber') logNumber?: string,
+    @Query('inventoryBay') inventoryBay?: string,
+    @Query('createdBy') createdBy?: string,
+    @Query('updatedBy') updatedBy?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string
+  ) {
+    return this.inventoryService.findAll(
+      logNumber,
+      inventoryBay,
+      createdBy,
+      updatedBy,
+      startDate,
+      endDate
+    );
   }
 
   @Get(':id')

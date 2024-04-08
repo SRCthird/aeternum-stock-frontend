@@ -4,15 +4,38 @@ import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class InventoryService {
-  
-  constructor(readonly databaseService: DatabaseService) {}
+
+  constructor(readonly databaseService: DatabaseService) { }
 
   create(createDto: Prisma.InventoryCreateInput) {
     return this.databaseService.inventory.create({ data: createDto });
   }
 
-  findAll() {
-    return this.databaseService.inventory.findMany();
+  findAll(
+    logNumber?: string,
+    inventoryBay?: string,
+    createdBy?: string,
+    updatedBy?: string,
+    startDate?: string,
+    endDate?: string
+  ) {
+    const query: Prisma.InventoryFindManyArgs = {
+      where: {
+        productLot: {
+          lotNumber: logNumber
+        },
+        inventoryBay: {
+          name: inventoryBay
+        },
+        createdBy: createdBy,
+        updatedBy: updatedBy,
+        createdAt: {
+          gte: new Date(startDate),
+          lte: new Date(endDate)
+        }
+      }
+    };
+    return this.databaseService.inventory.findMany(query);
   }
 
   findOne(id: number) {
