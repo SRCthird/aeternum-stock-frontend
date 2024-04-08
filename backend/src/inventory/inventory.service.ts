@@ -23,8 +23,8 @@ export class InventoryService {
       where: {
         productLot: {
           lotNumber: {
-            startsWith: logNumber 
-          } 
+            startsWith: logNumber
+          }
         },
         inventoryBay: {
           name: {
@@ -32,13 +32,16 @@ export class InventoryService {
           }
         },
         createdBy: createdBy,
-        updatedBy: updatedBy,
-        createdAt: {
-          gte: new Date(startDate),
-          lte: new Date(endDate)
-        }
+        updatedBy: updatedBy
       }
     };
+
+    if (startDate && endDate) {
+      query.where.createdAt = {
+        gte: new Date(startDate),
+        lte: new Date(endDate)
+      };
+    }
     return this.databaseService.inventory.findMany(query);
   }
 
