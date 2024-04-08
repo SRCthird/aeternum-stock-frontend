@@ -1,6 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Prisma } from '@prisma/client';
+
+/*
+model Product {
+  id               Int             @id @default(autoincrement())
+  name             String          @unique
+  description      String
+  productLots      ProductLot[]
+}
+*/
 
 @Controller('product')
 export class ProductController {
@@ -12,8 +21,14 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  findAll(
+    @Query('name') name?: string,
+    @Query('description') description?: string
+  ) {
+    return this.productService.findAll(
+      name,
+      description
+    );
   }
 
   @Get(':id')

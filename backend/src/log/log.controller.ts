@@ -1,6 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { LogService } from './log.service';
 import { Prisma } from '@prisma/client';
+
+/*
+model Log {
+  id               Int              @id @default(autoincrement())
+  fromLocation     String
+  toLocation       String
+  dateTime         DateTime         @default(now())
+  userId           String
+  lotNumber        String
+  quantityMoved    Int
+  comments         String           @default("")
+
+  fromInventoryBay InventoryBay     @relation("FromLocation", fields: [fromLocation], references: [name])
+  toInventoryBay   InventoryBay     @relation("ToLocation", fields: [toLocation], references: [name])
+  productLot       ProductLot       @relation(fields: [lotNumber], references: [lotNumber])
+}
+*/
 
 @Controller('log')
 export class LogController {
@@ -12,7 +29,14 @@ export class LogController {
   }
 
   @Get()
-  findAll() {
+  findAll(
+    @Query('fromLocation') fromLocation?: string,
+    @Query('toLocation') toLocation?: string,
+    @Query('userId') userId?: string,
+    @Query('lotNumber') lotNumber?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string
+  ) {
     return this.logService.findAll();
   }
 

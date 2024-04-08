@@ -11,8 +11,37 @@ export class LogService {
     return this.databaseService.log.create({ data: createDto });
   }
 
-  findAll() {
-    return this.databaseService.log.findMany();
+  findAll(
+    fromLocation?: string,
+    toLocation?: string,
+    userId?: string,
+    lotNumber?: string,
+    startDate?: string,
+    endDate?: string
+  ) {
+    const query: Prisma.LogFindManyArgs = {
+      where: {
+        fromLocation: {
+          startsWith: fromLocation
+        },
+        toLocation: {
+          startsWith: toLocation
+        },
+        userId: userId,
+        lotNumber: {
+          startsWith: lotNumber
+        },
+      }
+    };
+
+    if (startDate && endDate) {
+      query.where.dateTime = {
+        gte: new Date(startDate),
+        lte: new Date(endDate)
+      };
+    }
+
+    return this.databaseService.log.findMany(query);
   }
 
   findOne(id: number) {

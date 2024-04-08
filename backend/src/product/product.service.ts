@@ -11,8 +11,21 @@ export class ProductService {
     return this.databaseService.product.create({ data: createDto });
   }
 
-  findAll() {
-    return this.databaseService.product.findMany();
+  findAll(
+    name?: string,
+    description?: string
+  ) {
+    const query: Prisma.ProductFindManyArgs = {
+      where: {
+        name: {
+          startsWith: name,
+        },
+        description: {
+          contains: description,
+        }
+      }
+    };
+    return this.databaseService.product.findMany(query);
   }
 
   findOne(id: number) {

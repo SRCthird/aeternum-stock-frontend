@@ -1,6 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ProductLotService } from './product-lot.service';
 import { Prisma } from '@prisma/client';
+
+/*
+model ProductLot {
+  id                Int            @id @default(autoincrement())
+  lotNumber         String         @unique
+  internalReference String         @unique
+  productName       String
+
+  product           Product        @relation(fields: [productName], references: [name])
+  inventoryRecords  Inventory[]
+  activityLogs      Log[]  
+}
+*/
 
 @Controller('product-lot')
 export class ProductLotController {
@@ -12,8 +25,16 @@ export class ProductLotController {
   }
 
   @Get()
-  findAll() {
-    return this.productLotService.findAll();
+  findAll(
+    @Query('lotNumber') lotNumber?: string,
+    @Query('internalReference') internalReference?: string,
+    @Query('productName') productName?: string
+  ) {
+    return this.productLotService.findAll(
+      lotNumber,
+      internalReference,
+      productName
+    );
   }
 
   @Get(':id')

@@ -1,6 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { WarehouseService } from './warehouse.service';
 import { Prisma } from '@prisma/client';
+
+/*
+model Warehouse {
+  id               Int              @id @default(autoincrement())
+  name             String           @unique
+  inventoryBays    InventoryBay[]
+}
+*/
 
 @Controller('warehouse')
 export class WarehouseController {
@@ -12,8 +20,12 @@ export class WarehouseController {
   }
 
   @Get()
-  findAll() {
-    return this.warehouseService.findAll();
+  findAll(
+    @Query('name') name?: string,
+  ) {
+    return this.warehouseService.findAll(
+      name
+    );
   }
 
   @Get(':id')

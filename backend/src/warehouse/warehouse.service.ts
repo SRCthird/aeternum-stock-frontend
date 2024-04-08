@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -7,23 +7,32 @@ export class WarehouseService {
 
   constructor(readonly databaseService: DatabaseService) { }
 
-  create(createDto: Prisma.WarehouseCreateInput) {
+  async create(createDto: Prisma.WarehouseCreateInput) {
     return this.databaseService.warehouse.create({ data: createDto });
   }
 
-  findAll() {
-    return this.databaseService.warehouse.findMany();
+  async findAll(
+    name?: string,
+  ) {
+    const query: Prisma.WarehouseFindManyArgs = {
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    };
+    return this.databaseService.warehouse.findMany(query);
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.databaseService.warehouse.findUnique({ where: { id } });
   }
 
-  update(id: number, updateDto: Prisma.WarehouseUpdateInput) {
+  async update(id: number, updateDto: Prisma.WarehouseUpdateInput) {
     return this.databaseService.warehouse.update({ where: { id }, data: updateDto });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return this.databaseService.warehouse.delete({ where: { id } });
   }
 }
