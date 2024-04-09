@@ -3,6 +3,9 @@
     "name": "WHMSystem",
     "slug": "WHMSystem",
     "version": "1.0.0",
+    "ignore": [
+      "backend/**"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
