@@ -1,12 +1,21 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import Header from '@components/Header';
 import { styles } from '@styles';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '@screens/Home';
+import { useNavigation } from '@react-navigation/native';
 
-const ActionScreen = () => {
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, 'ActionScreen'>;
+}
+
+const ActionScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
-      <Header title="" />
+      <Header 
+        title=""
+        navigation={navigation}
+      />
       <View style={styles.body}>
         <TouchableOpacity style={styles.action} onPress={() => { }}>
           <Text style={styles.optionText}>Create Item</Text>
