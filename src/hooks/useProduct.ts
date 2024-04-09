@@ -2,9 +2,9 @@ import api from '@src';
 import { CanceledError } from 'axios';
 import { useEffect, useState } from 'react'
 
-type Product = {
+export type Product = {
   id: number;
-  lotnumber: string;
+  name: string;
   description: string;
 }
 

@@ -3,10 +3,9 @@ import Header from '@components/Header';
 import { styles } from '@styles';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@screens/Home';
-import { useNavigation } from '@react-navigation/native';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'ActionScreen'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Actions'>;
 }
 
 const ActionScreen = ({navigation}: Props) => {
