@@ -3,7 +3,12 @@ import { Appbar, Menu } from 'react-native-paper';
 import { RootStackParamList } from '@src/screens/Home';
 import { StackNavigationProp } from "@react-navigation/stack";
 
-const Header = ({ title, navigation }: { title: string, navigation: StackNavigationProp<RootStackParamList, 'Actions'> }) => {
+type Props = {
+  title: string;
+  navigation: StackNavigationProp<RootStackParamList, 'Actions'>;
+}
+
+const Header = ({ title, navigation }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -35,6 +40,20 @@ const Header = ({ title, navigation }: { title: string, navigation: StackNavigat
             navigation.navigate('ProductLot');
             closeMenu(); 
           }} 
+        />
+        <Menu.Item 
+          title="Warehouse Management" 
+          onPress={() => { 
+            navigation.navigate('Warehouse');
+            closeMenu(); 
+          }} 
+        />
+        <Menu.Item 
+          title="Inventory Bay Management" 
+          onPress={() => { 
+            navigation.navigate('InventoryBay');
+            closeMenu(); 
+          }}
         />
       </Menu>
       <Appbar.Content title={title} />
