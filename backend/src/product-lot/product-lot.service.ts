@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -54,6 +54,17 @@ export class ProductLotService {
   }
 
   async remove(id: number) {
+    const dependency = await this.databaseService.inventory.findMany({
+      where: {
+        productLot: {
+          id: id
+        }
+      },
+    })
+
+    if (dependency.length > 0) {
+      throw new HttpException('Lot has dependencies', HttpStatus.NOT_ACCEPTABLE);
+    }
     return this.databaseService.productLot.delete({ where: { id } });
   }
 }
