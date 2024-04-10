@@ -24,6 +24,16 @@ export class InventoryBayService {
     return this.databaseService.inventoryBay.create({ data: createDto });
   }
 
+  async list() {
+    const bays = await this.databaseService.inventoryBay.findMany({
+      select: {
+        name: true,
+      },
+    });
+
+    return bays.map((bay) => bay.name);
+  }
+
   async findAll(
     name?: string,
     warehouseName?: string,

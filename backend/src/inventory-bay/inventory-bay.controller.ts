@@ -25,6 +25,11 @@ export class InventoryBayController {
     return this.inventoryBayService.create(createDto);
   }
 
+  @Get('list')
+  list() {
+    return this.inventoryBayService.list();
+  }
+
   @Get()
   findAll(
     @Query('name') name?: string,
