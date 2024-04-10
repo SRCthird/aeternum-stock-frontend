@@ -20,6 +20,11 @@ export class ProductController {
     return this.productService.create(createDto);
   }
 
+  @Get('list')
+  list() {
+    return this.productService.list();
+  }
+
   @Get()
   findAll(
     @Query('name') name?: string,

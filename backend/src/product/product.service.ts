@@ -11,6 +11,16 @@ export class ProductService {
     return this.databaseService.product.create({ data: createDto });
   }
 
+  async list() {
+    const products = await this.databaseService.product.findMany({
+      select: {
+        name: true,
+      }
+    });
+
+    return products.map(product => product.name);
+  }
+
   async findAll(
     name?: string,
     description?: string
