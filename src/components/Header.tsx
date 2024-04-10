@@ -15,7 +15,11 @@ const Header = ({ title, navigation }: { title: string, navigation: Navigations 
   const closeMenu = () => setMenuVisible(false);
 
   return (
-    <Appbar.Header style={{ marginTop: -60 }}>
+    <Appbar.Header
+      style={{
+        height: 50,
+      }}
+    >
       <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
