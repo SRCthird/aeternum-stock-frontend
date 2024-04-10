@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -7,11 +7,11 @@ export class ProductService {
 
   constructor(readonly databaseService: DatabaseService) {}
 
-  create(createDto: Prisma.ProductCreateInput) {
+  async create(createDto: Prisma.ProductCreateInput) {
     return this.databaseService.product.create({ data: createDto });
   }
 
-  findAll(
+  async findAll(
     name?: string,
     description?: string
   ) {
@@ -28,15 +28,28 @@ export class ProductService {
     return this.databaseService.product.findMany(query);
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.databaseService.product.findUnique({ where: { id } });
   }
 
-  update(id: number, updateDto: Prisma.ProductUpdateInput) {
+  async update(id: number, updateDto: Prisma.ProductUpdateInput) {
+
     return this.databaseService.product.update({ where: { id }, data: updateDto });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    const dependency = await this.databaseService.productLot.findMany({
+      where: {
+        product: {
+          id: id
+        }
+      },
+    })
+
+    if (dependency.length > 0) {
+      throw new HttpException('Product has dependencies', HttpStatus.NOT_ACCEPTABLE);
+    }
+
     return this.databaseService.product.delete({ where: { id } });
   }
 }
