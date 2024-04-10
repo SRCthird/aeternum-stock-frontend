@@ -1,10 +1,10 @@
 import { useState } from "react";
-import ProductList from "./ProductList";
+import ProductList from "./Components/ProductList";
 import { Appbar, Menu } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Home";
 import { mode } from ".";
-import { Product } from "@src/hooks/useProduct";
+import { Product } from "./Hooks/useProduct";
 
 type Props = {
   key: number;

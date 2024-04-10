@@ -2,8 +2,8 @@ import { View } from "react-native";
 import { RootStackParamList } from "../Home";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
-import ProductListView from "./ProductListView";
-import { Product } from "@src/hooks/useProduct";
+import ProductView from "./ProductView";
+import { Product } from "./Hooks/useProduct";
 import ProductEdit from "./ProductEdit";
 import ProductAdd from "./ProductAdd";
 
@@ -34,7 +34,7 @@ const ProductIndex = ({ navigation }: Props) => {
       alignItems: 'center',
     }}>
       {mode === 'view' && (
-        <ProductListView
+        <ProductView
           key={key}
           setKey={setKey}
           setMode={setMode}

@@ -1,7 +1,7 @@
-import { Product } from '@hooks/useProduct';
+import { Product } from '../Hooks/useProduct';
 import { Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { mode } from '.';
+import { mode } from '..';
 
 type Props = {
   listItem: Product;

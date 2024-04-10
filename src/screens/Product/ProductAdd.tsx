@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Appbar, Menu, TextInput } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Home";
-import { Product } from "@src/hooks/useProduct";
+import { Product } from "./Hooks/useProduct";
 import { Text, TouchableOpacity, View } from "react-native";
 import api from "@src";
 import { mode } from ".";
+import DropDown from "@src/components/DropDown";
+import useProductList from "@screens/Product/Hooks/useProductList";
 
 type Props = {
   key: number;
