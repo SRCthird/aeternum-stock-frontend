@@ -11,7 +11,9 @@ const Stack = createStackNavigator();
 
 const index = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerShown: false
+    }}>
       <Stack.Screen name="Actions" component={ActionScreen} />
       <Stack.Screen name="Product" component={Product} />
     </Stack.Navigator>

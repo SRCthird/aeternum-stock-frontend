@@ -1,6 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Header from '@components/Header';
-import { styles } from '@styles';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@screens/Home';
 
@@ -9,13 +8,33 @@ type Props = {
 }
 
 const ActionScreen = ({navigation}: Props) => {
+
+  const styles = StyleSheet.create({
+    action: {
+      backgroundColor: '#219ebc',
+      padding: 15,
+      marginBottom: 5,
+      width: '100%',
+      alignItems: 'center',
+    },
+    optionText: {
+      color: '#ffffff',
+      fontSize: 18,
+    },
+  })
+
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1 }}>
       <Header 
         title=""
         navigation={navigation}
       />
-      <View style={styles.body}>
+      <View style={{
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        padding: 5,
+      }}>
         <TouchableOpacity style={styles.action} onPress={() => { }}>
           <Text style={styles.optionText}>Create Item</Text>
         </TouchableOpacity>
