@@ -19,6 +19,7 @@ model ProductLot {
   lotNumber         String         @unique
   internalReference String         @unique
   productName       String
+  quantity          Int            @default(0)
 
   product           Product        @relation(fields: [productName], references: [name])
   inventoryRecords  Inventory[]
