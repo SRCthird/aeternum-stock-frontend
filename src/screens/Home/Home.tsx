@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Header from '@components/Header';
+import HomeHeader from './Components/HomeHeader';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@screens/Home';
 
@@ -7,7 +7,7 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Actions'>;
 }
 
-const ActionScreen = ({navigation}: Props) => {
+const Home = ({navigation}: Props) => {
 
   const styles = StyleSheet.create({
     action: {
@@ -25,7 +25,7 @@ const ActionScreen = ({navigation}: Props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header 
+      <HomeHeader 
         title=""
         navigation={navigation}
       />
@@ -52,4 +52,4 @@ const ActionScreen = ({navigation}: Props) => {
   );
 };
 
-export default ActionScreen;
+export default Home;
