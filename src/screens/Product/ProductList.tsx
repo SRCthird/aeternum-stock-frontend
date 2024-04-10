@@ -1,8 +1,14 @@
-import useProduct from '@src/hooks/useProduct';
+import useProduct, { Product } from '@src/hooks/useProduct';
 import { FlatList, Text } from 'react-native';
 import ProductListItem from './ProductListItem';
+import { mode } from '.';
 
-const ProductList = () => {
+type Props = {
+  setMode: (mode: mode) => void;
+  setItem: (item: Product) => void;
+}
+
+const ProductList = ({ setMode, setItem }: Props) => {
   const { result, error, isLoading } = useProduct({});
 
   return (
@@ -16,7 +22,13 @@ const ProductList = () => {
           width: '100%',
         }}
         data={result}
-        renderItem={({ item }) => <ProductListItem listItem={item} />}
+        renderItem={({ item }) => (
+          <ProductListItem 
+            listItem={item} 
+            setMode={setMode}
+            setItem={setItem}
+          />
+        )}
         keyExtractor={(item) => item.id.toString()}
       />
     )

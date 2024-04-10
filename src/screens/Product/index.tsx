@@ -1,36 +1,67 @@
-import Header from "@components/Header";
-import { Text, View } from "react-native";
-import { styles } from "@src/styles";
+import { View } from "react-native";
 import { RootStackParamList } from "../Home";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useState } from "react";
-import ProductView from "./ProductView";
+import { useEffect, useState } from "react";
+import ProductListView from "./ProductListView";
+import { Product } from "@src/hooks/useProduct";
+import ProductEdit from "./ProductEdit";
+import ProductAdd from "./ProductAdd";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Product'>;
 }
 
-type mode = 'view' | 'add' | 'edit' | 'create';
+export type mode = 'view' | 'add' | 'edit';
 
-const Product = ({ navigation }: Props) => {
+const ProductIndex = ({ navigation }: Props) => {
   const [key, setKey] = useState(0);
-  const [mode, setMode] = useState<mode>('add');
+  const [mode, setMode] = useState<mode>('view');
+  const [item, setItem] = useState<Product>({
+    id: 0,
+    name: '',
+    description: '',
+  });
+
+  useEffect(() => {
+    if (item.id === 0) return;
+    console.log(item);
+  }, [item]);
 
   return (
-    <View style={styles.container}>
-      <Header
-        title=""
-        navigation={navigation}
-      />
-      <View style={styles.body}>
-        {mode === 'view' ? (
-          <ProductView />
-        ) : (
-          <Text>Product</Text>
-        )}
-      </View>
+    <View style={{
+      flex: 1,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    }}>
+      {mode === 'view' && (
+        <ProductListView
+          key={key}
+          setKey={setKey}
+          setMode={setMode}
+          setItem={setItem}
+          navigation={navigation}
+        />
+      )}
+      {mode === 'edit' && (
+        <ProductEdit
+          key={key}
+          setKey={setKey}
+          setMode={setMode}
+          item={item}
+          setItem={setItem}
+          navigation={navigation}
+        />
+      )}
+      {mode === 'add' && (
+        <ProductAdd
+          key={key}
+          setKey={setKey}
+          setMode={setMode}
+          navigation={navigation}
+        />
+      )}
     </View>
   );
 }
 
-export default Product;
+export default ProductIndex;
