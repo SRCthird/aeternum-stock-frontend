@@ -24,6 +24,11 @@ export class ProductLotController {
     return this.productLotService.create(createDto);
   }
 
+  @Get('list')
+  list() {
+    return this.productLotService.list();
+  }
+
   @Get()
   findAll(
     @Query('lotNumber') lotNumber?: string,

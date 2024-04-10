@@ -22,6 +22,16 @@ export class ProductLotService {
     return this.databaseService.productLot.create({ data: createDto });
   }
 
+  async list() {
+    const lots = await this.databaseService.productLot.findMany({
+      select: {
+        lotNumber: true,
+      }
+    });
+
+    return lots.map(lot => lot.lotNumber);
+  }
+
   async findAll(
     lotNumber?: string,
     internalReference?: string,
