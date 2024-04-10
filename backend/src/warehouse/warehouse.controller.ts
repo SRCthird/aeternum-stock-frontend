@@ -19,6 +19,11 @@ export class WarehouseController {
     return this.warehouseService.create(createDto);
   }
 
+  @Get('list')
+  list() {
+    return this.warehouseService.list();
+  }
+
   @Get()
   findAll(
     @Query('name') name?: string,

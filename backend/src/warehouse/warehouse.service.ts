@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -9,6 +9,16 @@ export class WarehouseService {
 
   async create(createDto: Prisma.WarehouseCreateInput) {
     return this.databaseService.warehouse.create({ data: createDto });
+  }
+
+  async list() {
+    const warehouses = await this.databaseService.warehouse.findMany({
+      select: {
+        name: true,
+      }
+    });
+
+    return warehouses.map(warehouse => warehouse.name);
   }
 
   async findAll(
