@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -43,6 +43,17 @@ export class WarehouseService {
   }
 
   async remove(id: number) {
+    const dependency = await this.databaseService.inventoryBay.findMany({
+      where: {
+        warehouse: {
+          id: id
+        }
+      },
+    })
+
+    if (dependency.length > 0) {
+      throw new HttpException('Warehouse has dependencies', HttpStatus.NOT_ACCEPTABLE);
+    }
     return this.databaseService.warehouse.delete({ where: { id } });
   }
 }
