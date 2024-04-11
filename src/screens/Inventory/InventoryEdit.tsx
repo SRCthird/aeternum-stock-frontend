@@ -18,10 +18,11 @@ import SearchableDropDown from "@src/components/SearchableDropDown";
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
   setMode: Dispatch<SetStateAction<mode>>;
+  state: 'release' | 'scrap' | null;
   item: Inventory;
 }
 
-const InventoryEdit = ({ setKey, item, setMode }: Props) => {
+const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
   const { result: lots, isLoading: lotsLoading } = useProductLotList();
   const { result: locations, isLoading: locationsLoading } = useInventoryBayList();
 
@@ -29,6 +30,12 @@ const InventoryEdit = ({ setKey, item, setMode }: Props) => {
 
   useEffect(() => {
     setData({...data, updatedAt: new Date()});
+    if (state === 'release') {
+      setData({...data, location: "Released"});
+    }
+    if (state === 'scrap') {
+      setData({...data, location: "Scrapped"});
+    }
   }, []);
 
   const [submit, setSubmit] = useState(false);
@@ -130,7 +137,7 @@ const InventoryEdit = ({ setKey, item, setMode }: Props) => {
       />
       <View style={{ flex: 1 }}></View>
       <SaveButton setSubmit={setSubmit} />
-      {item.location === 'Scrapped' && (
+      {(item.location === 'Scrapped' || item.location === 'Released') && (
         <DeleteButton onPress={() => deleteAlert(item)} />
       )}
     </View>

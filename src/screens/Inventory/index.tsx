@@ -8,12 +8,15 @@ import InventoryEdit from "./InventoryEdit";
 import InventoryAdd from "./InventoryAdd";
 import { mode } from "@utils/types";
 import InventoryHeader from "./Components/InventoryHeader";
+import { RouteProp } from "@react-navigation/native";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Inventory'>;
+  route: RouteProp<RootStackParamList, 'Inventory'>;
 }
 
-const InventoryIndex = ({ navigation }: Props) => {
+const InventoryIndex = ({ navigation, route }: Props) => {
+  const [state, setState] = useState<'release' | 'scrap' | null>(route.params?.state || null);
   const [key, setKey] = useState<number>(0);
   const [mode, setMode] = useState<mode>('view');
   const [item, setItem] = useState<Inventory>({
@@ -26,15 +29,6 @@ const InventoryIndex = ({ navigation }: Props) => {
     updatedAt: new Date(),
     updatedBy: '',
   });
-
-  useEffect(() => {
-    console.log(key);
-  }, [key]);
-
-  useEffect(() => {
-    if (item.id === 0) return;
-    console.log(item);
-  }, [item]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -59,6 +53,7 @@ const InventoryIndex = ({ navigation }: Props) => {
         {mode === 'edit' && (
           <InventoryEdit
             key={key}
+            state={state}
             setKey={setKey}
             setMode={setMode}
             item={item}
