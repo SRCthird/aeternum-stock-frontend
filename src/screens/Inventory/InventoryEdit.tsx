@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import NumberInput from "@src/components/NumberInput";
 import DatePicker from "@components/DatePicker";
 import DeleteButton from "@src/components/DeleteButton";
-import HandlePatch from "./Utility/HandlePatch";
+import handlePatch from "./Utility/HandlePatch";
 import SearchableDropDown from "@src/components/SearchableDropDown";
 
 type Props = {
@@ -42,7 +42,7 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
 
   useEffect(() => {
     if (!submit) return;
-    HandlePatch({
+    handlePatch({
       setKey: setKey,
       setMode: setMode,
       setSubmit: setSubmit,

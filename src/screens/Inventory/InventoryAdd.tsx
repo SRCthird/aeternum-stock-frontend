@@ -56,7 +56,15 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
         setMode('view');
       })
       .catch(err => {
-        Alert.alert('Error', err.message);
+        if (err.response.status === 400) {
+          Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
+        } else if (err.response.status === 422) {
+          Alert.alert('Error', 'Product lot does not exist');
+        } else if (err.response.status === 428) {
+          Alert.alert('Error', 'Inventory bay does not exist');
+        } else {
+          Alert.alert('Error', err.message);
+        }
       });
     setSubmit(false);
   }, [submit]);
@@ -70,6 +78,7 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
     }}>
       <DropDown
         label="Lot Number"
+        placeHolder="Select a lot number"
         selectedValue={data.lotNumber}
         onValueChange={(lotNumber, _) => {
           setData({ ...data, lotNumber });
@@ -86,18 +95,15 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
       />
       <DropDown
         label="Location"
+        placeHolder="Select a location"
         selectedValue={data.location}
         onValueChange={(location, _) => {
           setData({ ...data, location });
         }}
         selection={
-          locationsLoading ? (
-            <Text>Loading...</Text>
-          ) : (
-            locations.map(location => (
-              <Picker.Item key={location} label={location} value={location} />
-            ))
-          )
+          locations.map(location => (
+            <Picker.Item key={location} label={location} value={location} />
+          ))
         }
       />
       <NumberInput

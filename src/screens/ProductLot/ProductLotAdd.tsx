@@ -62,6 +62,18 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       alignItems: 'center',
       padding: 10,
     }}>
+      <DropDown
+      label="Product Name"
+      selectedValue={data.productName}
+      onValueChange={(itemValue, _) => {
+        setData({ ...data, productName: itemValue });
+      }}
+      selection={
+        products.map((product, index) => (
+          <Picker.Item key={index} label={product} value={product} />
+        ))
+      }
+      />
       <TextInput
         style={{
           minWidth: '100%',
@@ -81,18 +93,6 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
         placeholder="enter internal reference/workorder."
         mode="outlined"
         onChangeText={text => { setData({ ...data, internalReference: text }) }}
-      />
-      <DropDown
-        label="Product Name"
-        selectedValue={data.productName}
-        onValueChange={(itemValue, _) => {
-          setData({ ...data, productName: itemValue });
-        }}
-        selection={
-          products.map((product, index) => (
-            <Picker.Item key={index} label={product} value={product} />
-          ))
-        }
       />
       <NumberInput
         label="Lot Quantity"

@@ -12,42 +12,82 @@ type Props = {
   newItem: Inventory;
 }
 
-const HandlePatch = ({ setKey, setMode, setSubmit, oldItem, newItem }: Props) => {
-  if (newItem.location === oldItem.location) {
-    Alert.alert('Error', 'Location must be different from the original location.');
+const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Props) => {
+
+  const fullMove = async (id: number, item: Inventory) => {
+    api.patch('/api/inventory/' + id, item)
+    .then(_ => {
+      setKey(prev => prev + 1);
+      setSubmit(false);
+      setMode('view');
+    })
+    .catch(err => {
+      if (err.response.status === 400) {
+        Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
+      } else if (err.response.status === 422) {
+        Alert.alert('Error', 'Product lot does not exist');
+      } else if (err.response.status === 428) {
+        Alert.alert('Error', 'Inventory bay does not exist');
+      } else {
+        Alert.alert('Error', err.message);
+      }
+    });
   }
-  if (newItem.quantity === oldItem.quantity) {
-    api.patch('/api/inventory/' + oldItem.id, newItem)
+
+ const subtractOld = async (item: Inventory, quantity: number) => {
+    api.patch('/api/inventory/' + item.id, { quantity: quantity, lotNumber: item.lotNumber })
       .then(_ => {
         setKey(prev => prev + 1);
         setSubmit(false);
         setMode('view');
       })
       .catch(err => {
-        Alert.alert('Error', err.message);
+        console.log('subtraction');
+        if (err.response.status === 400) {
+          Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
+        } else if (err.response.status === 422) {
+          Alert.alert('Error', 'Product lot does not exist');
+        } else if (err.response.status === 428) {
+          Alert.alert('Error', 'Inventory bay does not exist');
+        } else {
+          Alert.alert('Error', err.message);
+        }
       });
+  }
+
+  const createNew = async (item: Inventory) => {
+    const { id: _, ...newData } = item;
+    api.post('/api/inventory/', newData)
+    .then(_ => {
+      setKey(prev => prev + 1);
+      setSubmit(false);
+      setMode('view');
+    })
+    .catch(err => {
+      console.log('creation');
+      if (err.response.status === 400) {
+        Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
+      } else if (err.response.status === 422) {
+        Alert.alert('Error', 'Product lot does not exist');
+      } else if (err.response.status === 428) {
+        Alert.alert('Error', 'Inventory bay does not exist');
+      } else {
+        Alert.alert('Error', err.message);
+      }
+    });
+  }
+
+  if (newItem.location === oldItem.location) {
+    Alert.alert('Error', 'Location must be different from the original location.');
     return;
   }
-  const { id: _, ...newData } = newItem;
-  api.post('/api/inventory/', newData)
-    .then(_ => {
-      setKey(prev => prev + 1);
-      setSubmit(false);
-      setMode('view');
-    })
-    .catch(err => {
-      Alert.alert('Error', err.message);
-    });
-  api.patch('/api/inventory/' + oldItem.id, { quantity: oldItem.quantity - newItem.quantity })
-    .then(_ => {
-      setKey(prev => prev + 1);
-      setSubmit(false);
-      setMode('view');
-    })
-    .catch(err => {
-      Alert.alert('Error', err.message);
-    });
+  if (newItem.quantity === oldItem.quantity) {
+    await fullMove(oldItem.id, newItem);
+    return;
+  }
+  await subtractOld(oldItem, oldItem.quantity - newItem.quantity)
+      .then(_ => createNew(newItem));
   setSubmit(false);
 }
 
-export default HandlePatch;
+export default handlePatch;
