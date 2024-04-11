@@ -1,13 +1,18 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import HomeHeader from './Components/HomeHeader';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@screens/Home';
+import { useEffect, useState } from 'react';
+import { mode } from './types';
+import Actions from './Actions';
+import CreateItem from './CreateItem';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Actions'>;
 }
 
-const Home = ({navigation}: Props) => {
+const Home = ({ navigation }: Props) => {
+  const [mode, setMode] = useState<mode>('actions');
 
   const styles = StyleSheet.create({
     action: {
@@ -23,31 +28,28 @@ const Home = ({navigation}: Props) => {
     },
   })
 
+  useEffect(() => {
+    if (mode === 'transfer') {
+      navigation.navigate('Inventory');
+      setMode('actions');
+    }
+  }, [mode]);
+
   return (
     <View style={{ flex: 1 }}>
-      <HomeHeader 
+      <HomeHeader
         title=""
+        setMode={setMode}
         navigation={navigation}
       />
-      <View style={{
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 5,
-      }}>
-        <TouchableOpacity style={styles.action} onPress={() => { }}>
-          <Text style={styles.optionText}>Create Item</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.action} onPress={() => { }}>
-          <Text style={styles.optionText}>Inventory Transfer</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.action} onPress={() => { }}>
-          <Text style={styles.optionText}>Release Item</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.action} onPress={() => { }}>
-          <Text style={styles.optionText}>Scrap Items</Text>
-        </TouchableOpacity>
-      </View>
+      {mode === 'actions' && (
+        <Actions mode={mode} setMode={setMode} />
+      )}
+      {mode === 'create' && (
+        <CreateItem 
+          setHomeMode={setMode} 
+        />
+      )}
     </View>
   );
 };
