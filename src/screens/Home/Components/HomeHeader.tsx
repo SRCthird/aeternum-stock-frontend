@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { Appbar, Menu } from 'react-native-paper';
 import { RootStackParamList } from '@src/screens/Home';
 import { StackNavigationProp } from "@react-navigation/stack";
+import { mode } from '../types';
 
 type Props = {
   title: string;
+  setMode: (mode: mode) => void;
   navigation: StackNavigationProp<RootStackParamList, 'Actions'>;
 }
 
-const Header = ({ title, navigation }: Props) => {
+const Header = ({ title, setMode, navigation }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -27,6 +29,13 @@ const Header = ({ title, navigation }: Props) => {
           <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
         }
       >
+        <Menu.Item
+          title="Actions"
+          onPress={() => {
+            setMode('actions');
+            closeMenu();
+          }}
+        />
         <Menu.Item 
           title="Product Management" 
           onPress={() => { 
