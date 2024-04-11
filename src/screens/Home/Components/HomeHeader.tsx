@@ -55,6 +55,13 @@ const Header = ({ title, navigation }: Props) => {
             closeMenu(); 
           }}
         />
+        <Menu.Item
+          title="Inventory Management"
+          onPress={() => {
+            navigation.navigate('Inventory');
+            closeMenu();
+          }}
+        />
       </Menu>
       <Appbar.Content title={title} />
       <Appbar.Action icon="account" onPress={() => { console.log('Profile'); }} />

@@ -4,6 +4,7 @@ import Product from '@screens/Product';
 import ProductLot from '@screens/ProductLot';
 import Warehouse from '@screens/Warehouse';
 import InventoryBay from '@screens/InventoryBay';
+import Inventory from '@screens/Inventory';
 
 export type RootStackParamList = {
   Actions: undefined;
@@ -11,6 +12,7 @@ export type RootStackParamList = {
   ProductLot: undefined;
   Warehouse: undefined;
   InventoryBay: undefined;
+  Inventory: undefined;
 }
 
 const Stack = createStackNavigator();
@@ -25,6 +27,7 @@ const index = () => {
       <Stack.Screen name="ProductLot" component={ProductLot} />
       <Stack.Screen name="Warehouse" component={Warehouse} />
       <Stack.Screen name="InventoryBay" component={InventoryBay} />
+      <Stack.Screen name="Inventory" component={Inventory} />
     </Stack.Navigator>
   );
 }
