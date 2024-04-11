@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -11,23 +11,39 @@ export class InventoryService {
     const obj: Prisma.InventoryCreateInput & {lotNumber?: string, location?: string} = {...createDto};
 
     const lot = await this.databaseService.productLot.findMany({
-      select: {
-        lotNumber: true,
+      where: {
+        lotNumber: obj.lotNumber,
       }
     });
-    const lotExist = lot.find((l) => l.lotNumber === obj.lotNumber);
-    if (!lotExist) {
-      throw new BadRequestException('Product lot does not exist');
-    }
 
     const bay = await this.databaseService.inventoryBay.findMany({
-      select: {
-        name: true,
+      where: {
+        name: obj.location,
       }
     });
+
+    const inventory = await this.databaseService.inventory.findMany({
+      where: {
+        productLot: {
+          lotNumber: obj.lotNumber,
+        },
+      }
+    });
+
+    const sumInv = inventory.reduce((acc, curr) => acc + curr.quantity, 0);
+
+    if (sumInv + obj.quantity > lot[0].quantity) {
+      throw new HttpException('Inventory quantity exceeds product lot quantity', HttpStatus.BAD_REQUEST); 
+    }
+
+    const lotExist = lot.find((l) => l.lotNumber === obj.lotNumber);
+    if (!lotExist) {
+      throw new HttpException('Product lot does not exist', HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     const bayExist = bay.find((b) => b.name === obj.location);
     if (!bayExist) {
-      throw new BadRequestException('Inventory bay does not exist');
+      throw new HttpException('Inventory bay does not exist', HttpStatus.PRECONDITION_REQUIRED);
     }
 
     return this.databaseService.inventory.create({ data: createDto });
@@ -72,6 +88,39 @@ export class InventoryService {
   }
 
   async update(id: number, updateDto: Prisma.InventoryUpdateInput) {
+    const obj: Prisma.InventoryUpdateInput & {lotNumber?: string, location?: string} = {...updateDto};
+    console.log(obj);
+
+    const lot = await this.databaseService.productLot.findMany({
+      where: {
+        lotNumber: obj.lotNumber,
+      }
+    });
+    
+    if (obj.lotNumber) {
+      const lotExist = lot.find((l) => l.lotNumber === obj.lotNumber);
+      if (!lotExist) {
+        throw new HttpException('Product lot does not exist', HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+    }
+
+    if (+obj.quantity > lot[0].quantity) {
+      console.log(obj.quantity, lot[0].quantity);
+      throw new HttpException('Inventory quantity exceeds product lot quantity', HttpStatus.BAD_REQUEST);
+    }
+
+    if (obj.location) {
+      const bay = await this.databaseService.inventoryBay.findMany({
+        where: {
+          name: obj.location,
+        }
+      });
+
+      const bayExist = bay.find((b) => b.name === obj.location);
+      if (!bayExist) {
+        throw new HttpException('Inventory bay does not exist', HttpStatus.PRECONDITION_REQUIRED);
+      }
+    }
     return this.databaseService.inventory.update({ where: { id }, data: updateDto });
   }
 
