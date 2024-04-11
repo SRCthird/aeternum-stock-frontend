@@ -1,16 +1,17 @@
 import { mode } from "@src/utils/types";
 import { mode as homeMode } from './types';
 import ProductLotAdd from "../ProductLot/ProductLotAdd";
-import { Dispatch, SetStateAction, useState } from "react";
-import { Text, View } from "react-native";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { View } from "react-native";
 import InventoryAdd from "../Inventory/InventoryAdd";
 import { ProductLot } from "../ProductLot/Hooks/useProductLot";
 
 type Props = {
   setHomeMode: Dispatch<SetStateAction<homeMode>>;
+  setTitle: Dispatch<SetStateAction<string>>;
 }
 
-const CreateItem = ({ setHomeMode }: Props) => {
+const CreateItem = ({ setHomeMode, setTitle }: Props) => {
   const [mode, setMode] = useState<mode>('add');
   const [item, setItem] = useState<ProductLot>({
     id: 0,
@@ -19,6 +20,11 @@ const CreateItem = ({ setHomeMode }: Props) => {
     productName: '',
     quantity: 0,
   });
+
+  useEffect(() => {
+    if (mode === 'add') setTitle('Create Lot');
+    if (mode === 'view') setTitle('Add lot to Inventory');
+  },[mode]);
 
   return (
     <View style={{ flex: 1 }}>

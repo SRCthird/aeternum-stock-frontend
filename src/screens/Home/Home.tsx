@@ -13,20 +13,7 @@ type Props = {
 
 const Home = ({ navigation }: Props) => {
   const [mode, setMode] = useState<mode>('actions');
-
-  const styles = StyleSheet.create({
-    action: {
-      backgroundColor: '#219ebc',
-      padding: 15,
-      marginBottom: 5,
-      width: '100%',
-      alignItems: 'center',
-    },
-    optionText: {
-      color: '#ffffff',
-      fontSize: 18,
-    },
-  })
+  const [title, setTitle] = useState<string>('Actions');
 
   useEffect(() => {
     if (mode === 'transfer') {
@@ -46,7 +33,7 @@ const Home = ({ navigation }: Props) => {
   return (
     <View style={{ flex: 1 }}>
       <HomeHeader
-        title=""
+        title={title}
         setMode={setMode}
         navigation={navigation}
       />
@@ -56,6 +43,7 @@ const Home = ({ navigation }: Props) => {
       {mode === 'create' && (
         <CreateItem 
           setHomeMode={setMode} 
+          setTitle={setTitle}
         />
       )}
     </View>
