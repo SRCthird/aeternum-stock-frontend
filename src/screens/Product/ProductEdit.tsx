@@ -5,11 +5,11 @@ import { RootStackParamList } from "../Home";
 import { Product } from "./Hooks/useProduct";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import api from "@src";
-import { mode } from ".";
+import { mode } from "@utils/types";
 
 type Props = {
-  key: number;
-  setKey: (key: number) => void;
+  key_: number;
+  setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   item: Product;
   setItem: (item: Product) => void;
@@ -17,7 +17,7 @@ type Props = {
 }
 
 
-const ProductEdit = ({ key, setKey, setMode, item, setItem, navigation }: Props) => {
+const ProductEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
@@ -57,7 +57,7 @@ const ProductEdit = ({ key, setKey, setMode, item, setItem, navigation }: Props)
     if (!submit) return;
     api.patch('/api/product/' + item.id, data)
       .then(_ => {
-        setKey(key + 1);
+        setKey(key_ + 1);
         setMode('view');
       })
       .catch(err => {
@@ -105,7 +105,7 @@ const ProductEdit = ({ key, setKey, setMode, item, setItem, navigation }: Props)
           });
         }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <View style={{

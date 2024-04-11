@@ -8,21 +8,21 @@ import { Alert, View } from "react-native";
 import SaveButton from "@components/SaveButton";
 import DeleteButton from "@components/DeleteButton";
 import api from "@src";
-import { mode } from "./types";
+import { mode } from "@utils/types";
 import NumberInput from "@src/components/NumberInput";
 import { Picker } from '@react-native-picker/picker';
 import DropDown from "@src/components/DropDown";
 
 type Props = {
-  key: number;
-  setKey: (key: number) => void;
+  key_: number;
+  setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   item: ProductLot;
   setItem: (item: ProductLot) => void;
   navigation: StackNavigationProp<RootStackParamList, 'ProductLot'>;
 }
 
-const ProductEdit = ({ key, setKey, setMode, item, setItem, navigation }: Props) => {
+const ProductEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
   const { result: products, isLoading } = useProductList();
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
@@ -63,7 +63,7 @@ const ProductEdit = ({ key, setKey, setMode, item, setItem, navigation }: Props)
     if (!submit) return;
     api.patch('/api/product-lot/' + item.id, data)
       .then(_ => {
-        setKey(key + 1);
+        setKey(key_ + 1);
         setMode('view');
       })
       .catch(err => {
@@ -113,7 +113,7 @@ const ProductEdit = ({ key, setKey, setMode, item, setItem, navigation }: Props)
           });
         }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <View style={{

@@ -1,7 +1,7 @@
 import useWarehouse, { Warehouse } from '../Hooks/useWarehouse';
 import { FlatList, Text } from 'react-native';
 import WarehouseListItem from './WarehouseListItem';
-import { mode } from '../types';
+import { mode } from '@utils/types';
 
 type Props = {
   setMode: (mode: mode) => void;

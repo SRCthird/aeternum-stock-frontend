@@ -5,7 +5,7 @@ import { RootStackParamList } from "../Home";
 import { ProductLot } from "./Hooks/useProductLot";
 import { View } from "react-native";
 import api from "@src";
-import { mode } from "./types";
+import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import NumberInput from "@src/components/NumberInput";
 import DropDown from "@src/components/DropDown";
@@ -13,13 +13,13 @@ import useProductList from "../Product/Hooks/useProductList";
 import { Picker } from "@react-native-picker/picker";
 
 type Props = {
-  key: number;
-  setKey: (key: number) => void;
+  key_: number;
+  setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   navigation: StackNavigationProp<RootStackParamList, 'ProductLot'>;
 }
 
-const ProductAdd = ({ key, setKey, setMode, navigation }: Props) => {
+const ProductAdd = ({ key_, setKey, setMode, navigation }: Props) => {
   const { result: products, isLoading } = useProductList();
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -42,7 +42,7 @@ const ProductAdd = ({ key, setKey, setMode, navigation }: Props) => {
     api.post('/api/product-lot/', putData)
       .then(res => {
         console.log(res.data);
-        setKey(key + 1);
+        setKey(key_ + 1);
         setSubmit(false);
         setMode('view');
       })
@@ -84,7 +84,7 @@ const ProductAdd = ({ key, setKey, setMode, navigation }: Props) => {
         <Appbar.Content title="Input lot" />
         <Appbar.Action icon="plus" onPress={() => { console.log('add'); }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <View style={{

@@ -5,7 +5,7 @@ import { RootStackParamList } from "../Home";
 import { InventoryBay } from "./Hooks/useInventoryBay";
 import { Alert, View } from "react-native";
 import api from "@src";
-import { mode } from "./types";
+import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import DeleteButton from "@src/components/DeleteButton";
 import NumberInput from "@src/components/NumberInput";
@@ -14,8 +14,8 @@ import useWarehouseList from "../Warehouse/Hooks/useWarehouseList";
 import { Picker } from "@react-native-picker/picker";
 
 type Props = {
-  key: number;
-  setKey: (key: number) => void;
+  key_: number;
+  setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   item: InventoryBay;
   setItem: (item: InventoryBay) => void;
@@ -23,7 +23,7 @@ type Props = {
 }
 
 
-const InventoryBayEdit = ({ key, setKey, setMode, item, setItem, navigation }: Props) => {
+const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
   const { result: warehouses, isLoading } = useWarehouseList();
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
@@ -64,7 +64,7 @@ const InventoryBayEdit = ({ key, setKey, setMode, item, setItem, navigation }: P
     if (!submit) return;
     api.patch('/api/inventory-bay/' + item.id, data)
       .then(_ => {
-        setKey(key + 1);
+        setKey(key_ + 1);
         setMode('view');
       })
       .catch(err => {
@@ -113,7 +113,7 @@ const InventoryBayEdit = ({ key, setKey, setMode, item, setItem, navigation }: P
           });
         }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <View style={{

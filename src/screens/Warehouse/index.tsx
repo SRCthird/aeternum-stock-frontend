@@ -6,7 +6,7 @@ import WarehouseView from "./WarehouseView";
 import { Warehouse } from "./Hooks/useWarehouse";
 import WarehouseEdit from "./WarehouseEdit";
 import WarehouseAdd from "./WarehouseAdd";
-import { mode } from "./types";
+import { mode } from '@utils/types';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Warehouse'>;
@@ -20,15 +20,6 @@ const WarehouseIndex = ({ navigation }: Props) => {
     name: '',
   });
 
-  useEffect(() => {
-    console.log(key);
-  },[key]);
-
-  useEffect(() => {
-    if (item.id === 0) return;
-    console.log(item);
-  }, [item]);
-
   return (
     <View style={{
       flex: 1,
@@ -38,6 +29,7 @@ const WarehouseIndex = ({ navigation }: Props) => {
       {mode === 'view' && (
         <WarehouseView
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           setItem={setItem}
@@ -47,6 +39,7 @@ const WarehouseIndex = ({ navigation }: Props) => {
       {mode === 'edit' && (
         <WarehouseEdit
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           item={item}
@@ -57,6 +50,7 @@ const WarehouseIndex = ({ navigation }: Props) => {
       {mode === 'add' && (
         <WarehouseAdd
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           navigation={navigation}

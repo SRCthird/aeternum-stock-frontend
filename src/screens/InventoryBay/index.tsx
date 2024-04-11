@@ -1,12 +1,12 @@
 import { View } from "react-native";
 import { RootStackParamList } from "../Home";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import InventoryBayView from "./InventoryBayView";
 import { InventoryBay } from "./Hooks/useInventoryBay";
 import InventoryBayEdit from "./InventoryBayEdit";
 import InventoryBayAdd from "./InventoryBayAdd";
-import { mode } from "./types";
+import { mode } from "@utils/types";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'InventoryBay'>;
@@ -22,15 +22,6 @@ const InventoryBayIndex = ({ navigation }: Props) => {
     maxUniqueLots: 0,
   });
 
-  useEffect(() => {
-    console.log(key);
-  },[key]);
-
-  useEffect(() => {
-    if (item.id === 0) return;
-    console.log(item);
-  }, [item]);
-
   return (
     <View style={{
       flex: 1,
@@ -40,6 +31,7 @@ const InventoryBayIndex = ({ navigation }: Props) => {
       {mode === 'view' && (
         <InventoryBayView
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           setItem={setItem}
@@ -49,6 +41,7 @@ const InventoryBayIndex = ({ navigation }: Props) => {
       {mode === 'edit' && (
         <InventoryBayEdit
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           item={item}
@@ -59,6 +52,7 @@ const InventoryBayIndex = ({ navigation }: Props) => {
       {mode === 'add' && (
         <InventoryBayAdd
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           navigation={navigation}

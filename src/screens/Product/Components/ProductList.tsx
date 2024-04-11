@@ -1,7 +1,7 @@
 import useProduct, { Product } from '../Hooks/useProduct';
 import { FlatList, Text } from 'react-native';
 import ProductListItem from './ProductListItem';
-import { mode } from '..';
+import { mode } from "@utils/types";
 
 type Props = {
   setMode: (mode: mode) => void;

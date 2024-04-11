@@ -3,20 +3,18 @@ import { Appbar, Menu, TextInput } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Home";
 import { Product } from "./Hooks/useProduct";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import api from "@src";
-import { mode } from ".";
-import DropDown from "@src/components/DropDown";
-import useProductList from "@screens/Product/Hooks/useProductList";
+import { mode } from "@utils/types";
 
 type Props = {
-  key: number;
-  setKey: (key: number) => void;
+  key_: number;
+  setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   navigation: StackNavigationProp<RootStackParamList, 'Product'>;
 }
 
-const ProductAdd = ({ key, setKey, setMode, navigation }: Props) => {
+const ProductAdd = ({ key_, setKey, setMode, navigation }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -34,13 +32,12 @@ const ProductAdd = ({ key, setKey, setMode, navigation }: Props) => {
     const { id: _, ...putData } = data;
     api.post('/api/product/', putData)
       .then(res => {
-        console.log(res.data);
-        setKey(key + 1);
+        setKey(key_ + 1);
         setSubmit(false);
         setMode('view');
       })
       .catch(err => {
-        console.log(err);
+        Alert.alert('Error', err.message);
       });
     setSubmit(false);
   }, [submit]);
@@ -77,7 +74,7 @@ const ProductAdd = ({ key, setKey, setMode, navigation }: Props) => {
         <Appbar.Content title="Input product" />
         <Appbar.Action icon="plus" onPress={() => { console.log('add'); }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <View style={{ 

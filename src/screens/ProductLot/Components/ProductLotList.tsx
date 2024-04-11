@@ -1,6 +1,6 @@
 import { FlatList, Text } from 'react-native';
 import ProductLotListItem from './ProductLotListItem';
-import { mode } from "../types";
+import { mode } from "@utils/types";
 import useProductLot, { ProductLot } from '../Hooks/useProductLot';
 
 type Props = {

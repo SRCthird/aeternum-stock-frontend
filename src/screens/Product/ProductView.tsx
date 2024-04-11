@@ -3,18 +3,18 @@ import ProductList from "./Components/ProductList";
 import { Appbar, Menu } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Home";
-import { mode } from ".";
+import { mode } from "@utils/types";
 import { Product } from "./Hooks/useProduct";
 
 type Props = {
-  key: number;
-  setKey: (key: number) => void;
+  key_: number;
+  setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   setItem: (item: Product) => void;
   navigation: StackNavigationProp<RootStackParamList, 'Product'>;
 }
 
-const ProductListView = ({ key, setKey, setMode, setItem, navigation }: Props) => {
+const ProductListView = ({ key_, setKey, setMode, setItem, navigation }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -52,11 +52,11 @@ const ProductListView = ({ key, setKey, setMode, setItem, navigation }: Props) =
           });
         }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <ProductList 
-        key={key} 
+        key={key_} 
         setMode={setMode}
         setItem={setItem}
       />

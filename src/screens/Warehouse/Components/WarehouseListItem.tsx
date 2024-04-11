@@ -1,7 +1,7 @@
 import { Warehouse } from '../Hooks/useWarehouse';
 import { Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { mode } from '../types';
+import { mode } from '@utils/types';
 
 type Props = {
   listItem: Warehouse;

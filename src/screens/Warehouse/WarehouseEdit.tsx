@@ -5,13 +5,13 @@ import { RootStackParamList } from "../Home";
 import { Warehouse } from "./Hooks/useWarehouse";
 import { Alert, View } from "react-native";
 import api from "@src";
-import { mode } from "./types";
+import { mode } from '@utils/types';
 import SaveButton from "@src/components/SaveButton";
 import DeleteButton from "@src/components/DeleteButton";
 
 type Props = {
-  key: number;
-  setKey: (key: number) => void;
+  key_: number;
+  setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   item: Warehouse;
   setItem: (item: Warehouse) => void;
@@ -19,7 +19,7 @@ type Props = {
 }
 
 
-const WarehouseEdit = ({ key, setKey, setMode, item, setItem, navigation }: Props) => {
+const WarehouseEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
@@ -59,7 +59,7 @@ const WarehouseEdit = ({ key, setKey, setMode, item, setItem, navigation }: Prop
     if (!submit) return;
     api.patch('/api/warehouse/' + item.id, data)
       .then(_ => {
-        setKey(key + 1);
+        setKey(key_ + 1);
         setMode('view');
       })
       .catch(err => {
@@ -106,7 +106,7 @@ const WarehouseEdit = ({ key, setKey, setMode, item, setItem, navigation }: Prop
           });
         }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <View style={{

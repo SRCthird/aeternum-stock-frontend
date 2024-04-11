@@ -5,7 +5,7 @@ import { RootStackParamList } from "../Home";
 import { InventoryBay } from "./Hooks/useInventoryBay";
 import { Alert, View } from "react-native";
 import api from "@src";
-import { mode } from "./types";
+import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import DropDown from "@src/components/DropDown";
 import useWarehouseList from "../Warehouse/Hooks/useWarehouseList";
@@ -13,13 +13,13 @@ import { Picker } from "@react-native-picker/picker";
 import NumberInput from "@src/components/NumberInput";
 
 type Props = {
-  key: number;
+  key_: number;
   setKey: (key: number) => void;
   setMode: (mode: mode) => void;
   navigation: StackNavigationProp<RootStackParamList, 'InventoryBay'>;
 }
 
-const InventoryBayAdd = ({ key, setKey, setMode, navigation }: Props) => {
+const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
   const { result: warehouses, isLoading } = useWarehouseList();
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -40,7 +40,7 @@ const InventoryBayAdd = ({ key, setKey, setMode, navigation }: Props) => {
     const { id: _, ...putData } = data;
     api.post('/api/inventory-bay/', putData)
       .then(_ => {
-        setKey(key + 1);
+        setKey(key_ + 1);
         setSubmit(false);
         setMode('view');
       })
@@ -82,7 +82,7 @@ const InventoryBayAdd = ({ key, setKey, setMode, navigation }: Props) => {
         <Appbar.Content title="Input bay" />
         <Appbar.Action icon="plus" onPress={() => { console.log('add'); }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <View style={{ 

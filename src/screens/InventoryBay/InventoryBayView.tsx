@@ -3,18 +3,18 @@ import InventoryBayList from "./Components/InventoryBayList";
 import { Appbar, Menu } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Home";
-import { mode } from "./types";
+import { mode } from "@utils/types";
 import { InventoryBay } from "./Hooks/useInventoryBay";
 
 type Props = {
-  key: number;
-  setKey: (key: number) => void;
+  key_: number;
+  setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   setItem: (item: InventoryBay) => void;
   navigation: StackNavigationProp<RootStackParamList, 'InventoryBay'>;
 }
 
-const InventoryBayView = ({ key, setKey, setMode, setItem, navigation }: Props) => {
+const InventoryBayView = ({ key_, setKey, setMode, setItem, navigation }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -53,7 +53,7 @@ const InventoryBayView = ({ key, setKey, setMode, setItem, navigation }: Props) 
           });
         }} />
         <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key + 1);
+          setKey(key_ + 1);
         }} />
       </Appbar>
       <InventoryBayList

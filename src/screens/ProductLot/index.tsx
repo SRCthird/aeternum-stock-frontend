@@ -1,12 +1,12 @@
 import { View } from "react-native";
 import { RootStackParamList } from "../Home";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ProductLotView from "./ProductLotView";
 import { ProductLot } from "./Hooks/useProductLot";
 import ProductLotEdit from "./ProductLotEdit";
 import ProductLotAdd from "./ProductLotAdd";
-import { mode } from "./types";
+import { mode } from "@utils/types";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductLot'>;
@@ -23,11 +23,6 @@ const ProductIndex = ({ navigation }: Props) => {
     quantity: 0
   });
 
-  useEffect(() => {
-    if (item.id === 0) return;
-    console.log(item);
-  }, [item]);
-
   return (
     <View style={{
       flex: 1,
@@ -37,6 +32,7 @@ const ProductIndex = ({ navigation }: Props) => {
       {mode === 'view' && (
         <ProductLotView
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           setItem={setItem}
@@ -46,6 +42,7 @@ const ProductIndex = ({ navigation }: Props) => {
       {mode === 'edit' && (
         <ProductLotEdit
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           item={item}
@@ -56,6 +53,7 @@ const ProductIndex = ({ navigation }: Props) => {
       {mode === 'add' && (
         <ProductLotAdd
           key={key}
+          key_={key}
           setKey={setKey}
           setMode={setMode}
           navigation={navigation}
