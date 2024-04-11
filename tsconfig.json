@@ -10,7 +10,8 @@
       "@config/*": ["src/config/*"],
       "@screens/*": ["src/screens/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@styles": ["src/styles"]
+      "@styles": ["src/styles"],
+      "@utils/*": ["src/utils/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
