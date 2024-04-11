@@ -1,15 +1,17 @@
 import { Picker } from "@react-native-picker/picker"
-import { ReactNode } from "react";
+import { ReactNode,  } from "react";
 import { Text, View } from "react-native"
 
 type Props = {
   label: string;
   selectedValue: string;
+  loading?: boolean;
   onValueChange: (itemValue: string, itemIndex: number) => void;
   selection: ReactNode;
 }
 
-const DropDown = ({ label, selectedValue, onValueChange, selection }: Props) => {
+const DropDown = ({ label, selectedValue, loading, onValueChange, selection }: Props) => {
+
   return (
     <View
       style={{
