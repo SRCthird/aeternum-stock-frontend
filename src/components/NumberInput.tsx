@@ -1,13 +1,14 @@
-import { TextInput } from "react-native-paper";
+import { TextInput } from 'react-native-paper';
 
 type Props = {
   value: number;
   defaultValue?: number;
   label: string;
+  max?: number;
   onChange: (value: number) => void;
-}
-const NumberInput = ({ value, defaultValue, label, onChange }: Props) => {
+};
 
+const NumberInput = ({ value, defaultValue, label, max, onChange }: Props) => {
   return (
     <TextInput
       style={{
@@ -19,16 +20,20 @@ const NumberInput = ({ value, defaultValue, label, onChange }: Props) => {
       keyboardType="numeric"
       value={value.toString()}
       defaultValue={defaultValue?.toString()}
-      onChangeText={text => {
+      onChangeText={(text) => {
         let quantity = text.replace(/[^0-9]/g, '');
         let parsedQuantity = parseInt(quantity, 10);
         if (isNaN(parsedQuantity)) {
           parsedQuantity = 0;
         }
+        if (max !== undefined && parsedQuantity > max) {
+          parsedQuantity = max;
+        }
         onChange(parsedQuantity);
       }}
     />
-  )
-}
+  );
+};
 
 export default NumberInput;
+
