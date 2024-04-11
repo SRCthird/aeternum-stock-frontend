@@ -138,9 +138,7 @@ const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: 
           selectedValue={data.warehouseName}
           onValueChange={(itemValue, _) => { setData({ ...data, warehouseName: itemValue }) }}
           selection={
-            isLoading ? (
-              <Picker.Item label="Loading..." value="" />
-            ) : warehouses.map((warehouse, index) => (
+            warehouses.map((warehouse, index) => (
               <Picker.Item key={index} label={warehouse} value={warehouse} />
             ))
           }
