@@ -2,24 +2,24 @@ import { Alert } from "react-native";
 import { Inventory } from "../Hooks/useInventory";
 import { mode } from "@utils/types";
 import api from "@src";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
-  key_: number;
-  setKey: (key: number) => void;
+  setKey: Dispatch<SetStateAction<number>>;
   setMode: (mode: mode) => void;
   setSubmit: (submit: boolean) => void;
   oldItem: Inventory;
   newItem: Inventory;
 }
 
-const HandlePatch = ({ key_, setKey, setMode, setSubmit, oldItem, newItem }: Props) => {
+const HandlePatch = ({ setKey, setMode, setSubmit, oldItem, newItem }: Props) => {
   if (newItem.location === oldItem.location) {
     Alert.alert('Error', 'Location must be different from the original location.');
   }
   if (newItem.quantity === oldItem.quantity) {
     api.patch('/api/inventory/' + oldItem.id, newItem)
       .then(_ => {
-        setKey(key_ + 1);
+        setKey(prev => prev + 1);
         setSubmit(false);
         setMode('view');
       })
@@ -31,7 +31,7 @@ const HandlePatch = ({ key_, setKey, setMode, setSubmit, oldItem, newItem }: Pro
   const { id: _, ...newData } = newItem;
   api.post('/api/inventory/', newData)
     .then(_ => {
-      setKey(key_ + 1);
+      setKey(prev => prev + 1);
       setSubmit(false);
       setMode('view');
     })
@@ -40,7 +40,7 @@ const HandlePatch = ({ key_, setKey, setMode, setSubmit, oldItem, newItem }: Pro
     });
   api.patch('/api/inventory/' + oldItem.id, { quantity: oldItem.quantity - newItem.quantity })
     .then(_ => {
-      setKey(key_ + 1);
+      setKey(prev => prev + 1);
       setSubmit(false);
       setMode('view');
     })

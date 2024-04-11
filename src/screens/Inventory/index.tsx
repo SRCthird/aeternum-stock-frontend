@@ -7,6 +7,7 @@ import { Inventory } from "./Hooks/useInventory";
 import InventoryEdit from "./InventoryEdit";
 import InventoryAdd from "./InventoryAdd";
 import { mode } from "@utils/types";
+import InventoryHeader from "./Components/InventoryHeader";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Inventory'>;
@@ -36,41 +37,41 @@ const InventoryIndex = ({ navigation }: Props) => {
   }, [item]);
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    }}>
-      {mode === 'view' && (
-        <InventoryView
-          key={key}
-          key_={key}
-          setKey={setKey}
-          setMode={setMode}
-          setItem={setItem}
-          navigation={navigation}
-        />
-      )}
-      {mode === 'edit' && (
-        <InventoryEdit
-          key={key}
-          key_={key}
-          setKey={setKey}
-          setMode={setMode}
-          item={item}
-          setItem={setItem}
-          navigation={navigation}
-        />
-      )}
-      {mode === 'add' && (
-        <InventoryAdd
-          key={key}
-          key_={key}
-          setKey={setKey}
-          setMode={setMode}
-          navigation={navigation}
-        />
-      )}
+    <View style={{ flex: 1 }}>
+      <InventoryHeader
+        navigation={navigation}
+        setKey={setKey}
+        setMode={setMode}
+        setItem={setItem}
+      />
+      <View style={{
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+      }}>
+        {mode === 'view' && (
+          <InventoryView
+            key={key}
+            setMode={setMode}
+            setItem={setItem}
+          />
+        )}
+        {mode === 'edit' && (
+          <InventoryEdit
+            key={key}
+            setKey={setKey}
+            setMode={setMode}
+            item={item}
+          />
+        )}
+        {mode === 'add' && (
+          <InventoryAdd
+            key={key}
+            setKey={setKey}
+            setMode={setMode}
+          />
+        )}
+      </View>
     </View>
   );
 }

@@ -43,7 +43,7 @@ const InventoryListItem = ({ listItem, setMode, setItem }: Props) => {
   });
 
   useEffect(() => {
-    if (listItem.updatedBy !== listItem.createdBy) {
+    if (listItem.updatedAt !== listItem.createdAt) {
       setEdited(true);
     }
   }, []);
