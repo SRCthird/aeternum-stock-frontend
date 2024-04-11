@@ -10,7 +10,6 @@ type Props = {
 
 const ProductLotList = ({ setMode, setItem }: Props) => {
   const { result, error, isLoading } = useProductLot({});
-  console.log(result);
 
   return (
     isLoading ? (
