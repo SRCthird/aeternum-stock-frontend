@@ -4,13 +4,14 @@ import { Text, View } from "react-native"
 
 type Props = {
   label: string;
+  placeHolder?: string;
   selectedValue: string;
   loading?: boolean;
   onValueChange: (itemValue: string, itemIndex: number) => void;
   selection: ReactNode;
 }
 
-const DropDown = ({ label, selectedValue, loading, onValueChange, selection }: Props) => {
+const DropDown = ({ label, placeHolder, selectedValue, loading, onValueChange, selection }: Props) => {
 
   return (
     <View
@@ -47,7 +48,7 @@ const DropDown = ({ label, selectedValue, loading, onValueChange, selection }: P
         }}
       >
         {selectedValue === "" && (
-          <Picker.Item label="Select a product" value="" />
+          <Picker.Item label={placeHolder} value="" />
         )}
         {selection}
       </Picker>
