@@ -8,8 +8,9 @@ type Props = {
   setItem: (item: ProductLot) => void;
 }
 
-const ProductList = ({ setMode, setItem }: Props) => {
+const ProductLotList = ({ setMode, setItem }: Props) => {
   const { result, error, isLoading } = useProductLot({});
+  console.log(result);
 
   return (
     isLoading ? (
@@ -35,5 +36,5 @@ const ProductList = ({ setMode, setItem }: Props) => {
   );
 }
 
-export default ProductList;
+export default ProductLotList;
 

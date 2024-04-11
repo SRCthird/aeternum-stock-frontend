@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { Appbar, Menu, TextInput } from 'react-native-paper';
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../Home";
+import { TextInput } from 'react-native-paper';
 import { ProductLot } from "./Hooks/useProductLot";
 import useProductList from "@screens/Product/Hooks/useProductList";
 import { Alert, View } from "react-native";
@@ -18,15 +16,10 @@ type Props = {
   setKey: (key_: number) => void;
   setMode: (mode: mode) => void;
   item: ProductLot;
-  setItem: (item: ProductLot) => void;
-  navigation: StackNavigationProp<RootStackParamList, 'ProductLot'>;
 }
 
-const ProductEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
+const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
   const { result: products, isLoading } = useProductList();
-  const [menuVisible, setMenuVisible] = useState(false);
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
 
   const [data, setData] = useState<ProductLot>(item);
   const [submit, setSubmit] = useState(false);
@@ -73,105 +66,61 @@ const ProductEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props
   }, [submit]);
 
   return (
-    <>
-      <Appbar style={{
-        height: 80,
-        width: '100%',
-        paddingTop: 25,
-      }}>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
-          }
-        >
-          <Menu.Item
-            title="Home"
-            onPress={() => {
-              navigation.navigate('Actions');
-              closeMenu();
-            }}
-          />
-          <Menu.Item
-            title="Product View"
-            onPress={() => {
-              setMode('view');
-              closeMenu();
-            }}
-          />
-        </Menu>
-        <Appbar.Content title={"ID: " + item.id} />
-        <Appbar.Action icon="plus" onPress={() => {
-          setMode('add');
-          setItem({
-            id: 0,
-            lotNumber: "",
-            internalReference: "",
-            productName: "",
-            quantity: 0,
-          });
-        }} />
-        <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key_ + 1);
-        }} />
-      </Appbar>
-      <View style={{
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 10,
-      }}>
-        <TextInput
-          style={{
-            minWidth: '100%',
-            margin: 10,
-          }}
-          label="Lot Number"
-          mode="outlined"
-          defaultValue={item.lotNumber}
-          onChangeText={text => { setData({ ...data, lotNumber: text }) }}
-        />
-        <TextInput
-          style={{
-            minWidth: '100%',
-            margin: 10,
-          }}
-          label="Internal Reference"
-          mode="outlined"
-          defaultValue={item.internalReference}
-          onChangeText={text => { setData({ ...data, internalReference: text }) }}
-        />
-        <DropDown
-          label="Product Name"
-          selectedValue={data.productName}
-          onValueChange={(itemValue, _) => {
-            console.log(itemValue);
-            setData({ ...data, productName: itemValue });
-          }}
-          selection={
-            isLoading ? (
-              <Picker.Item label="Loading..." value="" />
-            ) : products.map((product, index) => (
-              <Picker.Item key={index} label={product} value={product} />
-            ))
-          }
-        />
-        <NumberInput
-          label="Lot Quantity"
-          value={data.quantity}
-          defaultValue={item.quantity}
-          onChange={quantity => setData({ ...data, quantity })}
-        />
-        <View style={{ flex: 1 }}></View>
-        <SaveButton setSubmit={setSubmit} />
-        <DeleteButton
-          onPress={() => {
-            deleteAlert(item)
-          }}
-        />
-      </View>
-    </>
+    <View style={{
+      flex: 1,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      padding: 10,
+    }}>
+      <TextInput
+        style={{
+          minWidth: '100%',
+          margin: 10,
+        }}
+        label="Lot Number"
+        mode="outlined"
+        defaultValue={item.lotNumber}
+        onChangeText={text => { setData({ ...data, lotNumber: text }) }}
+      />
+      <TextInput
+        style={{
+          minWidth: '100%',
+          margin: 10,
+        }}
+        label="Internal Reference"
+        mode="outlined"
+        defaultValue={item.internalReference}
+        onChangeText={text => { setData({ ...data, internalReference: text }) }}
+      />
+      <DropDown
+        label="Product Name"
+        selectedValue={data.productName}
+        onValueChange={(itemValue, _) => {
+          console.log(itemValue);
+          setData({ ...data, productName: itemValue });
+        }}
+        selection={
+          isLoading ? (
+            <Picker.Item label="Loading..." value="" />
+          ) : products.map((product, index) => (
+            <Picker.Item key={index} label={product} value={product} />
+          ))
+        }
+      />
+      <NumberInput
+        label="Lot Quantity"
+        value={data.quantity}
+        defaultValue={item.quantity}
+        onChange={quantity => setData({ ...data, quantity })}
+      />
+      <View style={{ flex: 1 }}></View>
+      <SaveButton setSubmit={setSubmit} />
+      <DeleteButton
+        onPress={() => {
+          deleteAlert(item)
+        }}
+      />
+    </View>
   );
 }
 
