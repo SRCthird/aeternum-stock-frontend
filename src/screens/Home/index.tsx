@@ -12,7 +12,9 @@ export type RootStackParamList = {
   ProductLot: undefined;
   Warehouse: undefined;
   InventoryBay: undefined;
-  Inventory: undefined;
+  Inventory: {
+    state?: 'release' | 'scrap';
+  } | undefined;
 }
 
 const Stack = createStackNavigator();

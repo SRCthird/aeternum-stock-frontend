@@ -33,6 +33,14 @@ const Home = ({ navigation }: Props) => {
       navigation.navigate('Inventory');
       setMode('actions');
     }
+    if (mode === 'release') {
+      navigation.navigate('Inventory', { state: 'release' });
+      setMode('actions');
+    }
+    if (mode === 'scrap') {
+      navigation.navigate('Inventory', { state: 'scrap' });
+      setMode('actions');
+    }
   }, [mode]);
 
   return (
