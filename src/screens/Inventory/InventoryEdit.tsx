@@ -105,7 +105,6 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
         items={locations}
         selectedValue={data.location}
         onValueChange={(location) => {
-          console.log(location);
           setData({ ...data, location });
         }}
       />
