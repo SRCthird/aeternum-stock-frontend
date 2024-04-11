@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Appbar, Menu, TextInput } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Home";
@@ -11,20 +11,17 @@ import DropDown from "@src/components/DropDown";
 import useWarehouseList from "../Warehouse/Hooks/useWarehouseList";
 import { Picker } from "@react-native-picker/picker";
 import NumberInput from "@src/components/NumberInput";
+import InventoryBayHeader from "./Components/InventoryBayHeader";
 
 type Props = {
   key_: number;
-  setKey: (key: number) => void;
-  setMode: (mode: mode) => void;
+  setKey: Dispatch<SetStateAction<number>>;
+  setMode: Dispatch<SetStateAction<mode>>;
   navigation: StackNavigationProp<RootStackParamList, 'InventoryBay'>;
 }
 
 const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
   const { result: warehouses, isLoading } = useWarehouseList();
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
 
   const [data, setData] = useState<InventoryBay>({
     id: 0,
@@ -51,40 +48,14 @@ const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
   }, [submit]);
 
   return (
-    <>
-      <Appbar style={{
-        height: 80,
-        width: '100%',
-        paddingTop: 25,
-      }}>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
-          }
-        >
-          <Menu.Item
-            title="Home"
-            onPress={() => {
-              navigation.navigate('Actions');
-              closeMenu();
-            }}
-          />
-          <Menu.Item
-            title="Inventory Bay View"
-            onPress={() => {
-              setMode('view');
-              closeMenu();
-            }}
-          />
-        </Menu>
-        <Appbar.Content title="Input bay" />
-        <Appbar.Action icon="plus" onPress={() => { console.log('add'); }} />
-        <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key_ + 1);
-        }} />
-      </Appbar>
+    <View style={{ flex: 1 }}>
+      <InventoryBayHeader
+        title="Add Inventory Bay"
+        setKey={setKey}
+        setItem={setData}
+        setMode={setMode}
+        navigation={navigation}
+      />
       <View style={{ 
         flex: 1,
         justifyContent: 'flex-start',
@@ -121,7 +92,7 @@ const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
         <View style={{ flex: 1 }}></View>
         <SaveButton setSubmit={setSubmit} />
       </View>
-    </>
+    </View>
   );
 }
 
