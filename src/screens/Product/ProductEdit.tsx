@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Appbar, Menu, TextInput } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Home";
@@ -6,22 +6,19 @@ import { Product } from "./Hooks/useProduct";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import api from "@src";
 import { mode } from "@utils/types";
+import ProductHeader from "./Components/ProductHeader";
 
 type Props = {
   key_: number;
-  setKey: (key_: number) => void;
-  setMode: (mode: mode) => void;
+  setKey: Dispatch<SetStateAction<number>>;
+  setMode: Dispatch<SetStateAction<mode>>;
   item: Product;
-  setItem: (item: Product) => void;
+  setItem: Dispatch<SetStateAction<Product>>;
   navigation: StackNavigationProp<RootStackParamList, 'Product'>;
 }
 
 
 const ProductEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
-
   const [data, setData] = useState<Product>(item);
   const [submit, setSubmit] = useState(false);
 
@@ -67,47 +64,14 @@ const ProductEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props
   }, [submit]);
 
   return (
-    <>
-      <Appbar style={{
-        height: 80,
-        width: '100%',
-        paddingTop: 25,
-      }}>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
-          }
-        >
-          <Menu.Item
-            title="Home"
-            onPress={() => {
-              navigation.navigate('Actions');
-              closeMenu();
-            }}
-          />
-          <Menu.Item
-            title="Product View"
-            onPress={() => {
-              setMode('view');
-              closeMenu();
-            }}
-          />
-        </Menu>
-        <Appbar.Content title={"ID: " + item.id} />
-        <Appbar.Action icon="plus" onPress={() => {
-          setMode('add');
-          setItem({
-            id: 0,
-            name: '',
-            description: '',
-          });
-        }} />
-        <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key_ + 1);
-        }} />
-      </Appbar>
+    <View style={{ flex: 1 }}>
+      <ProductHeader 
+        title="Edit Product"
+        setKey={setKey}
+        setMode={setMode}
+        setItem={setItem}
+        navigation={navigation}
+      />
       <View style={{
         flex: 1,
         justifyContent: 'flex-start',
@@ -162,7 +126,7 @@ const ProductEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props
           <Text style={{ color: '#ffffff', fontSize: 18 }}>Delete</Text>
         </TouchableOpacity>
       </View>
-    </>
+    </View>
   );
 }
 
