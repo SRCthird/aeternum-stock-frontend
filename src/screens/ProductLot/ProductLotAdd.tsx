@@ -3,7 +3,7 @@ import { Appbar, Menu, TextInput } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Home";
 import { ProductLot } from "./Hooks/useProductLot";
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import api from "@src";
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
@@ -38,16 +38,25 @@ const ProductAdd = ({ key_, setKey, setMode, navigation }: Props) => {
 
   useEffect(() => {
     if (!submit) return;
+    if (data.quantity <= 0) {
+      Alert.alert('Invalid quantity', 'Quantity must be greater than 0.');
+      return;
+    }
     const { id: _, ...putData } = data;
     api.post('/api/product-lot/', putData)
-      .then(res => {
-        console.log(res.data);
+      .then(_ => {
         setKey(key_ + 1);
         setSubmit(false);
         setMode('view');
       })
       .catch(err => {
-        console.log(err);
+        if (err.response.status === 404) {
+          Alert.alert('Product does not exist', 'Please check the product name and try again.');
+        } else if (err.response.status === 409) {
+          Alert.alert('Conflict', 'Lot number or workorder already exists.');
+        } else {
+          Alert.alert('Error', err.message);
+        }
       });
     setSubmit(false);
   }, [submit]);

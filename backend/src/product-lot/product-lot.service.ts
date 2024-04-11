@@ -8,7 +8,21 @@ export class ProductLotService {
   constructor(readonly databaseService: DatabaseService) { }
 
   async create(createDto: Prisma.ProductLotCreateInput) {
-    const obj: Prisma.ProductLotCreateInput & {productName?: string} = {...createDto};
+    const obj: Prisma.ProductLotCreateInput & {productName?: string } = {...createDto};
+
+    const lots = await this.databaseService.productLot.findMany({
+      where: {
+        OR: [
+          { lotNumber: obj.lotNumber },
+          { internalReference: obj.internalReference },
+        ]
+      },
+    });
+    
+    if (lots.length > 0) {
+      throw new HttpException('Lot already exists.', HttpStatus.CONFLICT);
+    }
+
     const product = await this.databaseService.product.findMany({
       select: {
         name: true
@@ -16,7 +30,7 @@ export class ProductLotService {
     })
     const productExists = product.find((p) => p.name === obj.productName);
     if (!productExists) {
-      throw new BadRequestException('Product does not exist');
+      throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
     }
 
     return this.databaseService.productLot.create({ data: createDto });
