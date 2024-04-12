@@ -7,7 +7,6 @@ export class ApiKeyMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction): void {
     const apiKey = req.headers['x-api-key'];
-    console.log(apiKey);
 
     if (!apiKey) {
       throw new UnauthorizedException('API key is missing');
