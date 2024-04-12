@@ -9,6 +9,8 @@ import { LogModule } from './log/log.module';
 import { ProductModule } from './product/product.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
 import { ProductLotModule } from './product-lot/product-lot.module';
+import { UserModule } from './user/user.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ProductLotModule } from './product-lot/product-lot.module';
     WarehouseModule,
     DatabaseModule,
     ProductLotModule,
+    UserModule,
+    ProfileModule,
   ],
   controllers: [CoreController],
   providers: [CoreService],
