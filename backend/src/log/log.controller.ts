@@ -32,12 +32,19 @@ export class LogController {
   findAll(
     @Query('fromLocation') fromLocation?: string,
     @Query('toLocation') toLocation?: string,
-    @Query('userId') userId?: string,
+    @Query('username') username?: string,
     @Query('lotNumber') lotNumber?: string,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string
   ) {
-    return this.logService.findAll();
+    return this.logService.findAll(
+      fromLocation,
+      toLocation,
+      username,
+      lotNumber,
+      startDate,
+      endDate
+    );
   }
 
   @Get(':id')

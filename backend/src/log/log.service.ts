@@ -14,7 +14,7 @@ export class LogService {
   findAll(
     fromLocation?: string,
     toLocation?: string,
-    userId?: string,
+    username?: string,
     lotNumber?: string,
     startDate?: string,
     endDate?: string
@@ -27,7 +27,9 @@ export class LogService {
         toLocation: {
           startsWith: toLocation
         },
-        userId: userId,
+        user: {
+          startsWith: username
+        },
         lotNumber: {
           startsWith: lotNumber
         },
