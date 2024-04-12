@@ -12,7 +12,8 @@
       "@screens": ["src/screens"],
       "@hooks/*": ["src/hooks/*"],
       "@styles": ["src/styles"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@context/*": ["src/context/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
