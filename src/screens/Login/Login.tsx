@@ -6,11 +6,14 @@ import { RootStackParamList } from '@screens';
 import { mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
+import axios from 'axios';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Login'>;
   setMode: Dispatch<SetStateAction<mode>>;
 }
+
+export const api = axios.create();
 
 const LoginScreen = ({ navigation, setMode }: Props) => {
   const [username, setUsername] = useState('');
@@ -25,6 +28,20 @@ const LoginScreen = ({ navigation, setMode }: Props) => {
     const storedHashedPassword = await AsyncStorage.getItem(`user:${username}`);
 
     if (hashedPassword === storedHashedPassword) {
+      const endpoint = await AsyncStorage.getItem(`${username}:endpoint`);
+      if (!endpoint) {
+        Alert.alert('Error', 'No endpoint found');
+        return;
+      };
+      api.defaults.baseURL = endpoint;
+
+      const key = await AsyncStorage.getItem(`${username}:apiKey`);
+      if (!key) {
+        Alert.alert("No API key found");
+      } else {
+        api.defaults.headers['x-api-key'] = key;
+      }
+
       await AsyncStorage.setItem('user', username);
       navigation.navigate('Actions');
     } else {
@@ -50,10 +67,10 @@ const LoginScreen = ({ navigation, setMode }: Props) => {
       <Button mode="contained" onPress={handleLogin} style={styles.button}>
         Submit
       </Button>
-      <Button mode="text" onPress={() => {setMode('createAccount')} } style={styles.button}>
+      <Button mode="text" onPress={() => { setMode('createAccount') }} style={styles.button}>
         Create Account
       </Button>
-      <Button mode="text" onPress={() => {setMode('link')} } style={styles.button}>
+      <Button mode="text" onPress={() => { setMode('link') }} style={styles.button}>
         Link Account
       </Button>
     </View>

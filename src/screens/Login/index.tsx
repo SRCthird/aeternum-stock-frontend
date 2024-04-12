@@ -4,6 +4,7 @@ import LoginScreen from "./Login";
 import { useState } from "react";
 import { View } from "react-native";
 import CreateAccount from "./CreateAccount";
+import LinkAccount from "./LinkAccount";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Login'>;
@@ -23,6 +24,11 @@ const LoginIndex = ({ navigation }: Props) => {
     )}
     {mode === 'createAccount' && (
       <CreateAccount 
+        setMode={setMode}
+      />
+    )}
+    {mode === 'link' && (
+      <LinkAccount
         setMode={setMode}
       />
     )}

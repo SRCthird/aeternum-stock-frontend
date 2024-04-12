@@ -2,9 +2,9 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
-import axios from 'axios';
 import { mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { validateUser } from './Utils';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -22,28 +22,16 @@ const LinkAccount = ({ setMode }: Props) => {
       password
     );
 
-    axios.post(endpoint, {
-      username,
-      password: hashedPassword,
-    }, {
-      headers: {
-        'X-API-Key': apiKey,
-      },
-    })
-      .then(res => {
-        Alert.alert('Success', 'Account linked successfully');
+    validateUser(endpoint, apiKey, username, hashedPassword)
+      .then(() => {
         AsyncStorage.setItem(`user:${username}`, hashedPassword);
         AsyncStorage.setItem(`${username}:endpoint`, endpoint);
         AsyncStorage.setItem(`${username}:apiKey`, apiKey);
-        setMode('login');
       })
       .catch(err => {
-        if (err.response.status === 500) {
-          Alert.alert('Error', 'User does not exist');
-        } else {
-          Alert.alert('Error', 'Failed to link account');
-        }
+        Alert.alert('Error', err.message);
       });
+    setMode('login');
   };
 
   return (

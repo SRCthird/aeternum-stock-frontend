@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { CoreController } from './core.controller';
 import { CoreService } from './core.service';
+import { ApiKeyMiddleware } from './api-key/api-key.middleware';
 
 import { DatabaseModule } from './database/database.module';
 import { InventoryModule } from './inventory/inventory.module';
@@ -27,4 +28,10 @@ import { ProfileModule } from './profile/profile.module';
   controllers: [CoreController],
   providers: [CoreService],
 })
-export class CoreModule {}
+export class CoreModule { 
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ApiKeyMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

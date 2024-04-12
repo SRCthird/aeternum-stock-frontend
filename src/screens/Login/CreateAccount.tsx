@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
 import { mode } from '.';
+import { postUser, validateUser } from './Utils';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -27,12 +27,19 @@ const CreateAccount = ({ setMode }: Props) => {
       password
     );
 
-    await AsyncStorage.setItem(`user:${username}`, hashedPassword);
-    await AsyncStorage.setItem(`${username}:endpoint`, endpoint);
-    await AsyncStorage.setItem(`${username}:apiKey`, apiKey);
-
-    Alert.alert('Success', 'Account created successfully');
-    setMode('login');
+    validateUser(endpoint, apiKey, username, hashedPassword)
+      .then(() => {
+        postUser(endpoint, apiKey, { email: username, password: hashedPassword })
+          .then(() => {
+            setMode('login');
+          })
+          .catch(err => {
+            Alert.alert('Error', err.message);
+          });
+      })
+      .catch(err => {
+        Alert.alert('Error', err.message);
+      });
   };
 
   return (
