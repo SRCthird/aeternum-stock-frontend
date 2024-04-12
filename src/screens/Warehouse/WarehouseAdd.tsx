@@ -4,7 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@screens";
 import { Warehouse } from "./Hooks/useWarehouse";
 import { View } from "react-native";
-import api from "@src";
+import { api } from '@screens/Login/Login';
 import { mode } from '@utils/types';
 import SaveButton from "@src/components/SaveButton";
 

@@ -1,4 +1,4 @@
-import api from '@src';
+import { api } from '@screens/Login/Login';
 import { CanceledError } from 'axios';
 import { useEffect, useState } from 'react'
 import { ProductLot } from './useProductLot';

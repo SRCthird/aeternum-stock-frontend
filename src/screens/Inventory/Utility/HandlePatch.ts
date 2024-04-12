@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 import { Inventory } from "../Hooks/useInventory";
 import { mode } from "@utils/types";
-import api from "@src";
+import { api } from '@screens/Login/Login';
 import { Dispatch, SetStateAction } from "react";
 
 type Props = {
