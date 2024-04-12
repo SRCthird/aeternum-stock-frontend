@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import Home from '@screens/Home';
+import Screens from '@screens';
 
 const App = () => {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Home />
+        <Screens />
       </NavigationContainer>
     </PaperProvider>
   );
