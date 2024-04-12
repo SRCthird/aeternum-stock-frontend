@@ -1,21 +1,19 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import { RootStackParamList } from '@screens';
 import { mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
 import axios from 'axios';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'Login'>;
   setMode: Dispatch<SetStateAction<mode>>;
+  setUser: Dispatch<SetStateAction<string>>;
 }
 
 export const api = axios.create();
 
-const LoginScreen = ({ navigation, setMode }: Props) => {
+const LoginScreen = ({ setMode, setUser }: Props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -43,7 +41,8 @@ const LoginScreen = ({ navigation, setMode }: Props) => {
       }
 
       await AsyncStorage.setItem('user', username);
-      navigation.navigate('Actions');
+      setUser(username);
+      setMode('loggedIn');
     } else {
       Alert.alert('Error', 'Invalid username or password');
     }

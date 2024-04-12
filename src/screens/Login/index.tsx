@@ -1,39 +1,56 @@
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@screens";
 import LoginScreen from "./Login";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { View } from "react-native";
 import CreateAccount from "./CreateAccount";
 import LinkAccount from "./LinkAccount";
+import useUser from "./Hooks/useUser";
+import AccountContext from "@context/AccountContext";
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'Login'>;
+  children?: ReactNode;
 }
 
-export type mode = 'login' | 'createAccount' | 'link';
-const LoginIndex = ({ navigation }: Props) => {
+export type mode = 'login' | 'createAccount' | 'link' | 'loggedIn';
+const LoginIndex = ({ children }: Props) => {
   const [mode, setMode] = useState<mode>('login');
-  
-  return (
-    <View style={{ flex: 1 }}>
-    {mode === 'login' && (
-      <LoginScreen 
-        navigation={navigation} 
-        setMode={setMode}
-      />
-    )}
-    {mode === 'createAccount' && (
-      <CreateAccount 
-        setMode={setMode}
-      />
-    )}
-    {mode === 'link' && (
-      <LinkAccount
-        setMode={setMode}
-      />
-    )}
-    </View>
-  )
-}
+  const [user, setUser] = useState("");
 
+  const { user: activeUser, error, loading } = useUser({ email: user });
+
+  switch (mode) {
+    case 'login':
+      return (
+        <View style={{ flex: 1 }}>
+          <LoginScreen
+            setMode={setMode}
+            setUser={setUser}
+          />
+        </View>
+      );
+    case 'createAccount':
+      return (
+        <View style={{ flex: 1 }}>
+          <CreateAccount
+            setMode={setMode}
+          />
+        </View>
+      );
+    case 'link':
+      return (
+        <View style={{ flex: 1 }}>
+          <LinkAccount
+            setMode={setMode}
+          />
+        </View>
+      );
+    case 'loggedIn':
+      return (
+        <AccountContext.Provider value={activeUser}>
+          <View style={{ flex: 1 }}>
+            {children}
+          </View>
+        </AccountContext.Provider>
+      );
+  }
+}
 export default LoginIndex;
