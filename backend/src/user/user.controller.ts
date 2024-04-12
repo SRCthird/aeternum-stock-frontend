@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Prisma } from '@prisma/client';
 
@@ -12,8 +12,8 @@ export class UserController {
   }
 
   @Get()
-  findAll(@Query) {
-    return this.userService.findAll();
+  findAll(@Query('email') email: string) {
+    return this.userService.findAll(email);
   }
 
   @Get(':id')

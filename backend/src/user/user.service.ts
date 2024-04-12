@@ -11,8 +11,12 @@ export class UserService {
     return this.databaseService.user.create({ data: createDto });
   }
 
-  findAll() {
-    return this.databaseService.user.findMany();
+  findAll(email: string) {
+    const query: Prisma.UserFindManyArgs = { where: 
+      { email } 
+    };
+
+    return this.databaseService.user.findMany(query);
   }
 
   findOne(id: number) {
