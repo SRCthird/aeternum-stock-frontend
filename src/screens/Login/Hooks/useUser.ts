@@ -45,7 +45,7 @@ const useUser = ({ id, email }: Props) => {
     updatedAt: ''
   });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (id === 0) return;
@@ -58,7 +58,8 @@ const useUser = ({ id, email }: Props) => {
     api.get(endpoint)
       .then(res => {
         if (id) setUser(res.data);
-        else setUsers(res.data);
+        if (email) setUser(res.data[0]);
+        setUsers(res.data);
         setLoading(false);
       })
       .catch(err => {

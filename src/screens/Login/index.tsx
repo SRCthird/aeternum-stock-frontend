@@ -1,10 +1,11 @@
-import LoginScreen from "./Login";
-import { ReactNode, useState } from "react";
-import { View } from "react-native";
+import LoginScreen, { api } from "./Login";
+import { ReactNode, useEffect, useState } from "react";
+import { Alert, Text, View } from "react-native";
 import CreateAccount from "./CreateAccount";
 import LinkAccount from "./LinkAccount";
-import useUser from "./Hooks/useUser";
+import { User } from "./Hooks/useUser";
 import AccountContext from "@context/AccountContext";
+import { CanceledError } from "axios";
 
 type Props = {
   children?: ReactNode;
@@ -14,8 +15,30 @@ export type mode = 'login' | 'createAccount' | 'link' | 'loggedIn';
 const LoginIndex = ({ children }: Props) => {
   const [mode, setMode] = useState<mode>('login');
   const [user, setUser] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [activeUser, setActiveUser] = useState<User>({
+    id: 0,
+    email: '',
+    password: '',
+    role: '',
+    createdAt: '',
+    updatedAt: ''
+  });
 
-  const { user: activeUser, error, loading } = useUser({ email: user });
+  useEffect(() => {
+    const handleLogin = () => {
+      api.get('/api/user/?email=' + user)
+        .then(res => {
+          setActiveUser(res.data[0]);
+          setLoading(false);
+        })
+        .catch(err => {
+          if (err instanceof CanceledError) return;
+          Alert.alert('Error', 'Invalid username or password');
+        });
+    }
+    if (user !== "") handleLogin();
+  }, [user]);
 
   switch (mode) {
     case 'login':
@@ -45,11 +68,15 @@ const LoginIndex = ({ children }: Props) => {
       );
     case 'loggedIn':
       return (
-        <AccountContext.Provider value={activeUser}>
-          <View style={{ flex: 1 }}>
-            {children}
-          </View>
-        </AccountContext.Provider>
+        <View style={{ flex: 1 }}>
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            <AccountContext.Provider value={activeUser}>
+              {children}
+            </AccountContext.Provider>
+          )}
+        </View>
       );
   }
 }
