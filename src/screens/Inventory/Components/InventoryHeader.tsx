@@ -1,5 +1,5 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@src/screens/Home";
+import { RootStackParamList } from "@screens";
 import { mode } from "@src/utils/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";

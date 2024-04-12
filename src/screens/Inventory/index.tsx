@@ -1,7 +1,7 @@
 import { View } from "react-native";
-import { RootStackParamList } from "../Home";
+import { RootStackParamList } from "@screens";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import InventoryView from "./InventoryView";
 import { Inventory } from "./Hooks/useInventory";
 import InventoryEdit from "./InventoryEdit";

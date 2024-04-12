@@ -2,7 +2,7 @@ import { useState } from "react";
 import WarehouseList from "./Components/WarehouseList";
 import { Appbar, Menu } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../Home";
+import { RootStackParamList } from "@screens";
 import { mode } from '@utils/types';
 import { Warehouse } from "./Hooks/useWarehouse";
 

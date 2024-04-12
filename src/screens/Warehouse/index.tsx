@@ -1,7 +1,7 @@
 import { View } from "react-native";
-import { RootStackParamList } from "../Home";
+import { RootStackParamList } from "@screens";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import WarehouseView from "./WarehouseView";
 import { Warehouse } from "./Hooks/useWarehouse";
 import WarehouseEdit from "./WarehouseEdit";

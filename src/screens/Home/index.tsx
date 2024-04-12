@@ -1,37 +1,53 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import Home from '@screens/Home/Home';
-import Product from '@screens/Product';
-import ProductLot from '@screens/ProductLot';
-import Warehouse from '@screens/Warehouse';
-import InventoryBay from '@screens/InventoryBay';
-import Inventory from '@screens/Inventory';
+import { View } from 'react-native';
+import HomeHeader from './Components/HomeHeader';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '@screens';
+import { useEffect, useState } from 'react';
+import { mode } from './types';
+import Actions from './Actions';
+import CreateItem from './CreateItem';
 
-export type RootStackParamList = {
-  Actions: undefined;
-  Product: undefined;
-  ProductLot: undefined;
-  Warehouse: undefined;
-  InventoryBay: undefined;
-  Inventory: {
-    state?: 'release' | 'scrap';
-  } | undefined;
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, 'Actions'>;
 }
 
-const Stack = createStackNavigator();
+const Home = ({ navigation }: Props) => {
+  const [mode, setMode] = useState<mode>('actions');
+  const [title, setTitle] = useState<string>('Actions');
 
-const index = () => {
+  useEffect(() => {
+    if (mode === 'transfer') {
+      navigation.navigate('Inventory');
+      setMode('actions');
+    }
+    if (mode === 'release') {
+      navigation.navigate('Inventory', { state: 'release' });
+      setMode('actions');
+    }
+    if (mode === 'scrap') {
+      navigation.navigate('Inventory', { state: 'scrap' });
+      setMode('actions');
+    }
+  }, [mode]);
+
   return (
-    <Stack.Navigator screenOptions={{
-      headerShown: false
-    }}>
-      <Stack.Screen name="Actions" component={Home} />
-      <Stack.Screen name="Product" component={Product} />
-      <Stack.Screen name="ProductLot" component={ProductLot} />
-      <Stack.Screen name="Warehouse" component={Warehouse} />
-      <Stack.Screen name="InventoryBay" component={InventoryBay} />
-      <Stack.Screen name="Inventory" component={Inventory} />
-    </Stack.Navigator>
+    <View style={{ flex: 1 }}>
+      <HomeHeader
+        title={title}
+        setMode={setMode}
+        navigation={navigation}
+      />
+      {mode === 'actions' && (
+        <Actions mode={mode} setMode={setMode} />
+      )}
+      {mode === 'create' && (
+        <CreateItem 
+          setHomeMode={setMode} 
+          setTitle={setTitle}
+        />
+      )}
+    </View>
   );
-}
+};
 
-export default index;
+export default Home;

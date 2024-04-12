@@ -2,7 +2,7 @@ import { Appbar, Menu } from "react-native-paper";
 import { Dispatch, SetStateAction, useState } from "react";
 import { mode } from "@src/utils/types";
 import { Product } from "../Hooks/useProduct";
-import { RootStackParamList } from "@src/screens/Home";
+import { RootStackParamList } from "@screens";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {

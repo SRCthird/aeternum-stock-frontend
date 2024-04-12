@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { RootStackParamList } from "../Home";
+import { RootStackParamList } from "@screens";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useState } from "react";
 import ProductView from "./ProductView";

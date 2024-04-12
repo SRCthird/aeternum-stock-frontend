@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Appbar, Menu, TextInput } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../Home";
+import { RootStackParamList } from "@screens";
 import { Warehouse } from "./Hooks/useWarehouse";
 import { Alert, View } from "react-native";
 import api from "@src";
