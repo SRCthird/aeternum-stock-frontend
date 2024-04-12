@@ -9,6 +9,7 @@
       "@components/*": ["src/components/*"],
       "@config/*": ["src/config/*"],
       "@screens/*": ["src/screens/*"],
+      "@screens": ["src/screens"],
       "@hooks/*": ["src/hooks/*"],
       "@styles": ["src/styles"],
       "@utils/*": ["src/utils/*"]
