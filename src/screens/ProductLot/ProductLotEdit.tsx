@@ -5,7 +5,7 @@ import useProductList from "@screens/Product/Hooks/useProductList";
 import { Alert, View } from "react-native";
 import SaveButton from "@components/SaveButton";
 import DeleteButton from "@components/DeleteButton";
-import { api } from '@screens/Login/Login';
+import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import NumberInput from "@src/components/NumberInput";
 import { Picker } from '@react-native-picker/picker';

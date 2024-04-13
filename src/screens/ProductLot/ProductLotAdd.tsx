@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TextInput } from 'react-native-paper';
 import { ProductLot } from "./Hooks/useProductLot";
 import { Alert, View } from "react-native";
-import { api } from '@screens/Login/Login';
+import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import NumberInput from "@src/components/NumberInput";

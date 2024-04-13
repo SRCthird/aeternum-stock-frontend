@@ -4,7 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@screens";
 import { Product } from "./Hooks/useProduct";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
-import { api } from '@screens/Login/Login';
+import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 
 type Props = {

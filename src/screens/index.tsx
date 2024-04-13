@@ -5,7 +5,7 @@ import ProductLot from '@screens/ProductLot';
 import Warehouse from '@screens/Warehouse';
 import InventoryBay from '@screens/InventoryBay';
 import Inventory from '@screens/Inventory';
-import Login from '@screens/Login';
+import Authenticate from '@screens/Authenticate';
 import Test from '@screens/Test';
 
 export type RootStackParamList = {
@@ -26,7 +26,7 @@ const Stack = createStackNavigator();
 
 const Screens = () => {
   return (
-    <Login >
+    <Authenticate>
       <Stack.Navigator screenOptions={{
         headerShown: false
       }}>
@@ -38,7 +38,7 @@ const Screens = () => {
         <Stack.Screen name="Inventory" component={Inventory} />
         <Stack.Screen name="Test" component={Test} />
       </Stack.Navigator>
-    </Login>
+    </Authenticate>
   );
 }
 

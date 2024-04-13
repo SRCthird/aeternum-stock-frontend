@@ -14,7 +14,6 @@ const TestScreen = ({ navigation, route }: Props) => {
       <Text>Test Screen</Text>
     </View>
   )
-
 }
 
 export default TestScreen;
