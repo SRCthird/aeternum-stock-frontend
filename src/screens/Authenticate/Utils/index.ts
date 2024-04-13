@@ -29,11 +29,12 @@ export const validateUser = async (endpoint: string, apiKey: string, username: s
 
 export const validateUserLocal = async (username: string, password: string) => {
   const userPass = await AsyncStorage.getItem(`user:${username}`);
+  if (userPass === null) return;
   if (userPass === password) {
     Alert.alert('Warning', 'This user already exists in local storage');
     return;
   }
-  if (userPass !== null) throw new Error('User already exists in local storage')
+  throw new Error('User already exists in local storage')
 }
 
 export const validateUserRemote = async (endpoint: string, apiKey: string, username: string, password: string) => {
@@ -43,7 +44,12 @@ export const validateUserRemote = async (endpoint: string, apiKey: string, usern
     }
   })
     .then(res => {
-      if (res.data[0].password === password) return;
-      if (res.data.length > 0) throw new Error('User already exists in database');
+      if (res.data.length === 0) return;
+      const passwd: string = res.data[0].password || "";
+      if (passwd === password) return;
+      throw new Error('User already exists in database');
     })
+    .catch(err => {
+      throw new Error(err);
+    });
 }

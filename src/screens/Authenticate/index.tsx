@@ -6,14 +6,17 @@ import LinkAccount from "./LinkAccount";
 import { User } from "./Hooks/useUser";
 import AccountContext from "@context/AccountContext";
 import { CanceledError } from "axios";
+import AuthContext from "@src/context/AuthContext";
 
 type Props = {
-  children?: ReactNode;
+  children: ReactNode;
 }
 
-export type mode = 'login' | 'createAccount' | 'link' | 'loggedIn';
-const LoginIndex = ({ children }: Props) => {
-  const [mode, setMode] = useState<mode>('login');
+export type authState = 'login' | 'createAccount' | 'link' | 'loggedIn';
+
+const Authenticate = ({ children }: Props) => {
+  const [auth, setAuth] = useState<authState>('login');
+
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
   const [activeUser, setActiveUser] = useState<User>({
@@ -40,12 +43,12 @@ const LoginIndex = ({ children }: Props) => {
     if (user !== "") handleLogin();
   }, [user]);
 
-  switch (mode) {
+  switch (auth) {
     case 'login':
       return (
         <View style={{ flex: 1 }}>
           <LoginScreen
-            setMode={setMode}
+            setMode={setAuth}
             setUser={setUser}
           />
         </View>
@@ -54,7 +57,7 @@ const LoginIndex = ({ children }: Props) => {
       return (
         <View style={{ flex: 1 }}>
           <CreateAccount
-            setMode={setMode}
+            setMode={setAuth}
           />
         </View>
       );
@@ -62,7 +65,7 @@ const LoginIndex = ({ children }: Props) => {
       return (
         <View style={{ flex: 1 }}>
           <LinkAccount
-            setMode={setMode}
+            setMode={setAuth}
           />
         </View>
       );
@@ -72,12 +75,14 @@ const LoginIndex = ({ children }: Props) => {
           {loading ? (
             <Text>Loading...</Text>
           ) : (
-            <AccountContext.Provider value={activeUser}>
-              {children}
-            </AccountContext.Provider>
+            <AuthContext.Provider value={{ setAuth }}>
+              <AccountContext.Provider value={activeUser}>
+                {children}
+              </AccountContext.Provider>
+            </AuthContext.Provider>
           )}
         </View>
       );
   }
 }
-export default LoginIndex;
+export default Authenticate;
