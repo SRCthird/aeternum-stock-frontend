@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Appbar, Menu } from 'react-native-paper';
-import { RootStackParamList } from '@src/screens/Home';
+import { RootStackParamList } from '@screens';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { mode } from '../types';
-import { Alert } from 'react-native';
+import UserMenu from '@src/screens/User/components/UserMenu';
 
 type Props = {
   title: string;
@@ -74,9 +74,9 @@ const Header = ({ title, setMode, navigation }: Props) => {
         />
       </Menu>
       <Appbar.Content title={title} />
-      <Appbar.Action icon="account" onPress={() => { 
-        Alert.alert('User', 'User authentication has not been implimented yet :\(');
-      }} />
+      <UserMenu 
+        Appbar={Appbar} 
+      />
     </Appbar.Header>
   );
 };
