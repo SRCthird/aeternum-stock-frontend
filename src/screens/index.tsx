@@ -7,6 +7,7 @@ import InventoryBay from '@screens/InventoryBay';
 import Inventory from '@screens/Inventory';
 import Authenticate from '@screens/Authenticate';
 import Test from '@screens/Test';
+import User from './User';
 
 export type RootStackParamList = {
   Actions: undefined;
@@ -20,6 +21,7 @@ export type RootStackParamList = {
   Test: {
     test?: any;
   } | undefined;
+  User: undefined;
 }
 
 const Stack = createStackNavigator();
@@ -37,6 +39,7 @@ const Screens = () => {
         <Stack.Screen name="InventoryBay" component={InventoryBay} />
         <Stack.Screen name="Inventory" component={Inventory} />
         <Stack.Screen name="Test" component={Test} />
+        <Stack.Screen name="User" component={User} />
       </Stack.Navigator>
     </Authenticate>
   );
