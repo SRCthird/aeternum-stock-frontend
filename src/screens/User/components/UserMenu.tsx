@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Menu } from "react-native-paper";
 
 type Props = {
+  navigation: any;
   Appbar: any;
 }
-const UserMenu = ({ Appbar }: Props) => {
-  const user = useAccount();
+const UserMenu = ({ navigation, Appbar }: Props) => {
+  const { user } = useAccount();
   const { setAuth } = useAuth();
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -28,10 +29,14 @@ const UserMenu = ({ Appbar }: Props) => {
       }
     >
       <Menu.Item
-        title={user.email}
+        title={user.firstName + ' ' + user.lastName}
       />
       <Menu.Item
-        title={user.firstName + ' ' + user.lastName}
+      title="View Account"
+      onPress={() => {
+        navigation.navigate('User');
+        closeMenu();
+      }}
       />
       <Menu.Item
         title="Logout"
