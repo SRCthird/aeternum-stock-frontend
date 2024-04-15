@@ -14,6 +14,7 @@ import DatePicker from "@components/DatePicker";
 import DeleteButton from "@src/components/DeleteButton";
 import handlePatch from "./Utility/HandlePatch";
 import SearchableDropDown from "@src/components/SearchableDropDown";
+import { useAccount } from "@src/context/AccountContext";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -23,13 +24,18 @@ type Props = {
 }
 
 const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
+  const { user } = useAccount();
   const { result: lots, isLoading: lotsLoading } = useProductLotList();
   const { result: locations, isLoading: locationsLoading } = useInventoryBayList();
 
   const [data, setData] = useState<Inventory>(item);
 
   useEffect(() => {
-    setData({...data, updatedAt: new Date()});
+    setData({
+      ...data, 
+      updatedAt: new Date(),
+      updatedBy: user.email,
+    });
     if (state === 'release') {
       setData({...data, location: "Released"});
     }
@@ -124,15 +130,14 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
         }}
       />
       <TextInput
+        disabled={true}
         style={{
           minWidth: '100%',
           margin: 10,
         }}
         label="Updated By"
-        defaultValue={item.updatedBy}
         value={data.updatedBy}
         mode="outlined"
-        onChangeText={updatedBy => { setData({ ...data, updatedBy }) }}
       />
       <View style={{ flex: 1 }}></View>
       <SaveButton setSubmit={setSubmit} />

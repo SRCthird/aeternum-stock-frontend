@@ -12,6 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import NumberInput from "@src/components/NumberInput";
 import DatePicker from "@components/DatePicker";
 import useLotLookup from "../ProductLot/Hooks/useLotLookup";
+import { useAccount } from "@src/context/AccountContext";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -20,6 +21,7 @@ type Props = {
 }
 
 const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
+  const { user } = useAccount();
   const { result: lots, isLoading: lotsLoading } = useProductLotList();
   const { result: locations, isLoading: locationsLoading } = useInventoryBayList();
 
@@ -42,6 +44,8 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
         ...data,
         lotNumber: defaultItem.lotNumber,
         quantity: defaultItem.quantity,
+        createdBy: user.email,
+        updatedBy: user.email,
       });
     }
   }, []);
@@ -122,14 +126,14 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
         }}
       />
       <TextInput
+        disabled={true}
         style={{
           minWidth: '100%',
           margin: 10,
         }}
         label="Created By"
-        placeholder="Enter your name"
+        value={user.email}
         mode="outlined"
-        onChangeText={createdBy => { setData({ ...data, createdBy }) }}
       />
       <View style={{ flex: 1 }}></View>
       <SaveButton setSubmit={setSubmit} />
