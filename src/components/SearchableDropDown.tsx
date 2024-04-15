@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { useEffect, useState, useRef } from 'react';
+import { View, Text, FlatList, TouchableOpacity, TouchableWithoutFeedback, Modal, StyleSheet } from 'react-native';
+import { TextInput } from 'react-native-paper';
 
 type Props = {
   label: string;
@@ -11,75 +12,116 @@ type Props = {
 const SearchableDropDown = ({ label, items, selectedValue, onValueChange }: Props) => {
   const [filter, setFilter] = useState(selectedValue);
   const [showDropdown, setShowDropdown] = useState(false);
+  const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     setFilter(selectedValue);
   }, [selectedValue]);
+
+  useEffect(() => {
+    if (showDropdown) {
+      inputRef.current?.focus();
+    }
+  }, [showDropdown]);
 
   const filteredItems = items.filter(item =>
     item.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
-    <View
-      style={{
-        minWidth: '100%',
-        margin: 10,
-        backgroundColor: '#fffbfe',
-        borderWidth: 1,
-        borderRadius: 4,
-        borderColor: '#6d6875',
-      }}
-    >
-      <Text
-        style={{
-          position: 'absolute',
-          backgroundColor: '#f2f2f2',
-          top: -10,
-          left: 10,
-          paddingHorizontal: 5,
-          fontSize: 12,
-          color: '#6d6875',
-        }}
-      >
-        {label}
-      </Text>
+    <View>
       <TextInput
+        label={label}
         value={filter}
-        onChangeText={setFilter}
         onFocus={() => setShowDropdown(true)}
         style={{
           minWidth: '100%',
-          borderRadius: 4,
-          backgroundColor: 'transparent',
-          padding: 10,
+          maxWidth: '100%',
+          margin: 10,
         }}
+        placeholder="Tap to search..."
+        underlineColor="transparent"
+        activeOutlineColor="#6d6875"
+        mode="outlined"
+        editable={!showDropdown}
       />
-      {showDropdown && (
-        <FlatList
-          data={filteredItems}
-          keyExtractor={item => item}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={{
-                width: '100%',
-                borderBottomWidth: 1,
-              }}
-              
-              onPress={() => {
-                onValueChange(item);
-                setFilter(item);
-                setShowDropdown(false);
-              }}
-            >
-              <Text style={{ padding: 10 }}>{item}</Text>
-            </TouchableOpacity>
-          )}
-        />
-      )}
+      <Modal
+        visible={showDropdown}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowDropdown(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.dropdown}>
+          <TextInput
+            ref={inputRef}
+            value={filter}
+            onChangeText={setFilter}
+            autoFocus={true}
+            activeOutlineColor="#6d6875"
+            mode="outlined"
+          />
+          <View style={{ height: 30 }} />
+          <FlatList
+            style={{
+              maxWidth: '100%',
+              backgroundColor: 'white',
+              borderRadius: 4,
+            }}
+            data={filteredItems}
+            keyExtractor={item => item}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => {
+                  onValueChange(item);
+                  setFilter(item);
+                  setShowDropdown(false);
+                }}
+              >
+                <Text style={styles.itemText}>{item}</Text>
+              </TouchableOpacity>
+            )}
+            keyboardShouldPersistTaps="handled"
+          />
+        </View>
+      </Modal>
     </View>
   );
 };
 
-export default SearchableDropDown;
+const styles = StyleSheet.create({
+  container: {
+    minWidth: '100%',
+    margin: 10
+  },
+  input: {
+    fontSize: 16
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  dropdown: {
+    position: 'absolute',
+    top: 50,
+    left: 10,
+    right: 10,
+    borderRadius: 4,
+  },
+  modalInput: {
+    fontSize: 16
+  },
+  item: {
+    width: '100%',
+    borderBottomWidth: 1,
+    borderColor: '#ddd'
+  },
+  itemText: {
+    padding: 10
+  }
+});
 
+export default SearchableDropDown;
