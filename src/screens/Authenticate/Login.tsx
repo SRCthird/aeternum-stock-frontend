@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, Appbar } from 'react-native-paper';
 import { authState as mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
@@ -9,11 +9,12 @@ import axios from 'axios';
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
   setUser: Dispatch<SetStateAction<string>>;
+  passPassword: Dispatch<SetStateAction<string>>;
 }
 
 export const api = axios.create();
 
-const LoginScreen = ({ setMode, setUser }: Props) => {
+const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -43,6 +44,10 @@ const LoginScreen = ({ setMode, setUser }: Props) => {
       await AsyncStorage.setItem('user', username);
       setUser(username);
       setMode('loggedIn');
+    } else if (storedHashedPassword === null) {
+      setUser(username);
+      passPassword(password);
+      setMode('link');
     } else {
       Alert.alert('Error', 'Invalid username or password');
     }
@@ -50,6 +55,7 @@ const LoginScreen = ({ setMode, setUser }: Props) => {
 
   return (
     <View style={styles.container}>
+
       <TextInput
         label="Username"
         value={username}

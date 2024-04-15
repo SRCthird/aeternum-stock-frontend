@@ -18,6 +18,7 @@ const Authenticate = ({ children }: Props) => {
   const [auth, setAuth] = useState<authState>('login');
 
   const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const [activeUser, setActiveUser] = useState<User>({
     id: 0,
@@ -40,8 +41,8 @@ const Authenticate = ({ children }: Props) => {
           Alert.alert('Error', 'Invalid username or password');
         });
     }
-    if (user !== "") handleLogin();
-  }, [user]);
+    if (user !== "" && auth === 'loggedIn') handleLogin();
+  }, [user, auth]);
 
   switch (auth) {
     case 'login':
@@ -50,6 +51,7 @@ const Authenticate = ({ children }: Props) => {
           <LoginScreen
             setMode={setAuth}
             setUser={setUser}
+            passPassword={setPassword}
           />
         </View>
       );
@@ -66,6 +68,8 @@ const Authenticate = ({ children }: Props) => {
         <View style={{ flex: 1 }}>
           <LinkAccount
             setMode={setAuth}
+            _user={user}
+            _password={password}
           />
         </View>
       );
