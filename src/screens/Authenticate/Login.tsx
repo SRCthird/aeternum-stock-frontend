@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { TextInput, Button, Appbar } from 'react-native-paper';
+import { View, Image, StyleSheet, Alert } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
 import { authState as mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
@@ -55,7 +55,15 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
 
   return (
     <View style={styles.container}>
-
+      <View style = {{ flex : 1 }} />
+      <Image 
+        source={require('../../../assets/Title2.png')} 
+        style={{ 
+          width: '100%', 
+          height: 120 
+        }} 
+      />
+      <View style = {{ flex : 1 }} />
       <TextInput
         label="Username"
         value={username}
@@ -75,9 +83,7 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
       <Button mode="text" onPress={() => { setMode('createAccount') }} style={styles.button}>
         Create Account
       </Button>
-      <Button mode="text" onPress={() => { setMode('link') }} style={styles.button}>
-        Link Account
-      </Button>
+      <View style = {{ flex : 3 }} />
     </View>
   );
 };
