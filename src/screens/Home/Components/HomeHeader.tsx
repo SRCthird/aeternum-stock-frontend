@@ -75,6 +75,7 @@ const Header = ({ title, setMode, navigation }: Props) => {
       </Menu>
       <Appbar.Content title={title} />
       <UserMenu 
+        navigation={navigation}
         Appbar={Appbar} 
       />
     </Appbar.Header>
