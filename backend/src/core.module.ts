@@ -11,7 +11,6 @@ import { ProductModule } from './product/product.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
 import { ProductLotModule } from './product-lot/product-lot.module';
 import { UserModule } from './user/user.module';
-import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -23,7 +22,6 @@ import { ProfileModule } from './profile/profile.module';
     DatabaseModule,
     ProductLotModule,
     UserModule,
-    ProfileModule,
   ],
   controllers: [CoreController],
   providers: [CoreService],
