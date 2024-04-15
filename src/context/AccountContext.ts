@@ -1,8 +1,13 @@
 import { User } from '@src/screens/Authenticate/Hooks/useUser';
-import {createContext} from 'react';
+import {Dispatch, SetStateAction, createContext} from 'react';
 import { useContext } from 'react';
 
-const AccountContext = createContext<User | null>(null);
+type AccountContextType = {
+  user: User;
+  setUser: Dispatch<SetStateAction<User>>;
+}
+
+const AccountContext = createContext<AccountContextType | null>(null);
 
 export const useAccount = () => {
   const account = useContext(AccountContext);
