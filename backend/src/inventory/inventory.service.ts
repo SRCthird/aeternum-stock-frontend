@@ -7,8 +7,8 @@ export class InventoryService {
 
   constructor(readonly databaseService: DatabaseService) { }
 
-  async create(createDto: Prisma.InventoryCreateInput) {
-    const obj: Prisma.InventoryCreateInput & {lotNumber?: string, location?: string} = {...createDto};
+  async create(createDto: Prisma.InventoryCreateInput, comments?: string, fromLocation?: string) {
+    const obj: Prisma.InventoryCreateInput & {lotNumber?: string, location?: string, createdBy?: string} = {...createDto};
 
     const lot = await this.databaseService.productLot.findMany({
       where: {
@@ -45,6 +45,18 @@ export class InventoryService {
     if (!bayExist) {
       throw new HttpException('Inventory bay does not exist', HttpStatus.PRECONDITION_REQUIRED);
     }
+
+    const log = await this.databaseService.log.create({
+      data: {
+        fromLocation: fromLocation,
+        toLocation: obj.location,
+        dateTime: new Date(),
+        user: obj.createdBy,
+        lotNumber: obj.lotNumber,
+        quantityMoved: obj.quantity,
+        comments: comments || 'Inventory created'
+      }
+    })
 
     return this.databaseService.inventory.create({ data: createDto });
   }
@@ -87,9 +99,8 @@ export class InventoryService {
     return this.databaseService.inventory.findUnique({ where: { id } });
   }
 
-  async update(id: number, updateDto: Prisma.InventoryUpdateInput) {
-    const obj: Prisma.InventoryUpdateInput & {lotNumber?: string, location?: string} = {...updateDto};
-    console.log(obj);
+  async update(id: number, updateDto: Prisma.InventoryUpdateInput, comments?: string, fromLocation?: string) {
+    const obj: Prisma.InventoryUpdateInput & {lotNumber?: string, location?: string, createdBy?: string } = {...updateDto};
 
     const lot = await this.databaseService.productLot.findMany({
       where: {
@@ -121,6 +132,23 @@ export class InventoryService {
         throw new HttpException('Inventory bay does not exist', HttpStatus.PRECONDITION_REQUIRED);
       }
     }
+
+    try {
+      const log = await this.databaseService.log.create({
+        data: {
+          fromLocation: fromLocation,
+          toLocation: obj.location,
+          dateTime: new Date(),
+          user: obj.createdBy,
+          lotNumber: obj.lotNumber,
+          quantityMoved: +obj.quantity,
+          comments: comments || 'Inventory updated'
+        }
+      })
+    } catch (error) {
+      null;
+    }
+
     return this.databaseService.inventory.update({ where: { id }, data: updateDto });
   }
 

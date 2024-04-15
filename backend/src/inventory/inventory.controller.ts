@@ -24,9 +24,10 @@ export class InventoryController {
 
   @Post()
   create(
-    @Body() createDto: Prisma.InventoryCreateInput
+    @Body() createDto: Prisma.InventoryCreateInput & {comments?: string, fromLocation?: string}
   ) {
-    return this.inventoryService.create(createDto);
+    const { comments: comments, fromLocation: fromLocation,  ...newDto } = createDto;
+    return this.inventoryService.create(newDto, comments, fromLocation);
   }
 
   @Get()
@@ -54,8 +55,9 @@ export class InventoryController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: Prisma.InventoryUpdateInput) {
-    return this.inventoryService.update(+id, updateDto);
+  update(@Param('id') id: string, @Body() updateDto: Prisma.InventoryUpdateInput & {comments?: string, fromLocation?: string}) {
+    const { comments: comments, fromLocation: fromLocation,  ...newDto } = updateDto;
+    return this.inventoryService.update(+id, newDto, comments, fromLocation);
   }
 
   @Delete(':id')

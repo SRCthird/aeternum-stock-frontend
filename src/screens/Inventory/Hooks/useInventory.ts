@@ -11,6 +11,10 @@ export type Inventory = {
   createdBy: string;
   updatedAt?: Date;
   updatedBy: string;
+
+  // Sending not recieving
+  fromLocation?: string;
+  comments?: string;
 }
 
 const useInventory = ({ id }: { id?: number }) => {

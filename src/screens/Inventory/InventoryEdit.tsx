@@ -32,15 +32,17 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
 
   useEffect(() => {
     setData({
-      ...data, 
+      ...data,
       updatedAt: new Date(),
       updatedBy: user.email,
+      fromLocation: item.location,
+      comments: ""
     });
     if (state === 'release') {
-      setData({...data, location: "Released"});
+      setData({ ...data, location: "Released" });
     }
     if (state === 'scrap') {
-      setData({...data, location: "Scrapped"});
+      setData({ ...data, location: "Scrapped" });
     }
   }, []);
 
@@ -128,6 +130,18 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
         onConfirm={(updatedAt) => {
           setData({ ...data, updatedAt });
         }}
+      />
+      <TextInput
+        style={{
+          minWidth: '100%',
+          margin: 10,
+        }}
+        label="Comments"
+        value={data.comments}
+        onChangeText={(comments) => {
+          setData({ ...data, comments });
+        }}
+        mode="outlined"
       />
       <TextInput
         disabled={true}
