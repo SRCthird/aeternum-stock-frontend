@@ -17,7 +17,7 @@ const ViewProfile = ({ user, setMode, navigation }: Props) => {
   const { user: currentUser } = useAccount();
 
   useEffect(() => {
-    if (currentUser.id === user.id || currentUser.role === 'admin') {
+    if (currentUser.id === user.id || currentUser.role === 'Admin') {
       setAllowEdit(true);
     }
   }, []);

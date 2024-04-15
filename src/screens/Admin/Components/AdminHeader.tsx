@@ -2,18 +2,14 @@ import { useState } from 'react';
 import { Appbar, Menu } from 'react-native-paper';
 import { RootStackParamList } from '@screens';
 import { StackNavigationProp } from "@react-navigation/stack";
-import { mode } from '../types';
 import UserMenu from '@src/screens/User/components/UserMenu';
-import { useAccount } from '@src/context/AccountContext';
 
 type Props = {
   title: string;
-  setMode: (mode: mode) => void;
-  navigation: StackNavigationProp<RootStackParamList, 'Actions'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Admin'>;
 }
 
-const Header = ({ title, setMode, navigation }: Props) => {
-  const { user } = useAccount();
+const AdminHeader = ({ title, navigation }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -33,21 +29,12 @@ const Header = ({ title, setMode, navigation }: Props) => {
         }
       >
         <Menu.Item
-          title="Actions"
+          title="Home"
           onPress={() => {
-            setMode('actions');
+            navigation.navigate('Actions');
             closeMenu();
           }}
         />
-        {user?.role === 'Admin' && (
-          <Menu.Item
-            title="Admin"
-            onPress={() => {
-              navigation.navigate('Admin');
-              closeMenu();
-            }}
-          />
-        )}
       </Menu>
       <Appbar.Content title={title} />
       <UserMenu 
@@ -58,5 +45,5 @@ const Header = ({ title, setMode, navigation }: Props) => {
   );
 };
 
-export default Header;
+export default AdminHeader;
 
