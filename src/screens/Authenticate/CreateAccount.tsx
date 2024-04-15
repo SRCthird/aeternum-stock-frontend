@@ -12,6 +12,8 @@ type Props = {
 const CreateAccount = ({ setMode }: Props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
   const [endpoint, setEndpoint] = useState('');
   const [apiKey, setApiKey] = useState('');
@@ -29,7 +31,12 @@ const CreateAccount = ({ setMode }: Props) => {
 
     await validateUser(endpoint, apiKey, username, hashedPassword)
       .then(() => {
-        postUser(endpoint, apiKey, { email: username, password: hashedPassword })
+        postUser(endpoint, apiKey, { 
+          email: username, 
+          password: hashedPassword,
+          firstName: firstName,
+          lastName: lastName
+        })
           .then(() => {
             setMode('login');
           })
@@ -66,6 +73,21 @@ const CreateAccount = ({ setMode }: Props) => {
           label="Verify Password"
           value={verifyPassword}
           onChangeText={setVerifyPassword}
+          secureTextEntry
+          style={styles.input}
+        />
+        <View style={{ flex: 1 }}></View>
+        <TextInput
+          label="First Name"
+          value={firstName}
+          onChangeText={setFirstName}
+          secureTextEntry
+          style={styles.input}
+        />
+        <TextInput
+          label="Last Name"
+          value={lastName}
+          onChangeText={setLastName}
           secureTextEntry
           style={styles.input}
         />

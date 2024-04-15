@@ -80,7 +80,10 @@ const Authenticate = ({ children }: Props) => {
             <Text>Loading...</Text>
           ) : (
             <AuthContext.Provider value={{ setAuth }}>
-              <AccountContext.Provider value={activeUser}>
+              <AccountContext.Provider value={{ 
+                user: activeUser, 
+                setUser: setActiveUser 
+              }}>
                 {children}
               </AccountContext.Provider>
             </AuthContext.Provider>

@@ -7,8 +7,11 @@ export type User = {
   email: string;
   password: string;
   role: string;
+  position?: string;
   firstName?: string;
   lastName?: string;
+  bio?: string;
+  image?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -18,6 +21,8 @@ export type createUser = {
   email: string;
   password: string;
   role?: string;
+  firstName?: string;
+  lastName?: string;
   createdAt?: string;
   updatedAt?: string;
 }

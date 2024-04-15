@@ -40,7 +40,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
     <View style={{ flex: 1 }}>
       <Appbar>
         <Appbar.BackAction onPress={() => setMode('login')} />
-        <Appbar.Content title="Create Account" />
+        <Appbar.Content title="Link Account" />
       </Appbar>
       <View style={styles.container}>
         <TextInput
