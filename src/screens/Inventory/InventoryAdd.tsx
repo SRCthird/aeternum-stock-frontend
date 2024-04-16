@@ -31,9 +31,10 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
     location: '',
     quantity: 0,
     createdAt: new Date(),
-    createdBy: '',
+    createdBy: user.email,
     updatedAt: new Date(),
-    updatedBy: '',
+    updatedBy: user.email,
+    fromLocation: 'Operations',
   });
   const [submit, setSubmit] = useState(false);
   const { result: lotLookup, isLoading: lotLookupLoading } = useLotLookup({ lotNumber: data.lotNumber });
