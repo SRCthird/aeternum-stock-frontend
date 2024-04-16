@@ -37,7 +37,6 @@ const useLog = ({ id, location, lotNumber, user }: Props) => {
     if (lotNumber) endpoint += `lotNumber=${lotNumber}&`
     if (user) endpoint += `user=${user}&`
     const controller = new AbortController();
-    console.log("useLogs.ts: endpoint: ", endpoint)
     api.get<Log[]>(endpoint, { signal: controller.signal })
       .then(res => {
         setLogs(res.data)
