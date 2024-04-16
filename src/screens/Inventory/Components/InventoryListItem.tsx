@@ -50,7 +50,7 @@ const InventoryListItem = ({ listItem, setMode, setItem }: Props) => {
 
   const formatDate = (date?: Date) => {
     const dt = moment(date);
-    return dt.format('MM/DD/YYYY HH:mm');
+    return dt.format('DD-MMM-YYYY HH:mm');
   }
 
   return (
