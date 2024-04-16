@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { mode } from './types';
 
 type Props = {
@@ -40,6 +40,10 @@ const Actions = ({ mode, setMode }: Props) => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.action} onPress={() => { setMode('scrap') }}>
         <Text style={styles.optionText}>Scrap Items</Text>
+      </TouchableOpacity>
+      <View style={{ flex: 1 }} />
+      <TouchableOpacity style={styles.action} onPress={() => { Alert.alert("401", "Find lot will be implimented in a future update") }}>
+        <Text style={styles.optionText}>Find Lot</Text>
       </TouchableOpacity>
     </View>
   );

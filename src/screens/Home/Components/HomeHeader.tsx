@@ -48,6 +48,20 @@ const Header = ({ title, setMode, navigation }: Props) => {
             }}
           />
         )}
+        <Menu.Item
+          title="Test elements"
+          onPress={() => {
+            navigation.navigate('Test');
+            closeMenu();
+          }}
+        />
+        <Menu.Item
+          title="Logs"
+          onPress={() => {
+            navigation.navigate('Log');
+            closeMenu();
+          }}
+        />
       </Menu>
       <Appbar.Content title={title} />
       <UserMenu 

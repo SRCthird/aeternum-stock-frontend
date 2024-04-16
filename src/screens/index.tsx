@@ -9,6 +9,7 @@ import Authenticate from '@screens/Authenticate';
 import Test from '@screens/Test';
 import User from './User';
 import Admin from './Admin';
+import Log from './Log';
 
 export type RootStackParamList = {
   Actions: undefined;
@@ -24,6 +25,7 @@ export type RootStackParamList = {
   } | undefined;
   User: undefined;
   Admin: undefined;
+  Log: undefined;
 }
 
 const Stack = createStackNavigator();
@@ -43,6 +45,7 @@ const Screens = () => {
         <Stack.Screen name="Test" component={Test} />
         <Stack.Screen name="User" component={User} />
         <Stack.Screen name="Admin" component={Admin} />
+        <Stack.Screen name="Log" component={Log} />
       </Stack.Navigator>
     </Authenticate>
   );
