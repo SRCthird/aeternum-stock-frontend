@@ -60,7 +60,7 @@ const useUser = ({ id, email }: Props) => {
       email ? `/api/user/?email=${email}` :
         '/api/user/';
     setLoading(true);
-    api.get(endpoint)
+    api.get(endpoint, { signal: controller.signal })
       .then(res => {
         if (id) setUser(res.data);
         if (email) setUser(res.data[0]);
