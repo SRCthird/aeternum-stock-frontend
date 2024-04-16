@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -42,7 +42,7 @@ export class InventoryService {
 
     const totalQuantityInBay = inventories.reduce((acc, curr) => acc + curr.quantity, 0);
     if (totalQuantityInBay + obj.quantity > lot.quantity) {
-      throw new HttpException('Inventory quantity exceeds product lot quantity', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Selected locator is already ocupied', HttpStatus.BAD_REQUEST);
     }
 
     const uniqueLotsInBay = await this.databaseService.inventory.findMany({
