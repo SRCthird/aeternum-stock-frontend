@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { Log } from "../hooks/useLogs";
 import moment from "moment";
 import { Card } from "react-native-paper";

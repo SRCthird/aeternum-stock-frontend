@@ -49,7 +49,6 @@ const useLog = ({ id, location, lotNumber, user }: Props) => {
     return () => controller.abort()
   }, [])
 
-
   return { logs, error, loading }
 }
 

@@ -30,13 +30,15 @@ const LogIndex = ({ navigation }: Props) => {
     case 'view':
       return (
         <View style={{ flex: 1 }}>
-          <LogHeader 
-            label="View logs"
-            setMode={setMode} 
-            navigation={navigation} 
-            setKey={setKey}
-          />
-          <LogList 
+          <LogList
+            headerNode={
+              <LogHeader
+                label="View logs"
+                setMode={setMode}
+                navigation={navigation}
+                setKey={setKey}
+              />
+            }
             setItem={setItem}
             setMode={setMode}
             key={key}
@@ -46,10 +48,10 @@ const LogIndex = ({ navigation }: Props) => {
     default:
       return (
         <View style={{ flex: 1 }}>
-          <LogHeader 
+          <LogHeader
             label="View log"
-            setMode={setMode} 
-            navigation={navigation} 
+            setMode={setMode}
+            navigation={navigation}
             setKey={setKey}
           />
           <LogListItem
