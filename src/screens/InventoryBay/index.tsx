@@ -7,6 +7,7 @@ import { InventoryBay } from "./Hooks/useInventoryBay";
 import InventoryBayEdit from "./InventoryBayEdit";
 import InventoryBayAdd from "./InventoryBayAdd";
 import { mode } from "@utils/types";
+import InventoryBayHeader from "./Components/InventoryBayHeader";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'InventoryBay'>;
@@ -23,40 +24,52 @@ const InventoryBayIndex = ({ navigation }: Props) => {
   });
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    }}>
-      {mode === 'view' && (
+    <View style={{ flex: 1 }}>
+      {mode === 'view' ? (
         <InventoryBayView
           key={key}
-          key_={key}
-          setKey={setKey}
+          headerNode={
+            <InventoryBayHeader
+              title="Inventory Bay"
+              setKey={setKey}
+              setMode={setMode}
+              setItem={setItem}
+              navigation={navigation}
+            />
+          }
           setMode={setMode}
           setItem={setItem}
-          navigation={navigation}
         />
-      )}
-      {mode === 'edit' && (
-        <InventoryBayEdit
-          key={key}
-          key_={key}
-          setKey={setKey}
-          setMode={setMode}
-          item={item}
-          setItem={setItem}
-          navigation={navigation}
-        />
-      )}
-      {mode === 'add' && (
-        <InventoryBayAdd
-          key={key}
-          key_={key}
-          setKey={setKey}
-          setMode={setMode}
-          navigation={navigation}
-        />
+      ) : (
+        <View style={{ flex: 1 }}>
+          <InventoryBayHeader
+            title="Inventory Bay"
+            setKey={setKey}
+            setMode={setMode}
+            setItem={setItem}
+            navigation={navigation}
+          />
+          {mode === 'edit' && (
+            <InventoryBayEdit
+              key={key}
+              key_={key}
+              setKey={setKey}
+              setMode={setMode}
+              item={item}
+              setItem={setItem}
+              navigation={navigation}
+            />
+          )}
+          {mode === 'add' && (
+            <InventoryBayAdd
+              key={key}
+              key_={key}
+              setKey={setKey}
+              setMode={setMode}
+              navigation={navigation}
+            />
+          )}
+        </View>
       )}
     </View>
   );

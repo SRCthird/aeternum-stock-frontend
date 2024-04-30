@@ -13,6 +13,7 @@ const InventoryBayListItem = ({ listItem, setMode, setItem }: Props) => {
   return (
     <TouchableOpacity
       style={{
+        width: '100%',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'stretch',
