@@ -7,7 +7,7 @@ import ProductLotEdit from "./ProductLotEdit";
 import ProductLotAdd from "./ProductLotAdd";
 import { mode } from "@utils/types";
 import ProductHeader from "./Components/ProductHeader";
-import ProductLotList from "./Components/ProductLotList";
+import ProductLotView from "./ProductLotView";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductLot'>;
@@ -26,41 +26,54 @@ const ProductLotIndex = ({ navigation }: Props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ProductHeader
-        navigation={navigation}
-        label="Product Lot"
-        setMode={setMode}
-        setKey={setKey}
-        setItem={setItem}
-      />
-      <View style={{
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-      }}>
-        {mode === 'view' && (
-          <ProductLotList
+      {mode === 'view' ? (
+        <ProductLotView
+          headerNode={
+            <ProductHeader
+              navigation={navigation}
+              label="Product Lot"
+              setMode={setMode}
+              setKey={setKey}
+              setItem={setItem}
+            />
+          }
+          setMode={setMode}
+          setItem={setItem}
+        />
+      ) : (
+        <View style={{ flex: 1 }}>
+
+          <ProductHeader
+            navigation={navigation}
+            label="Product Lot"
             setMode={setMode}
+            setKey={setKey}
             setItem={setItem}
           />
-        )}
-        {mode === 'edit' && (
-          <ProductLotEdit
-            key={key}
-            key_={key}
-            setKey={setKey}
-            setMode={setMode}
-            item={item}
-          />
-        )}
-        {mode === 'add' && (
-          <ProductLotAdd
-            key={key}
-            setKey={setKey}
-            setMode={setMode}
-          />
-        )}
-      </View>
+          <View style={{
+            flex: 1,
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+          }}>
+            {mode === 'edit' && (
+              <ProductLotEdit
+                key={key}
+                key_={key}
+                setKey={setKey}
+                setMode={setMode}
+                item={item}
+              />
+            )}
+            {mode === 'add' && (
+              <ProductLotAdd
+                key={key}
+                setKey={setKey}
+                setMode={setMode}
+              />
+            )}
+          </View>
+        </View>
+      )}
     </View>
   );
 }
