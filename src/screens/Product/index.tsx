@@ -7,6 +7,7 @@ import { Product } from "./Hooks/useProduct";
 import ProductEdit from "./ProductEdit";
 import ProductAdd from "./ProductAdd";
 import { mode } from "@utils/types";
+import ProductHeader from "./Components/ProductHeader";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Product'>;
@@ -22,19 +23,20 @@ const ProductIndex = ({ navigation }: Props) => {
   });
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    }}>
+    <View style={{ flex: 1 }}>
       {mode === 'view' && (
         <ProductView
-          key={key}
-          key_={key}
-          setKey={setKey}
+          headerNode={
+            <ProductHeader
+              title="Product"
+              setMode={setMode}
+              setItem={setItem}
+              setKey={setKey}
+              navigation={navigation}
+            />
+          }
           setMode={setMode}
           setItem={setItem}
-          navigation={navigation}
         />
       )}
       {mode === 'edit' && (

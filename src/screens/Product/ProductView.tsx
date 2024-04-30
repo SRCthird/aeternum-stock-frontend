@@ -1,66 +1,74 @@
-import { useState } from "react";
-import ProductList from "./Components/ProductList";
-import { Appbar, Menu } from 'react-native-paper';
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@screens";
-import { mode } from "@utils/types";
-import { Product } from "./Hooks/useProduct";
+import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import { TextInput } from 'react-native-paper';
+import useProduct, { Product } from "./Hooks/useProduct";
+import { FlatList, Text, View } from "react-native";
+import ProductListItem from "./Components/ProductListItem";
+import HiddenTop from "@src/components/HiddenTop";
+import { mode } from "@src/utils/types";
 
 type Props = {
-  key_: number;
-  setKey: (key_: number) => void;
-  setMode: (mode: mode) => void;
-  setItem: (item: Product) => void;
-  navigation: StackNavigationProp<RootStackParamList, 'Product'>;
+  setMode: Dispatch<SetStateAction<mode>>;
+  setItem: Dispatch<SetStateAction<Product>>;
+  headerNode: ReactNode;
 }
 
-const ProductListView = ({ key_, setKey, setMode, setItem, navigation }: Props) => {
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
+const ProductListView = ({ setMode, setItem, headerNode }: Props) => {
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const { result, error, isLoading } = useProduct({});
 
   return (
-    <>
-      <Appbar style={{
-        height: 80,
-        width: '100%',
-        paddingTop: 25,
-      }}>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
+    isLoading ? (
+      <Text>Loading...</Text>
+    ) : error ? (
+      <Text>{error}</Text>
+    ) : (
+      <View style={{ flex: 1 }}>
+        <HiddenTop
+          searchNode={
+            <View style={{
+              width: '100%',
+              padding: 10,
+              paddingTop: 30,
+            }}>
+              <TextInput
+                placeholder="Search..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                style={{
+                  width: '100%',
+                  backgroundColor: 'white',
+                }}
+              />
+            </View>
           }
-        >
-          <Menu.Item 
-            title="Home" 
-            onPress={() => { 
-              navigation.navigate('Actions');
-              closeMenu(); 
-            }} 
-          />
-        </Menu>
-        <Appbar.Content title="" />
-        <Appbar.Action icon="plus" onPress={() => { 
-          setMode('add');
-          setItem({
-            id: 0,
-            name: '',
-            description: '',
-          });
-        }} />
-        <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key_ + 1);
-        }} />
-      </Appbar>
-      <ProductList 
-        key={key_} 
-        setMode={setMode}
-        setItem={setItem}
-      />
-    </>
+          finalHeight={100}
+          headerNode={
+            <View style={{ width: '100%' }}>
+              {headerNode}
+            </View>
+          }
+          contentNode={
+            <FlatList
+              style={{
+                width: '100%',
+              }}
+              data={result.filter((item) =>
+                item.name.includes(searchQuery) ||
+                item.description.includes(searchQuery)
+              )}
+              renderItem={({ item }) => (
+                <ProductListItem
+                  listItem={item}
+                  setMode={setMode}
+                  setItem={setItem}
+                />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          }
+        />
+      </View>
+    )
   );
 }
 
