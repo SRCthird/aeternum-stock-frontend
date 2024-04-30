@@ -32,41 +32,52 @@ const InventoryIndex = ({ navigation, route }: Props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <InventoryHeader
-        navigation={navigation}
-        setKey={setKey}
-        setMode={setMode}
-        setItem={setItem}
-      />
-      <View style={{
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-      }}>
-        {mode === 'view' && (
-          <InventoryView
-            key={key}
+      {mode === 'view' ? (
+        <InventoryView
+          key={key}
+          setMode={setMode}
+          setItem={setItem}
+          headerNode={
+            <InventoryHeader
+              navigation={navigation}
+              setKey={setKey}
+              setMode={setMode}
+              setItem={setItem}
+            />
+          }
+        />
+      ) : (
+        <View style={{ flex: 1 }}>
+          <InventoryHeader
+            navigation={navigation}
+            setKey={setKey}
             setMode={setMode}
             setItem={setItem}
           />
-        )}
-        {mode === 'edit' && (
-          <InventoryEdit
-            key={key}
-            state={state}
-            setKey={setKey}
-            setMode={setMode}
-            item={item}
-          />
-        )}
-        {mode === 'add' && (
-          <InventoryAdd
-            key={key}
-            setKey={setKey}
-            setMode={setMode}
-          />
-        )}
-      </View>
+          <View style={{
+            flex: 1,
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+          }}>
+            {mode === 'edit' && (
+              <InventoryEdit
+                key={key}
+                state={state}
+                setKey={setKey}
+                setMode={setMode}
+                item={item}
+              />
+            )}
+            {mode === 'add' && (
+              <InventoryAdd
+                key={key}
+                setKey={setKey}
+                setMode={setMode}
+              />
+            )}
+          </View>
+        </View>
+      )}
     </View>
   );
 }
