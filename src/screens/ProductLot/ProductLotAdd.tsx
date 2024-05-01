@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { TextInput } from 'react-native-paper';
 import { ProductLot } from "./Hooks/useProductLot";
 import { Alert, View } from "react-native";
@@ -6,9 +6,8 @@ import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import NumberInput from "@src/components/NumberInput";
-import DropDown from "@src/components/DropDown";
 import useProductList from "../Product/Hooks/useProductList";
-import { Picker } from "@react-native-picker/picker";
+import SearchableDropDown from "@src/components/SearchableDropDown";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -17,6 +16,9 @@ type Props = {
 }
 
 const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
+  const refLotNumber = useRef<TextInput>();
+  const refInternal = useRef<TextInput>();
+  const refQuantity = useRef<TextInput>();
   const { result: products, isLoading } = useProductList();
 
   const [data, setData] = useState<ProductLot>({
@@ -62,19 +64,17 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       alignItems: 'center',
       padding: 10,
     }}>
-      <DropDown
-      label="Product Name"
-      selectedValue={data.productName}
-      onValueChange={(itemValue, _) => {
-        setData({ ...data, productName: itemValue });
-      }}
-      selection={
-        products.map((product, index) => (
-          <Picker.Item key={index} label={product} value={product} />
-        ))
-      }
+      <SearchableDropDown
+        label="Product Name"
+        selectedValue={data.productName}
+        onValueChange={(itemValue) => {
+          setData({ ...data, productName: itemValue });
+        }}
+        items={products}
+        onSubmitEditing={() => refLotNumber.current.focus()}
       />
       <TextInput
+        ref={refLotNumber}
         style={{
           minWidth: '100%',
           margin: 10,
@@ -83,8 +83,10 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
         placeholder="enter lot number."
         mode="outlined"
         onChangeText={text => { setData({ ...data, lotNumber: text }) }}
+        onSubmitEditing={() => refInternal.current.focus()}
       />
       <TextInput
+        ref={refInternal}
         style={{
           minWidth: '100%',
           margin: 10,
@@ -93,11 +95,27 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
         placeholder="enter internal reference/workorder."
         mode="outlined"
         onChangeText={text => { setData({ ...data, internalReference: text }) }}
+        onSubmitEditing={() => refQuantity.current.focus()}
       />
-      <NumberInput
+      <TextInput
+        ref={refQuantity}
+        style={{
+          minWidth: '100%',
+          margin: 10,
+        }}
         label="Lot Quantity"
-        value={data.quantity}
-        onChange={quantity => setData({ ...data, quantity })}
+        mode="outlined"
+        keyboardType="numeric"
+        value={data.quantity.toString()}
+        onChangeText={(text) => {
+          let quantity = text.replace(/[^0-9]/g, '');
+          let parsedQuantity = parseInt(quantity, 10);
+          if (isNaN(parsedQuantity)) {
+            parsedQuantity = 0;
+          }
+          setData({ ...data, quantity: parsedQuantity });
+        }}
+        onSubmitEditing={() => setSubmit(true)}
       />
       <View style={{ flex: 1 }}></View>
       <SaveButton setSubmit={setSubmit} />

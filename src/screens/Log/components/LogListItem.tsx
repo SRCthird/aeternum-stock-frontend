@@ -4,6 +4,7 @@ import moment from "moment";
 import { Card } from "react-native-paper";
 import { Dispatch, SetStateAction } from "react";
 import { mode } from "@src/utils/types";
+import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
   log: Log
@@ -30,6 +31,10 @@ const LogListItem = ({ log, setItem, setMode }: Props) => {
         <Text style={styles.text}>{formatDate(log.dateTime)}</Text>
         <Text style={styles.text}>{log.lotNumber}</Text>
         <Text style={styles.text}>{log.quantityMoved}</Text>
+      </Card.Content>
+      <Card.Content style={styles.comments}>
+        <Text style={styles.text}>{log.fromLocation}</Text>
+        <AntDesign name="arrowright" size={24} color="black" />
         <Text style={styles.text}>{log.toLocation}</Text>
       </Card.Content>
     </Card>

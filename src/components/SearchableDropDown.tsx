@@ -7,9 +7,11 @@ type Props = {
   items: string[];
   selectedValue: string;
   onValueChange: (value: string) => void;
+  onSubmitEditing?: () => void;
+  placeholder?: string;
 };
 
-const SearchableDropDown = ({ label, items, selectedValue, onValueChange }: Props) => {
+const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubmitEditing, placeholder }: Props) => {
   const [filter, setFilter] = useState(selectedValue);
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -34,12 +36,12 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange }: Prop
         label={label}
         value={filter}
         onFocus={() => setShowDropdown(true)}
+        placeholder={placeholder || 'Tap to search...'}
         style={{
           minWidth: '100%',
           maxWidth: '100%',
           margin: 10,
         }}
-        placeholder="Tap to search..."
         underlineColor="transparent"
         activeOutlineColor="#6d6875"
         mode="outlined"
@@ -59,6 +61,14 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange }: Prop
             ref={inputRef}
             value={filter}
             onChangeText={setFilter}
+            onSubmitEditing={() => {
+              if (filteredItems.length > 0) {
+                onValueChange(filteredItems[0]);
+                setFilter(filteredItems[0]);
+                setShowDropdown(false);
+              }
+              onSubmitEditing?.();              
+            }}
             autoFocus={true}
             activeOutlineColor="#6d6875"
             mode="outlined"

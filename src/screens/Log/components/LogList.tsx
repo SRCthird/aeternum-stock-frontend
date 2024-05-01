@@ -57,6 +57,7 @@ const LogList = ({ headerNode, setItem, setMode }: Props) => {
                   item.user.includes(searchQuery) ||
                   item.lotNumber.includes(searchQuery) ||
                   item.toLocation.includes(searchQuery) ||
+                  item.fromLocation.includes(searchQuery) ||
                   item.comments.includes(searchQuery)
                 )
               }

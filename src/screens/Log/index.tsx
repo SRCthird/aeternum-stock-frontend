@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack"
 import { RootStackParamList } from ".."
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import LogList from "./components/LogList";
 import { useState } from "react";
 import { mode } from "@src/utils/types";

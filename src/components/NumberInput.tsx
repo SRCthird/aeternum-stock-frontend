@@ -6,9 +6,10 @@ type Props = {
   label: string;
   max?: number;
   onChange: (value: number) => void;
+  onSubmitEditing?: () => void;
 };
 
-const NumberInput = ({ value, defaultValue, label, max, onChange }: Props) => {
+const NumberInput = ({ value, defaultValue, label, max, onChange, onSubmitEditing }: Props) => {
   return (
     <TextInput
       style={{
@@ -31,6 +32,7 @@ const NumberInput = ({ value, defaultValue, label, max, onChange }: Props) => {
         }
         onChange(parsedQuantity);
       }}
+      onSubmitEditing={onSubmitEditing}
     />
   );
 };

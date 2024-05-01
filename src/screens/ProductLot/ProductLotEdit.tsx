@@ -10,6 +10,7 @@ import { mode } from "@utils/types";
 import NumberInput from "@src/components/NumberInput";
 import { Picker } from '@react-native-picker/picker';
 import DropDown from "@src/components/DropDown";
+import SearchableDropDown from "@src/components/SearchableDropDown";
 
 type Props = {
   key_: number;
@@ -92,20 +93,14 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
         defaultValue={item.internalReference}
         onChangeText={text => { setData({ ...data, internalReference: text }) }}
       />
-      <DropDown
+      <SearchableDropDown
         label="Product Name"
         selectedValue={data.productName}
-        onValueChange={(itemValue, _) => {
+        onValueChange={(itemValue) => {
           console.log(itemValue);
           setData({ ...data, productName: itemValue });
         }}
-        selection={
-          isLoading ? (
-            <Picker.Item label="Loading..." value="" />
-          ) : products.map((product, index) => (
-            <Picker.Item key={index} label={product} value={product} />
-          ))
-        }
+        items={products}
       />
       <NumberInput
         label="Lot Quantity"

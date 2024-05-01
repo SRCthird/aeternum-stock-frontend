@@ -95,17 +95,13 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
       alignItems: 'center',
       padding: 10,
     }}>
-      <DropDown
+      <SearchableDropDown
         label="Lot Number"
         selectedValue={data.lotNumber}
-        onValueChange={(lotNumber, _) => {
+        onValueChange={(lotNumber) => {
           setData({ ...data, lotNumber });
         }}
-        selection={
-          lots.map(lot => (
-            <Picker.Item key={lot} label={lot} value={lot} />
-          ))
-        }
+        items={lots}
       />
       <Text>From location: {item.location}</Text>
       <SearchableDropDown

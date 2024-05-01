@@ -5,7 +5,6 @@ import { Alert, Text, View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
-import DropDown from "@src/components/DropDown";
 import useProductLotList from "../ProductLot/Hooks/useProductLotList";
 import useInventoryBayList from "../InventoryBay/Hooks/useInventoryBayList";
 import { Picker } from "@react-native-picker/picker";
@@ -13,6 +12,7 @@ import NumberInput from "@src/components/NumberInput";
 import DatePicker from "@components/DatePicker";
 import useLotLookup from "../ProductLot/Hooks/useLotLookup";
 import { useAccount } from "@src/context/AccountContext";
+import SearchableDropDown from "@src/components/SearchableDropDown";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -81,35 +81,23 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
       alignItems: 'center',
       padding: 10,
     }}>
-      <DropDown
+      <SearchableDropDown
         label="Lot Number"
-        placeHolder="Select a lot number"
+        placeholder="Select a lot number"
         selectedValue={data.lotNumber}
-        onValueChange={(lotNumber, _) => {
+        onValueChange={(lotNumber) => {
           setData({ ...data, lotNumber });
         }}
-        selection={
-          lotsLoading ? (
-            <Text>Loading...</Text>
-          ) : (
-            lots.map(lot => (
-              <Picker.Item key={lot} label={lot} value={lot} />
-            ))
-          )
-        }
+        items={lots}
       />
-      <DropDown
+      <SearchableDropDown
         label="Location"
-        placeHolder="Select a location"
+        placeholder="Select a location"
         selectedValue={data.location}
-        onValueChange={(location, _) => {
+        onValueChange={(location) => {
           setData({ ...data, location });
         }}
-        selection={
-          locations.map(location => (
-            <Picker.Item key={location} label={location} value={location} />
-          ))
-        }
+        items={locations}
       />
       <NumberInput
         label="Quantity"
