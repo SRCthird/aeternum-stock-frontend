@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { authState as mode } from '.';
@@ -15,6 +15,7 @@ type Props = {
 export const api = axios.create();
 
 const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
+  const refPassword = useRef<TextInput>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -55,27 +56,33 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
 
   return (
     <View style={styles.container}>
-      <View style = {{ flex : 1 }} />
-      <Image 
-        source={require('../../../assets/Title2.png')} 
-        style={{ 
-          width: '100%', 
-          height: 120 
-        }} 
-      />
-      <View style = {{ flex : 1 }} />
+      <View style={{ flex: 1 }} />
+      <View style={{ 
+        width: '100%',
+        height: '20%',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <Image
+          source={require('../../../assets/Title2.png')}
+        />
+      </View>
+      <View style={{ flex: 1 }} />
       <TextInput
         label="Username"
         value={username}
         onChangeText={setUsername}
         style={styles.input}
+        onSubmitEditing={() => refPassword.current.focus()}
       />
       <TextInput
+        ref={refPassword}
         label="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
+        onSubmitEditing={handleLogin}
       />
       <Button mode="contained" onPress={handleLogin} style={styles.button}>
         Submit
@@ -83,7 +90,7 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
       <Button mode="text" onPress={() => { setMode('createAccount') }} style={styles.button}>
         Create Account
       </Button>
-      <View style = {{ flex : 3 }} />
+      <View style={{ flex: 3 }} />
     </View>
   );
 };

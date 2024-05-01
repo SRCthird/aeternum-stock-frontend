@@ -1,15 +1,22 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button, Appbar } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
 import { authState as mode } from '.';
-import { postUser, validateUser, validateUserLocal } from './Utils';
+import { postUser, validateUser } from './Utils';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
 }
 
 const CreateAccount = ({ setMode }: Props) => {
+  const refPass = useRef<TextInput>();
+  const refVerifyPass = useRef<TextInput>();
+  const refFirst = useRef<TextInput>();
+  const refLast = useRef<TextInput>();
+  const refEndpoint = useRef<TextInput>();
+  const refApiKey = useRef<TextInput>();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -61,48 +68,61 @@ const CreateAccount = ({ setMode }: Props) => {
           value={username}
           onChangeText={setUsername}
           style={styles.input}
+          onSubmitEditing={() => refPass.current.focus()}
         />
         <TextInput
+          ref={refPass}
           label="Password"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
           style={styles.input}
+          onSubmitEditing={() => refVerifyPass.current.focus()}
         />
         <TextInput
+          ref={refVerifyPass}
           label="Verify Password"
           value={verifyPassword}
           onChangeText={setVerifyPassword}
           secureTextEntry
           style={styles.input}
+          onSubmitEditing={() => refFirst.current.focus()}
         />
         <View style={{ flex: 1 }}></View>
         <TextInput
+          ref={refFirst}
           label="First Name"
           value={firstName}
           onChangeText={setFirstName}
           secureTextEntry
           style={styles.input}
+          onSubmitEditing={() => refLast.current.focus()}
         />
         <TextInput
+          ref={refLast}
           label="Last Name"
           value={lastName}
           onChangeText={setLastName}
           secureTextEntry
           style={styles.input}
+          onSubmitEditing={() => refEndpoint.current.focus()}
         />
         <View style={{ flex: 1 }}></View>
         <TextInput
+          ref={refEndpoint}
           label="Endpoint"
           value={endpoint}
           onChangeText={setEndpoint}
           style={styles.input}
+          onSubmitEditing={() => refApiKey.current.focus()}
         />
         <TextInput
+          ref={refApiKey}
           label="API Key"
           value={apiKey}
           onChangeText={setApiKey}
           style={styles.input}
+          onSubmitEditing={handleCreateAccount}
         />
         <Button mode="contained" onPress={handleCreateAccount} style={styles.button}>
           Create Account

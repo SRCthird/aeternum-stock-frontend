@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 import { TextInput, Button, Appbar } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
@@ -13,6 +13,10 @@ type Props = {
 }
 
 const LinkAccount = ({ setMode, _user, _password }: Props) => {
+  const refPass = useRef<TextInput>();
+  const refEndpoint = useRef<TextInput>();
+  const refApiKey = useRef<TextInput>();
+
   const [username, setUsername] = useState(_user || '');
   const [password, setPassword] = useState(_password || '');
   const [endpoint, setEndpoint] = useState('');
@@ -48,25 +52,32 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           value={username}
           onChangeText={setUsername}
           style={styles.input}
+          onSubmitEditing={() => refPass.current.focus()}
         />
         <TextInput
+          ref={refPass}
           label="Password"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
           style={styles.input}
+          onSubmitEditing={() => refEndpoint.current.focus()}
         />
         <TextInput
+          ref={refEndpoint}
           label="Endpoint"
           value={endpoint}
           onChangeText={setEndpoint}
           style={styles.input}
+          onSubmitEditing={() => refApiKey.current.focus()}
         />
         <TextInput
+          ref={refApiKey}
           label="API Key"
           value={apiKey}
           onChangeText={setApiKey}
           style={styles.input}
+          onSubmitEditing={handleLinkAccount}
         />
         <Button mode="contained" onPress={handleLinkAccount} style={styles.button}>
           Link Account
