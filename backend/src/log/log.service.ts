@@ -33,6 +33,9 @@ export class LogService {
         lotNumber: {
           startsWith: lotNumber
         },
+      },
+      orderBy: {
+        dateTime: 'desc'
       }
     };
 
