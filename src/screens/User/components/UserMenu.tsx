@@ -32,12 +32,21 @@ const UserMenu = ({ navigation, Appbar }: Props) => {
         title={user.firstName + ' ' + user.lastName}
       />
       <Menu.Item
-      title="View Account"
-      onPress={() => {
-        navigation.navigate('User');
-        closeMenu();
-      }}
+        title="View Account"
+        onPress={() => {
+          navigation.navigate('User');
+          closeMenu();
+        }}
       />
+      {user.role === 'Admin' && (
+        <Menu.Item
+          title="Admin"
+          onPress={() => {
+            navigation.navigate('Admin');
+            closeMenu();
+          }}
+        />
+      )}
       <Menu.Item
         title="Logout"
         onPress={() => {

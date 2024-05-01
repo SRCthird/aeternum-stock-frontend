@@ -4,7 +4,6 @@ import { RootStackParamList } from '@screens';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { mode } from '../types';
 import UserMenu from '@src/screens/User/components/UserMenu';
-import { useAccount } from '@src/context/AccountContext';
 
 type Props = {
   title: string;
@@ -13,7 +12,6 @@ type Props = {
 }
 
 const Header = ({ title, setMode, navigation }: Props) => {
-  const { user } = useAccount();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -36,22 +34,6 @@ const Header = ({ title, setMode, navigation }: Props) => {
           title="Actions"
           onPress={() => {
             setMode('actions');
-            closeMenu();
-          }}
-        />
-        {user?.role === 'Admin' && (
-          <Menu.Item
-            title="Admin"
-            onPress={() => {
-              navigation.navigate('Admin');
-              closeMenu();
-            }}
-          />
-        )}
-        <Menu.Item
-          title="Test elements"
-          onPress={() => {
-            navigation.navigate('Test');
             closeMenu();
           }}
         />

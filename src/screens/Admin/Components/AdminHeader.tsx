@@ -35,6 +35,13 @@ const AdminHeader = ({ title, navigation }: Props) => {
             closeMenu();
           }}
         />
+        <Menu.Item
+          title="Test elements"
+          onPress={() => {
+            navigation.navigate('Test');
+            closeMenu();
+          }}
+        />
       </Menu>
       <Appbar.Content title={title} />
       <UserMenu 
