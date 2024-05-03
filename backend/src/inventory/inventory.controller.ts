@@ -32,7 +32,7 @@ export class InventoryController {
 
   @Get()
   findAll(
-    @Query('logNumber') logNumber?: string,
+    @Query('lotNumber') lotNumber?: string,
     @Query('inventoryBay') inventoryBay?: string,
     @Query('createdBy') createdBy?: string,
     @Query('updatedBy') updatedBy?: string,
@@ -40,7 +40,7 @@ export class InventoryController {
     @Query('endDate') endDate?: string
   ) {
     return this.inventoryService.findAll(
-      logNumber,
+      lotNumber,
       inventoryBay,
       createdBy,
       updatedBy,

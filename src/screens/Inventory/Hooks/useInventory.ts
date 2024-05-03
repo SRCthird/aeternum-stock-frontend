@@ -17,17 +17,43 @@ export type Inventory = {
   comments?: string;
 }
 
-const useInventory = ({ id }: { id?: number }) => {
+type Props = {
+  id?: number;
+  lotNumber?: string;
+  location?: string;
+  createdBy?: string;
+  updatedBy?: string;
+  startDate?: string;
+  endDate?: string;
+}
+const useInventory = ({ id, lotNumber, location, createdBy, updatedBy, startDate, endDate }: Props) => {
   const [result, setResult] = useState<Inventory[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
 
+  const params: URLSearchParams = new URLSearchParams();
+  if (id) params.append('id', id.toString());
+  if (lotNumber) params.append('lotNumber', lotNumber);
+  if (location) params.append('location', location);
+  if (createdBy) params.append('createdBy', createdBy);
+  if (updatedBy) params.append('updatedBy', updatedBy);
+  if (startDate) params.append('startDate', startDate);
+  if (endDate) params.append('endDate', endDate);
+
   useEffect(() => {
-    if (id === 0) return;
+    if (
+      id === 0 ||
+      lotNumber === '' ||
+      location === '' ||
+      createdBy === '' ||
+      updatedBy === '' ||
+      startDate === '' ||
+      endDate === ''
+    ) return;
     setLoading(true);
     const controller = new AbortController();
     const endpoint = id ? `/api/inventory/${id}` : '/api/inventory';
-    api.get(endpoint, { signal: controller.signal })
+    api.get(endpoint, { signal: controller.signal, params })
       .then(response => {
         setResult(response.data);
         setLoading(false);

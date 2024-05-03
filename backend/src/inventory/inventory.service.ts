@@ -115,7 +115,7 @@ export class InventoryService {
   }
 
   async findAll(
-    logNumber?: string,
+    lotNumber?: string,
     inventoryBay?: string,
     createdBy?: string,
     updatedBy?: string,
@@ -126,7 +126,7 @@ export class InventoryService {
       where: {
         productLot: {
           lotNumber: {
-            startsWith: logNumber
+            startsWith: lotNumber 
           }
         },
         inventoryBay: {
