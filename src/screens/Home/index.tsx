@@ -38,7 +38,11 @@ const Home = ({ navigation }: Props) => {
         navigation={navigation}
       />
       {mode === 'actions' && (
-        <Actions mode={mode} setMode={setMode} />
+        <Actions 
+          setMode={setMode} 
+          setTitle={setTitle}
+          navigation={navigation}
+        />
       )}
       {mode === 'create' && (
         <CreateItem 

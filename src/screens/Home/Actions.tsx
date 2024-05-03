@@ -1,17 +1,25 @@
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { mode } from './types';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '..';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 type Props = {
-  mode: mode;
-  setMode: (mode: mode) => void;
+  setMode: Dispatch<SetStateAction<mode>>;
+  setTitle: Dispatch<SetStateAction<string>>;
+  navigation: StackNavigationProp<RootStackParamList, 'Actions'>;
 }
 
-const Actions = ({ mode, setMode }: Props) => {
+const Actions = ({ setMode, setTitle, navigation }: Props) => {
+
+  useEffect(() => {
+    setTitle('Actions');
+  }, []);
 
   const styles = StyleSheet.create({
     action: {
       backgroundColor: '#219ebc',
-      padding: 15,
+      padding: 30,
       marginBottom: 5,
       width: '100%',
       alignItems: 'center',
@@ -42,7 +50,7 @@ const Actions = ({ mode, setMode }: Props) => {
         <Text style={styles.optionText}>Scrap Items</Text>
       </TouchableOpacity>
       <View style={{ flex: 1 }} />
-      <TouchableOpacity style={styles.action} onPress={() => { Alert.alert("401", "Find lot will be implimented in a future update") }}>
+      <TouchableOpacity style={styles.action} onPress={() => { navigation.navigate('FindLot') }}>
         <Text style={styles.optionText}>Find Lot</Text>
       </TouchableOpacity>
     </View>
