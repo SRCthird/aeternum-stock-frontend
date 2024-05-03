@@ -10,6 +10,7 @@ import Test from '@screens/Test';
 import User from './User';
 import Admin from './Admin';
 import Log from './Log';
+import FindLot from './FindLot';
 
 export type RootStackParamList = {
   Actions: undefined;
@@ -26,6 +27,7 @@ export type RootStackParamList = {
   User: undefined;
   Admin: undefined;
   Log: undefined;
+  FindLot: undefined;
 }
 
 const Stack = createStackNavigator();
@@ -46,6 +48,7 @@ const Screens = () => {
         <Stack.Screen name="User" component={User} />
         <Stack.Screen name="Admin" component={Admin} />
         <Stack.Screen name="Log" component={Log} />
+        <Stack.Screen name="FindLot" component={FindLot} />
       </Stack.Navigator>
     </Authenticate>
   );
