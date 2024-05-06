@@ -3,14 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  password  String   //@db.VarChar(64) //uncomment this line to use MySQL
+  password  String   @db.VarChar(64)
   role      String   @default("Operator")
   position  String?  
   firstName String?
