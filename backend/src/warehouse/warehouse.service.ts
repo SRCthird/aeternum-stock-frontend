@@ -12,7 +12,7 @@ export class WarehouseService {
     this.db = databaseService.getKyselyInstance();
   }
 
-  async create(createDto: Warehouse) {
+  async create(createDto: Warehouse): Promise<Warehouse> {
     const { insertId } = await this.db
       .insertInto('Warehouse')
       //.values(createDto)
@@ -22,7 +22,7 @@ export class WarehouseService {
     return await this.findOne(Number(insertId));
   }
 
-  async list() {
+  async list(): Promise<string[]> {
     const warehouses = await this.db
       .selectFrom('Warehouse')
       .select('name')
@@ -30,18 +30,18 @@ export class WarehouseService {
     return warehouses.map(warehouse => warehouse.name);
   }
 
-  async findAll(name?: string) {
+  async findAll(name?: string): Promise<Warehouse[]> {
     try {
       const warehouses = await this.db.selectFrom('Warehouse')
         .where('name', '=', name)
         .execute();
-      return warehouses;
+      return warehouses.map((warehouse: Warehouse) => warehouse);
     } catch (error) {
       throw new HttpException('Error fetching warehouses: ' + error.message, 500);
     }
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Warehouse> {
     try {
       const warehouse = await this.db.selectFrom('Warehouse')
         .where('id', '=', id)
@@ -52,7 +52,7 @@ export class WarehouseService {
     }
   }
 
-  async update(id: number, updateDto: Warehouse) {
+  async update(id: number, updateDto: Warehouse): Promise<Warehouse> {
     await this.db.updateTable('Warehouse')
       .set(updateDto)
       .where('id', '=', id)
@@ -61,7 +61,7 @@ export class WarehouseService {
     return await this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Warehouse> {
     const warehouse = await this.findOne(id);
 
     const dependency = await this.db.selectFrom('InventoryBay')

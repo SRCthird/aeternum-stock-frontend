@@ -12,7 +12,7 @@ export class UserService {
     this.db = this.databaseService.getKyselyInstance();
   }
 
-  async create(createDto: User) {
+  async create(createDto: User): Promise<User> {
     const { insertId } = await this.db
       .insertInto('User')
       //.values(createDto)
@@ -22,29 +22,28 @@ export class UserService {
     return await this.findOne(Number(insertId));
   }
 
-  async findAll(email: string) {
+  async findAll(email: string): Promise<User[]> {
     try {
       const users = await this.db.selectFrom('User')
         .where('email', '=', email)
         .execute();
-      return users;
+      return users.map((user: User) => user);
     } catch (error) {
       throw new HttpException('Error fetching users: ' + error.message, 500);
     }
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<User> {
     try {
-      const user = await this.db.selectFrom('User')
+      return await this.db.selectFrom('User')
         .where('id', '=', id)
-        .executeTakeFirst();
-      return user;
+        .execute()[0];
     } catch (error) {
       throw new HttpException('User not found', 404);
     }
   }
 
-  async update(id: number, updateDto: User) {
+  async update(id: number, updateDto: User): Promise<User> {
     await this.db.updateTable('User')
       .set(updateDto)
       .where('id', '=', id)
@@ -53,7 +52,7 @@ export class UserService {
     return await this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<User> {
     const user = await this.findOne(id);
 
     this.db.deleteFrom('User')
