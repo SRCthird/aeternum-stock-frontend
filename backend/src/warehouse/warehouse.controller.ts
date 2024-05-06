@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { WarehouseService } from './warehouse.service';
-import { Prisma } from '@prisma/client';
+import { Warehouse } from '@prisma/client';
 
 /*
 model Warehouse {
@@ -15,7 +15,7 @@ export class WarehouseController {
   constructor(private readonly warehouseService: WarehouseService) {}
 
   @Post()
-  create(@Body() createDto: Prisma.WarehouseCreateInput) {
+  create(@Body() createDto: Warehouse) {
     return this.warehouseService.create(createDto);
   }
 
@@ -39,7 +39,7 @@ export class WarehouseController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: Prisma.WarehouseUpdateInput) {
+  update(@Param('id') id: string, @Body() updateDto: Warehouse) {
     return this.warehouseService.update(+id, updateDto);
   }
 
