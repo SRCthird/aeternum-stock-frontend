@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { LogService } from './log.service';
-import { Prisma } from '@prisma/client';
+import { Log } from '@prisma/client';
 
 /*
 model Log {
@@ -24,7 +24,7 @@ export class LogController {
   constructor(private readonly logService: LogService) {}
 
   @Post()
-  create(@Body() createDto: Prisma.LogCreateInput) {
+  create(@Body() createDto: Log) {
     return this.logService.create(createDto);
   }
 
@@ -53,7 +53,7 @@ export class LogController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: Prisma.LogUpdateInput) {
+  update(@Param('id') id: string, @Body() updateDto: Log) {
     return this.logService.update(+id, updateDto);
   }
 
