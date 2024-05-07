@@ -35,13 +35,20 @@ export class ProductService {
     try {
       return await this.db.selectFrom('Product')
         .selectAll()
-        .where((eb) => eb.or([
-          (name) ? eb('name', '=', name) : null,
-          (description) ? eb('description', '=', description) : null
-        ]))
+        .where((eb) => {
+          let query = []
+          if (!name && !description) return eb('id', '>', 0);
+          if (name) {
+            query.push(eb('name', '=', name));
+          }
+          if (description) {
+            query.push(eb('description', 'like', `%${description}%`));
+          }
+          return eb.or(query)
+        })
         .execute();
     } catch (error) {
-      throw new HttpException('Error fetching product: ' + error.message, 500);
+      return [] as Product[];
     }
   }
 
@@ -50,7 +57,7 @@ export class ProductService {
       return await this.db.selectFrom('Product')
         .selectAll()
         .where('id', '=', id)
-        .executeTakeFirst();
+        .executeTakeFirstOrThrow();
     } catch (error) {
       throw new HttpException('Product not found', 404);
     }
@@ -67,7 +74,7 @@ export class ProductService {
 
   async remove(id: number) {
     const product = await this.findOne(id);
-    
+
     const dependency = await this.db.selectFrom('ProductLot')
       .selectAll()
       .where('productName', '=', product.name)
