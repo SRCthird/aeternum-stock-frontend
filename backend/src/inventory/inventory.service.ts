@@ -1,21 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Inventory, Prisma } from '@prisma/client';
-import { Kysely } from 'kysely';
+import { Inventory } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
-import { Database } from 'src/database/types';
 
 @Injectable()
 export class InventoryService {
-  private db: Kysely<Database>;
 
-  constructor(readonly databaseService: DatabaseService) {
-    this.db = this.databaseService.getKyselyInstance();
-  }
+  constructor(readonly databaseService: DatabaseService) {}
 
   async create(createDto: Inventory, fromLocation?: string, comment?: string) {
 
     // Get lot information
-    const lot = await this.db.selectFrom('ProductLot')
+    const lot = await this.databaseService.selectFrom('ProductLot')
       .selectAll()
       .where('lotNumber', '=', createDto.lotNumber)
       .executeTakeFirst();
@@ -24,7 +19,7 @@ export class InventoryService {
     }
 
     // Get target bay information
-    const bay = await this.db.selectFrom('InventoryBay')
+    const bay = await this.databaseService.selectFrom('InventoryBay')
       .selectAll()
       .where('name', '=', createDto.location)
       .executeTakeFirst();
@@ -33,7 +28,7 @@ export class InventoryService {
     }
 
     // Get all instances of this lot
-    const lotTotal = await this.db.selectFrom('Inventory')
+    const lotTotal = await this.databaseService.selectFrom('Inventory')
       .select(
         (eb) => eb.fn.sum<number>('quantity').as('total')
       )
@@ -44,7 +39,7 @@ export class InventoryService {
     }
 
     // Get distinct lots in bay
-    const uniqueLotsInBay = await this.db.selectFrom('Inventory')
+    const uniqueLotsInBay = await this.databaseService.selectFrom('Inventory')
       .select('lotNumber')
       .where('location', '=', createDto.lotNumber)
       .distinct()
@@ -60,7 +55,7 @@ export class InventoryService {
     }
 
     // Get mergable lots
-    const mergableLots = await this.db.selectFrom('Inventory')
+    const mergableLots = await this.databaseService.selectFrom('Inventory')
       .selectAll()
       .where('location', '=', createDto.location)
       .where('lotNumber', '=', createDto.lotNumber)
@@ -68,7 +63,7 @@ export class InventoryService {
       .executeTakeFirst();
 
     if (mergableLots) {
-      await this.db.updateTable('Inventory')
+      await this.databaseService.updateTable('Inventory')
         .where('id', '=', mergableLots.id)
         .set({
           quantity: (mergableLots.quantity + createDto.quantity),
@@ -77,7 +72,7 @@ export class InventoryService {
         })
         .execute();
 
-      await this.db.insertInto('Log')
+      await this.databaseService.insertInto('Log')
         .values({
           fromLocation: fromLocation,
           toLocation: createDto.location,
@@ -92,7 +87,7 @@ export class InventoryService {
       return this.findOne(mergableLots.id);
     }
 
-    await this.db.insertInto('Log')
+    await this.databaseService.insertInto('Log')
       .values({
         fromLocation: fromLocation || 'Operations',
         toLocation: createDto.location,
@@ -104,7 +99,7 @@ export class InventoryService {
       })
       .execute();
 
-    const { insertId } = await this.db.insertInto('Inventory')
+    const { insertId } = await this.databaseService.insertInto('Inventory')
       .values(createDto)
       .executeTakeFirst();
 
@@ -120,7 +115,7 @@ export class InventoryService {
     endDate?: string
   ) {
     try {
-      return await this.db.selectFrom('Inventory')
+      return await this.databaseService.selectFrom('Inventory')
         .selectAll()
         .where((eb) => eb.or([
           lotNumber ? eb('lotNumber', '=', lotNumber) : null,
@@ -138,7 +133,7 @@ export class InventoryService {
 
   async findOne(id: number): Promise<Inventory> {
     try {
-      return await this.db.selectFrom('ProductLot')
+      return await this.databaseService.selectFrom('ProductLot')
         .selectAll()
         .where('id', '=', id)
         .execute()[0];
@@ -148,7 +143,7 @@ export class InventoryService {
   }
 
   async update(id: number, updateDto: Inventory, fromLocation?: string, comments?: string) {
-    const lot = await this.db.selectFrom('ProductLot')
+    const lot = await this.databaseService.selectFrom('ProductLot')
       .selectAll()
       .where('lotNumber', '=', updateDto.lotNumber)
       .executeTakeFirst()
@@ -161,7 +156,7 @@ export class InventoryService {
       throw new HttpException('Inventory quantity exceeds product lot quantity', HttpStatus.BAD_REQUEST);
     }
 
-    const bay = await this.db.selectFrom('InventoryBay')
+    const bay = await this.databaseService.selectFrom('InventoryBay')
       .selectAll()
       .where('name', '=', updateDto.location)
       .executeTakeFirst();
@@ -170,7 +165,7 @@ export class InventoryService {
       throw new HttpException('Inventory bay does not exist', HttpStatus.PRECONDITION_REQUIRED);
     }
 
-    await this.db.insertInto('Log')
+    await this.databaseService.insertInto('Log')
       .values({
         fromLocation: fromLocation,
         toLocation: updateDto.location,
@@ -182,7 +177,7 @@ export class InventoryService {
       })
       .execute();
 
-    await this.db.updateTable('Inventory')
+    await this.databaseService.updateTable('Inventory')
       .where('id', '=', id)
       .set(updateDto)
       .execute();
@@ -193,7 +188,7 @@ export class InventoryService {
   async remove(id: number) {
     const inventory = await this.findOne(id);
 
-    await this.db.deleteFrom('Inventory')
+    await this.databaseService.deleteFrom('Inventory')
       .where('id', '=', id)
       .execute();
 

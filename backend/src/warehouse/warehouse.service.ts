@@ -1,19 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Warehouse } from '@prisma/client';
-import { Kysely } from 'kysely';
 import { DatabaseService } from 'src/database/database.service';
-import { Database } from 'src/database/types';
 
 @Injectable()
 export class WarehouseService {
-  private db: Kysely<Database>;
 
-  constructor(readonly databaseService: DatabaseService) {
-    this.db = databaseService.getKyselyInstance();
-  }
+  constructor(readonly databaseService: DatabaseService) {}
 
   async create(createDto: Warehouse): Promise<Warehouse> {
-    const { insertId } = await this.db.insertInto('Warehouse')
+    const { insertId } = await this.databaseService.insertInto('Warehouse')
       .values(createDto)
       .executeTakeFirstOrThrow();
 
@@ -21,7 +16,7 @@ export class WarehouseService {
   }
 
   async list(): Promise<string[]> {
-    const warehouses = await this.db
+    const warehouses = await this.databaseService
       .selectFrom('Warehouse')
       .select('name')
       .execute();
@@ -30,7 +25,7 @@ export class WarehouseService {
 
   async findAll(name?: string): Promise<Warehouse[]> {
     try {
-      return await this.db.selectFrom('Warehouse')
+      return await this.databaseService.selectFrom('Warehouse')
         .selectAll()
         .where((eb) =>{
           if (!name) return eb('id', '>', 0);
@@ -44,7 +39,7 @@ export class WarehouseService {
 
   async findOne(id: number): Promise<Warehouse> {
     try {
-      return await this.db.selectFrom('Warehouse')
+      return await this.databaseService.selectFrom('Warehouse')
         .selectAll()
         .where('id', '=', id)
         .executeTakeFirstOrThrow();
@@ -54,7 +49,7 @@ export class WarehouseService {
   }
 
   async update(id: number, updateDto: Warehouse): Promise<Warehouse> {
-    await this.db.updateTable('Warehouse')
+    await this.databaseService.updateTable('Warehouse')
       .set(updateDto)
       .where('id', '=', id)
       .execute();
@@ -65,7 +60,7 @@ export class WarehouseService {
   async remove(id: number): Promise<Warehouse> {
     const warehouse = await this.findOne(id);
 
-    const dependency = await this.db.selectFrom('InventoryBay')
+    const dependency = await this.databaseService.selectFrom('InventoryBay')
       .selectAll()
       .where('warehouseName', '=', warehouse.name)
       .execute();
@@ -74,7 +69,7 @@ export class WarehouseService {
       throw new HttpException('Warehouse has dependencies', HttpStatus.NOT_ACCEPTABLE);
     }
 
-    await this.db.deleteFrom('Warehouse')
+    await this.databaseService.deleteFrom('Warehouse')
       .where('id', '=', id)
       .execute();
 

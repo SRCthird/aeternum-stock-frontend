@@ -1,20 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Product } from '@prisma/client';
-import { Kysely } from 'kysely';
 import { DatabaseService } from 'src/database/database.service';
-import { Database } from 'src/database/types';
 
 @Injectable()
 export class ProductService {
-  private db: Kysely<Database>;
 
-  constructor(readonly databaseService: DatabaseService) {
-    this.db = this.databaseService.getKyselyInstance();
-  }
+  constructor(readonly databaseService: DatabaseService) {}
 
   async create(createDto: Product): Promise<Product> {
     try {
-      const { insertId } = await this.db.insertInto('Product')
+      const { insertId } = await this.databaseService.insertInto('Product')
         .values(createDto)
         .executeTakeFirstOrThrow();
 
@@ -29,7 +24,7 @@ export class ProductService {
 
   async list(): Promise<string[]> {
     try {
-      const products = await this.db.selectFrom('Product')
+      const products = await this.databaseService.selectFrom('Product')
         .select('name')
         .execute();
       return products.map(product => product.name);
@@ -43,7 +38,7 @@ export class ProductService {
     description?: string
   ): Promise<Product[]> {
     try {
-      return await this.db.selectFrom('Product')
+      return await this.databaseService.selectFrom('Product')
         .selectAll()
         .where((eb) => {
           if (!name && !description) return eb('id', '>', 0);
@@ -60,7 +55,7 @@ export class ProductService {
 
   async findOne(id: number): Promise<Product> {
     try {
-      return await this.db.selectFrom('Product')
+      return await this.databaseService.selectFrom('Product')
         .selectAll()
         .where('id', '=', id)
         .executeTakeFirstOrThrow();
@@ -71,7 +66,7 @@ export class ProductService {
 
   async update(id: number, updateDto: Product): Promise<Product> {
     try {
-      await this.db.updateTable('Product')
+      await this.databaseService.updateTable('Product')
         .set(updateDto)
         .where('id', '=', id)
         .execute();
@@ -88,7 +83,7 @@ export class ProductService {
   async remove(id: number) {
     const product = await this.findOne(id);
     try {
-      await this.db.deleteFrom('Product')
+      await this.databaseService.deleteFrom('Product')
         .where('id', '=', id)
         .execute();
 

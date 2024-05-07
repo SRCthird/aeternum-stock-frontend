@@ -1,19 +1,14 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InventoryBay } from '@prisma/client';
-import { Kysely } from 'kysely';
 import { DatabaseService } from 'src/database/database.service';
-import { Database } from 'src/database/types';
 
 @Injectable()
 export class InventoryBayService {
-  private db: Kysely<Database>;
 
-  constructor(readonly databaseService: DatabaseService) {
-    this.db = this.databaseService.getKyselyInstance();
-  }
+  constructor(readonly databaseService: DatabaseService) {}
 
   async create(createDto: InventoryBay): Promise<InventoryBay> {
-    const warehouse = await this.db.selectFrom('Warehouse')
+    const warehouse = await this.databaseService.selectFrom('Warehouse')
       .select('name')
       .where('name', '=', createDto.warehouseName)
       .execute();
@@ -22,7 +17,7 @@ export class InventoryBayService {
       throw new BadRequestException('Warehouse does not exist');
     }
 
-    const { insertId } = await this.db.insertInto('InventoryBay')
+    const { insertId } = await this.databaseService.insertInto('InventoryBay')
       .values(createDto)
       .executeTakeFirstOrThrow();
 
@@ -30,7 +25,7 @@ export class InventoryBayService {
   }
 
   async list(): Promise<string[]> {
-    const bays = await this.db.selectFrom('InventoryBay')
+    const bays = await this.databaseService.selectFrom('InventoryBay')
       .select('name')
       .execute();
 
@@ -43,7 +38,7 @@ export class InventoryBayService {
     maxUniqueLots?: number,
   ): Promise<InventoryBay[]> {
     try {
-      return await this.db.selectFrom('InventoryBay')
+      return await this.databaseService.selectFrom('InventoryBay')
         .selectAll()
         .where((eb) => eb.or([
           name ? eb('name', '=', name) : null,
@@ -58,7 +53,7 @@ export class InventoryBayService {
 
   async findOne(id: number): Promise<InventoryBay> {
     try {
-      return await this.db.selectFrom('InventoryBay')
+      return await this.databaseService.selectFrom('InventoryBay')
         .selectAll()
         .where('id', '=', id)
         .execute()[0];
@@ -68,7 +63,7 @@ export class InventoryBayService {
   }
 
   async update(id: number, updateDto: InventoryBay): Promise<InventoryBay> {
-    await this.db.updateTable('InventoryBay')
+    await this.databaseService.updateTable('InventoryBay')
       .set(updateDto)
       .where('id', '=', id)
       .execute();
@@ -79,7 +74,7 @@ export class InventoryBayService {
   async remove(id: number): Promise<InventoryBay> {
     const bay = await this.findOne(id);
 
-    const dependency = await this.db.selectFrom('Inventory')
+    const dependency = await this.databaseService.selectFrom('Inventory')
       .selectAll()
       .where('location', '=', bay.name)
       .execute();
@@ -87,7 +82,7 @@ export class InventoryBayService {
     if (dependency.length > 0) {
       throw new HttpException('Lot has dependencies', HttpStatus.NOT_ACCEPTABLE);
     }
-    await this.db.deleteFrom('InventoryBay')
+    await this.databaseService.deleteFrom('InventoryBay')
       .where('id', '=', id)
       .execute();
 

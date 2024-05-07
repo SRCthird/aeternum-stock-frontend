@@ -5,10 +5,9 @@ import { Database } from './types';
 import 'dotenv/config'
 
 @Injectable()
-export class DatabaseService {
-  private kyselyInstance: Kysely<Database>;
-
-  $connect() {
+export class DatabaseService extends Kysely<Database> {
+  
+  constructor() {
     const dialect = new MysqlDialect({
       pool: createPool({
         database: process.env.DB_NAME,
@@ -20,17 +19,8 @@ export class DatabaseService {
       })
     });
 
-    this.kyselyInstance = new Kysely<Database>({
-      dialect,
+    super({
+      dialect
     });
   }
-
-  getKyselyInstance(): Kysely<Database> {
-    this.$connect();
-    if (!this.kyselyInstance) {
-      throw new Error('Kysely instance not initialized');
-    }
-    return this.kyselyInstance;
-  }
 }
-

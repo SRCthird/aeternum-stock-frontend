@@ -1,20 +1,15 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { Kysely } from 'kysely';
 import { DatabaseService } from 'src/database/database.service';
-import { Database } from 'src/database/types';
 
 @Injectable()
 export class UserService {
-  private db: Kysely<Database>;
 
-  constructor(readonly databaseService: DatabaseService) {
-    this.db = this.databaseService.getKyselyInstance();
-  }
+  constructor(readonly databaseService: DatabaseService) {}
 
   async create(createDto: User): Promise<User> {
     try {
-      const { insertId } = await this.db.insertInto('User')
+      const { insertId } = await this.databaseService.insertInto('User')
         .values(createDto)
         .executeTakeFirstOrThrow();
       return await this.findOne(Number(insertId));
@@ -28,7 +23,7 @@ export class UserService {
 
   async findAll(email: string): Promise<User[]> {
     try {
-      return await this.db.selectFrom('User')
+      return await this.databaseService.selectFrom('User')
         .selectAll()
         .where((eb) => {
           if (!email) return eb('id', '>', 0);
@@ -42,7 +37,7 @@ export class UserService {
 
   async findOne(id: number): Promise<User> {
     try {
-      return await this.db.selectFrom('User')
+      return await this.databaseService.selectFrom('User')
         .selectAll()
         .where('id', '=', id)
         .executeTakeFirstOrThrow();
@@ -54,7 +49,7 @@ export class UserService {
   async update(id: number, updateDto: User): Promise<User> {
     updateDto.updatedAt = new Date();
     try {
-      await this.db.updateTable('User')
+      await this.databaseService.updateTable('User')
       .set(updateDto)
       .where('id', '=', id)
       .execute();
@@ -71,7 +66,7 @@ export class UserService {
   async remove(id: number): Promise<User> {
     const user = await this.findOne(id);
 
-    this.db.deleteFrom('User')
+    this.databaseService.deleteFrom('User')
       .where('id', '=', id)
       .execute();
 

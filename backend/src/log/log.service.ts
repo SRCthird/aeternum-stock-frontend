@@ -1,20 +1,15 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { Log } from '@prisma/client';
-import { Kysely } from 'kysely';
 import { DatabaseService } from 'src/database/database.service';
-import { Database } from 'src/database/types';
 
 @Injectable()
 export class LogService {
-  private db: Kysely<Database>;
 
-  constructor(readonly databaseService: DatabaseService) {
-    this.db = this.databaseService.getKyselyInstance();
-  }
+  constructor(readonly databaseService: DatabaseService) {}
 
   async create(createDto: Log): Promise<Log> {
     try {
-      const { insertId } = await this.db.insertInto('Log')
+      const { insertId } = await this.databaseService.insertInto('Log')
         .values(createDto)
         .executeTakeFirstOrThrow();
 
@@ -33,7 +28,7 @@ export class LogService {
     endDate?: string
   ): Promise<Log[]> {
     try {
-      return await this.db.selectFrom('Log')
+      return await this.databaseService.selectFrom('Log')
         .selectAll()
         .where((eb) => {
           if (
@@ -61,7 +56,7 @@ export class LogService {
 
   async findOne(id: number): Promise<Log> {
     try {
-      return await this.db.selectFrom('Log')
+      return await this.databaseService.selectFrom('Log')
         .selectAll()
         .where('id', '=', id)
         .execute()[0];
@@ -72,7 +67,7 @@ export class LogService {
 
   async update(id: number, updateDto: Log): Promise<Log> {
     try {
-      await this.db.updateTable('Log')
+      await this.databaseService.updateTable('Log')
         .set(updateDto)
         .where('id', '=', id)
         .execute();
@@ -86,7 +81,7 @@ export class LogService {
   async remove(id: number): Promise<Log> {
     const log = await this.findOne(id);
     try {
-      this.db.deleteFrom('Log')
+      this.databaseService.deleteFrom('Log')
         .where('id', '=', id)
         .execute();
 

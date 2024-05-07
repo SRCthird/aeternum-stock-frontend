@@ -1,20 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ProductLot } from '@prisma/client';
-import { Kysely } from 'kysely';
 import { DatabaseService } from 'src/database/database.service';
-import { Database } from 'src/database/types';
 
 @Injectable()
 export class ProductLotService {
-  private db: Kysely<Database>;
 
-  constructor(readonly databaseService: DatabaseService) {
-    this.db = this.databaseService.getKyselyInstance();
-  }
+  constructor(readonly databaseService: DatabaseService) {}
 
   async create(createDto: ProductLot): Promise<ProductLot> {
     try {
-      const { insertId } = await this.db.insertInto('ProductLot')
+      const { insertId } = await this.databaseService.insertInto('ProductLot')
         .values(createDto)
         .executeTakeFirstOrThrow();
 
@@ -30,7 +25,7 @@ export class ProductLotService {
   }
 
   async list(): Promise<string[]> {
-    const lots = await this.db.selectFrom('ProductLot')
+    const lots = await this.databaseService.selectFrom('ProductLot')
       .select('lotNumber')
       .execute();
 
@@ -43,7 +38,7 @@ export class ProductLotService {
     productName?: string
   ): Promise<ProductLot[]> {
     try {
-      return await this.db.selectFrom('ProductLot')
+      return await this.databaseService.selectFrom('ProductLot')
         .selectAll()
         .where((eb) => {
           if (!lotNumber && !internalReference && !productName) return eb('id', '>', 0);
@@ -62,7 +57,7 @@ export class ProductLotService {
 
   async findOne(id: number): Promise<ProductLot> {
     try {
-      return await this.db.selectFrom('ProductLot')
+      return await this.databaseService.selectFrom('ProductLot')
         .selectAll()
         .where('id', '=', id)
         .executeTakeFirstOrThrow();
@@ -73,7 +68,7 @@ export class ProductLotService {
 
   async update(id: number, updateDto: ProductLot): Promise<ProductLot> {
     try {
-      await this.db.updateTable('ProductLot')
+      await this.databaseService.updateTable('ProductLot')
         .set(updateDto)
         .where('id', '=', id)
         .execute();
@@ -92,7 +87,7 @@ export class ProductLotService {
   async remove(id: number): Promise<ProductLot> {
     const lot = await this.findOne(id);
     try{
-      await this.db.deleteFrom('ProductLot')
+      await this.databaseService.deleteFrom('ProductLot')
       .where('id', '=', id)
       .execute();
 
