@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma, Product } from '@prisma/client';
+import { Product } from '@prisma/client';
 import { Kysely } from 'kysely';
 import { DatabaseService } from 'src/database/database.service';
 import { Database } from 'src/database/types';
@@ -13,10 +13,8 @@ export class ProductService {
   }
 
   async create(createDto: Product): Promise<Product> {
-    const { insertId } = await this.db
-      .insertInto('Product')
-      //.values(createDto)
-      .onDuplicateKeyUpdate(createDto)
+    const { insertId } = await this.db.insertInto('Product')
+      .values(createDto)
       .executeTakeFirstOrThrow();
 
     return await this.findOne(Number(insertId));
@@ -35,13 +33,13 @@ export class ProductService {
     description?: string
   ): Promise<Product[]> {
     try {
-      const products = await this.db.selectFrom('Product')
+      return await this.db.selectFrom('Product')
+        .selectAll()
         .where((eb) => eb.or([
           (name) ? eb('name', '=', name) : null,
           (description) ? eb('description', '=', description) : null
         ]))
         .execute();
-      return products.map((product: Product) => product);
     } catch (error) {
       throw new HttpException('Error fetching product: ' + error.message, 500);
     }
@@ -50,8 +48,9 @@ export class ProductService {
   async findOne(id: number): Promise<Product> {
     try {
       return await this.db.selectFrom('Product')
+        .selectAll()
         .where('id', '=', id)
-        .execute()[0];
+        .executeTakeFirst();
     } catch (error) {
       throw new HttpException('Product not found', 404);
     }
@@ -70,6 +69,7 @@ export class ProductService {
     const product = await this.findOne(id);
     
     const dependency = await this.db.selectFrom('ProductLot')
+      .selectAll()
       .where('productName', '=', product.name)
       .execute();
 

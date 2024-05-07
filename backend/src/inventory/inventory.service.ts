@@ -1,117 +1,114 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Inventory, Prisma } from '@prisma/client';
+import { Kysely } from 'kysely';
 import { DatabaseService } from 'src/database/database.service';
+import { Database } from 'src/database/types';
 
 @Injectable()
 export class InventoryService {
+  private db: Kysely<Database>;
 
-  constructor(readonly databaseService: DatabaseService) { }
+  constructor(readonly databaseService: DatabaseService) {
+    this.db = this.databaseService.getKyselyInstance();
+  }
 
-  async create(createDto: Prisma.InventoryCreateInput, comments?: string, fromLocation?: string) {
-    const obj: Prisma.InventoryCreateInput & { lotNumber?: string, location?: string, createdBy?: string, id?: number } = { ...createDto };
+  async create(createDto: Inventory, fromLocation: string, comment: string) {
 
-    const lot = await this.databaseService.productLot.findUnique({
-      where: {
-        lotNumber: obj.lotNumber,
-      }
-    });
-
-    const bay = await this.databaseService.inventoryBay.findUnique({
-      where: {
-        name: obj.location,
-      }
-    });
-
-    if (!lot) {
+    // Get lot information
+    const lot = await this.db.selectFrom('ProductLot')
+      .selectAll()
+      .where('lotNumber', '=', createDto.lotNumber)
+      .executeTakeFirst();
+    if (lot) {
       throw new HttpException('Product lot does not exist', HttpStatus.UNPROCESSABLE_ENTITY);
     }
-    if (!bay) {
+
+    // Get target bay information
+    const bay = await this.db.selectFrom('InventoryBay')
+      .selectAll()
+      .where('name', '=', createDto.location)
+      .executeTakeFirst();
+    if (bay) {
       throw new HttpException('Inventory bay does not exist', HttpStatus.PRECONDITION_REQUIRED);
     }
 
-    const inventories = await this.databaseService.inventory.findMany({
-      where: {
-        productLot: {
-          lotNumber: obj.lotNumber,
-        },
-        inventoryBay: {
-          name: obj.location,
-        }
-      }
-    });
-
-    const totalQuantityInBay = inventories.reduce((acc, curr) => acc + curr.quantity, 0);
-    if (totalQuantityInBay + obj.quantity > lot.quantity) {
-      throw new HttpException('Selected locator is already ocupied', HttpStatus.BAD_REQUEST);
+    // Get all instances of this lot
+    const lotTotal = await this.db.selectFrom('Inventory')
+      .select(
+        (eb) => eb.fn.sum<number>('quantity').as('total')
+      )
+      .where('lotNumber', '=', createDto.lotNumber)
+      .executeTakeFirst();
+    if (lotTotal.total + createDto.quantity > lot.quantity) {
+      throw new HttpException('Overflow of lot size. Check lot quantity.', HttpStatus.BAD_REQUEST);
     }
 
-    const uniqueLotsInBay = await this.databaseService.inventory.findMany({
-      where: {
-        inventoryBay: {
-          name: obj.location,
-        }
-      },
-      select: {
-        productLot: true,
-      }
-    });
+    // Get distinct lots in bay
+    const uniqueLotsInBay = await this.db.selectFrom('Inventory')
+      .select('lotNumber')
+      .where('location', '=', createDto.lotNumber)
+      .distinct()
+      .execute();
 
-    const uniqueLotNumbers = new Set(uniqueLotsInBay.map(inventory => inventory.productLot.lotNumber));
-    if (uniqueLotNumbers.size >= bay.maxUniqueLots && !uniqueLotNumbers.has(obj.lotNumber)) {
+    if (
+      uniqueLotsInBay.length >= bay.maxUniqueLots &&
+      !uniqueLotsInBay.some(
+        lot => lot.lotNumber === createDto.lotNumber
+      )
+    ) {
       throw new HttpException('Inventory bay is at capacity for unique lots', HttpStatus.BAD_REQUEST);
     }
 
-    const existingInventory = await this.databaseService.inventory.findFirst({
-      where: {
-        lotNumber: obj.lotNumber,
-        location: obj.location,
-        NOT: {
-          id: obj.id,
-        }
-      }
-    });
+    // Get mergable lots
+    const mergableLots = await this.db.selectFrom('Inventory')
+      .selectAll()
+      .where('location', '=', createDto.location)
+      .where('lotNumber', '=', createDto.lotNumber)
+      .where('id', '<>', createDto.id)
+      .executeTakeFirst();
 
-    if (existingInventory) {
-      const newQuantity = existingInventory.quantity + obj.quantity;
-      const updatedInventory = await this.databaseService.inventory.update({
-        where: {
-          id: existingInventory.id,
-        },
-        data: {
-          quantity: newQuantity,
-          updatedBy: obj.createdBy,
-          updatedAt: new Date(),
-        }
-      });
+    if (mergableLots) {
+      await this.db.updateTable('Inventory')
+        .where('id', '=', mergableLots.id)
+        .set({
+          quantity: (mergableLots.quantity + createDto.quantity),
+          updatedBy: createDto.createdBy,
+          updatedAt: new Date()
+        })
+        .execute();
 
-      const log = await this.databaseService.log.create({
-        data: {
+      await this.db.insertInto('Log')
+        .values({
           fromLocation: fromLocation,
-          toLocation: obj.location,
+          toLocation: createDto.location,
           dateTime: new Date(),
-          user: obj.createdBy,
-          lotNumber: obj.lotNumber,
-          quantityMoved: obj.quantity,
-          comments: comments || 'Inventory updated'
-        }
-      });
+          user: createDto.createdBy,
+          lotNumber: createDto.lotNumber,
+          quantityMoved: createDto.quantity,
+          comments: comment || 'Inventory updated'
+        })
+        .execute();
 
-      return updatedInventory;
+      return this.findOne(mergableLots.id);
     }
 
-    const log = await this.databaseService.log.create({
-      data: {
+    await this.db.insertInto('Log')
+      .values({
         fromLocation: fromLocation || 'Operations',
-        toLocation: obj.location,
+        toLocation: createDto.location,
         dateTime: new Date(),
-        user: obj.createdBy,
-        lotNumber: obj.lotNumber,
-        quantityMoved: obj.quantity,
-        comments: comments || 'Inventory created'
-      }
-    });
+        user: createDto.createdBy,
+        lotNumber: createDto.lotNumber,
+        quantityMoved: createDto.quantity,
+        comments: comment || 'Inventory updated'
+      })
+      .execute();
 
-    return this.databaseService.inventory.create({ data: createDto });
+    const { insertId } = await this.db.insertInto('Inventory')
+      .values(createDto)
+      .executeTakeFirst();
+
+    return this.findOne(Number(insertId));
   }
 
   async findAll(
@@ -122,90 +119,84 @@ export class InventoryService {
     startDate?: string,
     endDate?: string
   ) {
-    const query: Prisma.InventoryFindManyArgs = {
-      where: {
-        productLot: {
-          lotNumber: {
-            startsWith: lotNumber 
-          }
-        },
-        inventoryBay: {
-          name: {
-            startsWith: inventoryBay
-          }
-        },
-        createdBy: createdBy,
-        updatedBy: updatedBy
-      }
-    };
-
-    if (startDate && endDate) {
-      query.where.createdAt = {
-        gte: new Date(startDate),
-        lte: new Date(endDate)
-      };
+    try {
+      return await this.db.selectFrom('Inventory')
+        .selectAll()
+        .where((eb) => eb.or([
+          lotNumber ? eb('lotNumber', '=', lotNumber) : null,
+          inventoryBay ? eb('location', '=', inventoryBay) : null,
+          createdBy ? eb('createdBy', '=', createdBy) : null,
+          updatedBy ? eb('updatedBy', '=', updatedBy) : null,
+          startDate ? eb('createdAt', '>=', new Date(startDate)) : null,
+          (startDate && endDate) ? eb('createdAt', '<=', new Date(endDate)) : null
+        ]))
+        .execute();
+    } catch (error) {
+      throw new HttpException('Error fetching users: ' + error.message, 500);
     }
-    return this.databaseService.inventory.findMany(query);
   }
 
-  async findOne(id: number) {
-    return this.databaseService.inventory.findUnique({ where: { id } });
+  async findOne(id: number): Promise<Inventory> {
+    try {
+      return await this.db.selectFrom('ProductLot')
+        .selectAll()
+        .where('id', '=', id)
+        .execute()[0];
+    } catch (error) {
+      throw new HttpException('Lot not found', 404);
+    }
   }
 
-  async update(id: number, updateDto: Prisma.InventoryUpdateInput, comments?: string, fromLocation?: string) {
-    const obj: Prisma.InventoryUpdateInput & { lotNumber?: string, location?: string, createdBy?: string, id?: number } = { ...updateDto };
+  async update(id: number, updateDto: Inventory, fromLocation?: string, comments?: string) {
+    const lot = await this.db.selectFrom('ProductLot')
+      .selectAll()
+      .where('lotNumber', '=', updateDto.lotNumber)
+      .executeTakeFirst()
 
-    const lot = await this.databaseService.productLot.findMany({
-      where: {
-        lotNumber: obj.lotNumber,
-      }
-    });
-
-    if (obj.lotNumber) {
-      const lotExist = lot.find((l) => l.lotNumber === obj.lotNumber);
-      if (!lotExist) {
-        throw new HttpException('Product lot does not exist', HttpStatus.UNPROCESSABLE_ENTITY);
-      }
+    if (!lot) {
+      throw new HttpException('Lot does not exist', HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    if (+obj.quantity > lot[0].quantity) {
-      console.log(obj.quantity, lot[0].quantity);
+    if (updateDto.quantity > lot.quantity) {
       throw new HttpException('Inventory quantity exceeds product lot quantity', HttpStatus.BAD_REQUEST);
     }
 
-    if (obj.location) {
-      const bay = await this.databaseService.inventoryBay.findMany({
-        where: {
-          name: obj.location,
-        }
-      });
+    const bay = await this.db.selectFrom('InventoryBay')
+      .selectAll()
+      .where('name', '=', updateDto.location)
+      .executeTakeFirst();
 
-      const bayExist = bay.find((b) => b.name === obj.location);
-      if (!bayExist) {
-        throw new HttpException('Inventory bay does not exist', HttpStatus.PRECONDITION_REQUIRED);
-      }
+    if (!bay) {
+      throw new HttpException('Inventory bay does not exist', HttpStatus.PRECONDITION_REQUIRED);
     }
 
-    try {
-      const log = await this.databaseService.log.create({
-        data: {
-          fromLocation: fromLocation,
-          toLocation: obj.location,
-          dateTime: new Date(),
-          user: obj.createdBy,
-          lotNumber: obj.lotNumber,
-          quantityMoved: +obj.quantity,
-          comments: comments || 'Inventory updated'
-        }
+    await this.db.insertInto('Log')
+      .values({
+        fromLocation: fromLocation || 'Operations',
+        toLocation: updateDto.location,
+        dateTime: new Date(),
+        user: updateDto.createdBy,
+        lotNumber: updateDto.lotNumber,
+        quantityMoved: updateDto.quantity,
+        comments: comments || 'Inventory updated'
       })
-    } catch (error) {
-      null;
-    }
+      .execute();
 
-    return this.databaseService.inventory.update({ where: { id }, data: updateDto });
+    await this.db.updateTable('Inventory')
+      .where('id', '=', id)
+      .set(updateDto)
+      .execute();
+
+    return this.findOne(id);
   }
 
   async remove(id: number) {
-    return this.databaseService.inventory.delete({ where: { id } });
+    const inventory = await this.findOne(id);
+
+    await this.db.deleteFrom('Inventory')
+      .where('id', '=', id)
+      .execute();
+
+    return inventory;
   }
 }

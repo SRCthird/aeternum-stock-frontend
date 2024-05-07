@@ -13,10 +13,8 @@ export class UserService {
   }
 
   async create(createDto: User): Promise<User> {
-    const { insertId } = await this.db
-      .insertInto('User')
-      //.values(createDto)
-      .onDuplicateKeyUpdate(createDto)
+    const { insertId } = await this.db.insertInto('User')
+      .values(createDto)
       .executeTakeFirstOrThrow();
 
     return await this.findOne(Number(insertId));
@@ -24,10 +22,10 @@ export class UserService {
 
   async findAll(email: string): Promise<User[]> {
     try {
-      const users = await this.db.selectFrom('User')
+      return await this.db.selectFrom('User')
+        .selectAll()
         .where('email', '=', email)
         .execute();
-      return users.map((user: User) => user);
     } catch (error) {
       throw new HttpException('Error fetching users: ' + error.message, 500);
     }
@@ -36,8 +34,9 @@ export class UserService {
   async findOne(id: number): Promise<User> {
     try {
       return await this.db.selectFrom('User')
+        .selectAll()
         .where('id', '=', id)
-        .execute()[0];
+        .executeTakeFirst();
     } catch (error) {
       throw new HttpException('User not found', 404);
     }

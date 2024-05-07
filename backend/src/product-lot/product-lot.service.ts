@@ -15,6 +15,7 @@ export class ProductLotService {
   async create(createDto: ProductLot): Promise<ProductLot> {
 
     const lots = await this.db.selectFrom('ProductLot')
+      .selectAll()
       .where((eb) => eb.or([
         eb('lotNumber', '=', createDto.lotNumber),
         eb('internalReference', '=', createDto.internalReference)
@@ -26,8 +27,8 @@ export class ProductLotService {
     }
 
     const product = await this.db.selectFrom('Product')
-      .where('name', '=', createDto.productName)
       .select('name')
+      .where('name', '=', createDto.productName)
       .execute();
 
     const productExists = product.find((p) => p.name === createDto.productName);
@@ -37,8 +38,7 @@ export class ProductLotService {
     }
 
     const { insertId } = await this.db.insertInto('ProductLot')
-      //.values(createDto)
-      .onDuplicateKeyUpdate(createDto)
+      .values(createDto)
       .executeTakeFirstOrThrow();
 
     return this.findOne(Number(insertId));
@@ -58,14 +58,14 @@ export class ProductLotService {
     productName?: string
   ): Promise<ProductLot[]> {
     try {
-      const result = await this.db.selectFrom('ProductLot')
+      return await this.db.selectFrom('ProductLot')
+        .selectAll()
         .where((eb) => eb.or([
           (lotNumber) ? eb('lotNumber', '=', lotNumber) : null,
           (internalReference) ? eb('internalReference', '=', internalReference) : null,
           (productName) ? eb('productName', '=', productName) : null
         ]))      
         .execute();
-      return result.map((row: ProductLot) => row);
     } catch (error) {
       throw new HttpException('Error fetching users: ' + error.message, 500);
     }
@@ -75,8 +75,9 @@ export class ProductLotService {
   async findOne(id: number): Promise<ProductLot> {
     try {
       return await this.db.selectFrom('ProductLot')
+        .selectAll()
         .where('id', '=', id)
-        .execute()[0];
+        .executeTakeFirst();
     } catch (error) {
       throw new HttpException('Lot not found', 404);
     }

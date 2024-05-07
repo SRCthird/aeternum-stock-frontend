@@ -1,5 +1,6 @@
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import 'dotenv/config'
 
 @Injectable()
 export class ApiKeyMiddleware implements NestMiddleware {

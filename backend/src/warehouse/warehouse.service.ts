@@ -13,10 +13,8 @@ export class WarehouseService {
   }
 
   async create(createDto: Warehouse): Promise<Warehouse> {
-    const { insertId } = await this.db
-      .insertInto('Warehouse')
-      //.values(createDto)
-      .onDuplicateKeyUpdate(createDto)
+    const { insertId } = await this.db.insertInto('Warehouse')
+      .values(createDto)
       .executeTakeFirstOrThrow();
 
     return await this.findOne(Number(insertId));
@@ -32,10 +30,10 @@ export class WarehouseService {
 
   async findAll(name?: string): Promise<Warehouse[]> {
     try {
-      const warehouses = await this.db.selectFrom('Warehouse')
+      return await this.db.selectFrom('Warehouse')
+        .selectAll()
         .where('name', '=', name)
         .execute();
-      return warehouses.map((warehouse: Warehouse) => warehouse);
     } catch (error) {
       throw new HttpException('Error fetching warehouses: ' + error.message, 500);
     }
@@ -43,10 +41,10 @@ export class WarehouseService {
 
   async findOne(id: number): Promise<Warehouse> {
     try {
-      const warehouse = await this.db.selectFrom('Warehouse')
+      return await this.db.selectFrom('Warehouse')
+        .selectAll()
         .where('id', '=', id)
         .executeTakeFirst();
-      return warehouse[0];
     } catch (error) {
       throw new HttpException('Warehouse not found', 404);
     }
@@ -65,6 +63,7 @@ export class WarehouseService {
     const warehouse = await this.findOne(id);
 
     const dependency = await this.db.selectFrom('InventoryBay')
+      .selectAll()
       .where('warehouseName', '=', warehouse.name)
       .execute();
 

@@ -12,11 +12,9 @@ export class LogService {
     this.db = this.databaseService.getKyselyInstance();
   }
 
-  async create(createDto: Log) {
-    const { insertId } = await this.db
-      .insertInto('Log')
-      //.values(createDto)
-      .onDuplicateKeyUpdate(createDto)
+  async create(createDto: Log): Promise<Log> {
+    const { insertId } = await this.db.insertInto('Log')
+      .values(createDto)
       .executeTakeFirstOrThrow();
 
     return await this.findOne(Number(insertId));
@@ -29,9 +27,10 @@ export class LogService {
     lotNumber?: string,
     startDate?: string,
     endDate?: string
-  ) {
+  ): Promise<Log[]> {
     try {
-      const result = await this.db.selectFrom('Log')
+      return await this.db.selectFrom('Log')
+        .selectAll()
         .where((eb) => eb.or([
           fromLocation ? eb('fromLocation', '=', fromLocation) : null,
           toLocation ? eb('toLocation', '=', toLocation) : null,
@@ -41,15 +40,15 @@ export class LogService {
           endDate ? eb('dateTime', '<=', new Date(endDate)) : null
         ]))
         .execute();
-      return result.map((row: Log) => row);
     } catch (error) {
       throw new HttpException('Error fetching users: ' + error.message, 500);
     }
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Log> {
     try {
       return await this.db.selectFrom('Log')
+        .selectAll()
         .where('id', '=', id)
         .execute()[0];
     } catch (error) {
@@ -57,7 +56,7 @@ export class LogService {
     }
   }
 
-  async update(id: number, updateDto: Log) {
+  async update(id: number, updateDto: Log): Promise<Log> {
     await this.db.updateTable('Log')
       .set(updateDto)
       .where('id', '=', id)
@@ -66,7 +65,7 @@ export class LogService {
     return await this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Log> {
     const log = await this.findOne(id);
 
     this.db.deleteFrom('Log')
