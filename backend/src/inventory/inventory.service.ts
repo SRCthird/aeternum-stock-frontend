@@ -12,7 +12,7 @@ export class InventoryService {
     this.db = this.databaseService.getKyselyInstance();
   }
 
-  async create(createDto: Inventory, fromLocation: string, comment: string) {
+  async create(createDto: Inventory, fromLocation?: string, comment?: string) {
 
     // Get lot information
     const lot = await this.db.selectFrom('ProductLot')
@@ -172,7 +172,7 @@ export class InventoryService {
 
     await this.db.insertInto('Log')
       .values({
-        fromLocation: fromLocation || 'Operations',
+        fromLocation: fromLocation,
         toLocation: updateDto.location,
         dateTime: new Date(),
         user: updateDto.createdBy,

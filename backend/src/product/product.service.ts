@@ -13,19 +13,29 @@ export class ProductService {
   }
 
   async create(createDto: Product): Promise<Product> {
-    const { insertId } = await this.db.insertInto('Product')
-      .values(createDto)
-      .executeTakeFirstOrThrow();
+    try {
+      const { insertId } = await this.db.insertInto('Product')
+        .values(createDto)
+        .executeTakeFirstOrThrow();
 
-    return await this.findOne(Number(insertId));
+      return await this.findOne(Number(insertId));
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('Product already exists', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error creating product', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async list(): Promise<string[]> {
-    const products = await this.db.selectFrom('Product')
-      .select('name')
-      .execute();
-
-    return products.map(product => product.name);
+    try {
+      const products = await this.db.selectFrom('Product')
+        .select('name')
+        .execute();
+      return products.map(product => product.name);
+    } catch (error) {
+      return [] as string[];
+    }
   }
 
   async findAll(
@@ -36,15 +46,11 @@ export class ProductService {
       return await this.db.selectFrom('Product')
         .selectAll()
         .where((eb) => {
-          let query = []
           if (!name && !description) return eb('id', '>', 0);
-          if (name) {
-            query.push(eb('name', '=', name));
-          }
-          if (description) {
-            query.push(eb('description', 'like', `%${description}%`));
-          }
-          return eb.or(query)
+          return eb.or([
+            name ? eb('name', '=', name) : null,
+            description ? eb('description', 'like', `%${description}%`) : null
+          ].filter((x) => x !== null))
         })
         .execute();
     } catch (error) {
@@ -64,30 +70,34 @@ export class ProductService {
   }
 
   async update(id: number, updateDto: Product): Promise<Product> {
-    await this.db.updateTable('Product')
-      .set(updateDto)
-      .where('id', '=', id)
-      .execute();
+    try {
+      await this.db.updateTable('Product')
+        .set(updateDto)
+        .where('id', '=', id)
+        .execute();
 
-    return await this.findOne(id);
+      return await this.findOne(id);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('Product already exists', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error updating product', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async remove(id: number) {
     const product = await this.findOne(id);
+    try {
+      await this.db.deleteFrom('Product')
+        .where('id', '=', id)
+        .execute();
 
-    const dependency = await this.db.selectFrom('ProductLot')
-      .selectAll()
-      .where('productName', '=', product.name)
-      .execute();
-
-    if (dependency.length > 0) {
-      throw new HttpException('Product has dependencies', HttpStatus.NOT_ACCEPTABLE);
+      return product;
+    } catch (error) {
+      if (String(error.code).includes('ER_ROW_IS_REFERENCED')) {
+        throw new HttpException('Product has dependencies', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error deleting product', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    await this.db.deleteFrom('Product')
-      .where('id', '=', id)
-      .execute();
-
-    return product;
   }
 }

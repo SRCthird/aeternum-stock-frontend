@@ -13,35 +13,20 @@ export class ProductLotService {
   }
 
   async create(createDto: ProductLot): Promise<ProductLot> {
+    try {
+      const { insertId } = await this.db.insertInto('ProductLot')
+        .values(createDto)
+        .executeTakeFirstOrThrow();
 
-    const lots = await this.db.selectFrom('ProductLot')
-      .selectAll()
-      .where((eb) => eb.or([
-        eb('lotNumber', '=', createDto.lotNumber),
-        eb('internalReference', '=', createDto.internalReference)
-      ]))
-      .execute();
-
-    if (lots.length > 0) {
-      throw new HttpException('Lot already exists.', HttpStatus.CONFLICT);
+      return this.findOne(Number(insertId));
+    } catch (error) {
+      if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+        throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
+      } else if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('Lot already exists.', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error creating lot: ' + error.message, 500);
     }
-
-    const product = await this.db.selectFrom('Product')
-      .select('name')
-      .where('name', '=', createDto.productName)
-      .execute();
-
-    const productExists = product.find((p) => p.name === createDto.productName);
-
-    if (!productExists) {
-      throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
-    }
-
-    const { insertId } = await this.db.insertInto('ProductLot')
-      .values(createDto)
-      .executeTakeFirstOrThrow();
-
-    return this.findOne(Number(insertId));
   }
 
   async list(): Promise<string[]> {
@@ -60,14 +45,17 @@ export class ProductLotService {
     try {
       return await this.db.selectFrom('ProductLot')
         .selectAll()
-        .where((eb) => eb.or([
-          (lotNumber) ? eb('lotNumber', '=', lotNumber) : null,
-          (internalReference) ? eb('internalReference', '=', internalReference) : null,
-          (productName) ? eb('productName', '=', productName) : null
-        ]))      
+        .where((eb) => {
+          if (!lotNumber && !internalReference && !productName) return eb('id', '>', 0);
+          return eb.or([
+            lotNumber ? eb('lotNumber', '=', lotNumber) : null,
+            internalReference ? eb('internalReference', '=', internalReference) : null,
+            productName ? eb('productName', '=', productName) : null
+          ].filter((x) => x !== null))
+        })
         .execute();
     } catch (error) {
-      throw new HttpException('Error fetching users: ' + error.message, 500);
+      return [] as ProductLot[];
     }
   }
 
@@ -77,35 +65,43 @@ export class ProductLotService {
       return await this.db.selectFrom('ProductLot')
         .selectAll()
         .where('id', '=', id)
-        .executeTakeFirst();
+        .executeTakeFirstOrThrow();
     } catch (error) {
       throw new HttpException('Lot not found', 404);
     }
   }
 
   async update(id: number, updateDto: ProductLot): Promise<ProductLot> {
-    await this.db.updateTable('ProductLot')
-      .set(updateDto)
-      .where('id', '=', id)
-      .execute();
+    try {
+      await this.db.updateTable('ProductLot')
+        .set(updateDto)
+        .where('id', '=', id)
+        .execute();
 
-    return await this.findOne(id);
+      return await this.findOne(id);
+    } catch (error) {
+      if (String(error.code).includes('ER_ROW_IS_REFERENCED')) {
+        throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
+      } else if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('Lot already exists.', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error creating lot: ' + error.message, 500);
+    }
   }
 
   async remove(id: number): Promise<ProductLot> {
     const lot = await this.findOne(id);
-
-    const dependency = await this.db.selectFrom('Inventory')
-      .where('lotNumber', '=', lot.lotNumber)
-      .execute();
-
-    if (dependency.length > 0) {
-      throw new HttpException('Lot has dependencies', HttpStatus.NOT_ACCEPTABLE);
-    }
-    await this.db.deleteFrom('ProductLot')
+    try{
+      await this.db.deleteFrom('ProductLot')
       .where('id', '=', id)
       .execute();
 
-    return lot;
+      return lot;
+    } catch (error) {
+      if (String(error.code).includes('ER_ROW_IS_REFERENCED')) {
+        throw new HttpException('Lot has dependencies', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error deleting lot: ' + error.message, 500);
+    }
   }
 }

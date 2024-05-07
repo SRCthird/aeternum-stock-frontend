@@ -13,11 +13,15 @@ export class LogService {
   }
 
   async create(createDto: Log): Promise<Log> {
-    const { insertId } = await this.db.insertInto('Log')
-      .values(createDto)
-      .executeTakeFirstOrThrow();
+    try {
+      const { insertId } = await this.db.insertInto('Log')
+        .values(createDto)
+        .executeTakeFirstOrThrow();
 
-    return await this.findOne(Number(insertId));
+      return await this.findOne(Number(insertId));
+    } catch (error) {
+      throw new HttpException('Error creating log: ' + error.message, 500);
+    }
   }
 
   async findAll(
@@ -31,17 +35,27 @@ export class LogService {
     try {
       return await this.db.selectFrom('Log')
         .selectAll()
-        .where((eb) => eb.or([
-          fromLocation ? eb('fromLocation', '=', fromLocation) : null,
-          toLocation ? eb('toLocation', '=', toLocation) : null,
-          username ? eb('user', '=', username) : null,
-          lotNumber ? eb('lotNumber', '=', lotNumber) : null,
-          startDate ? eb('dateTime', '>=', new Date(startDate)) : null,
-          endDate ? eb('dateTime', '<=', new Date(endDate)) : null
-        ]))
+        .where((eb) => {
+          if (
+            !fromLocation &&
+            !toLocation &&
+            !username &&
+            !lotNumber &&
+            !startDate &&
+            !endDate
+          ) return eb('id', '>', 0);
+          return eb.or([
+            fromLocation ? eb('fromLocation', '=', fromLocation) : null,
+            toLocation ? eb('toLocation', '=', toLocation) : null,
+            username ? eb('user', '=', username) : null,
+            lotNumber ? eb('lotNumber', '=', lotNumber) : null,
+            startDate ? eb('dateTime', '>=', new Date(startDate)) : null,
+            endDate ? eb('dateTime', '<=', new Date(endDate)) : null
+          ].filter((x) => x !== null))
+        })
         .execute();
     } catch (error) {
-      throw new HttpException('Error fetching users: ' + error.message, 500);
+      return [] as Log[];
     }
   }
 
@@ -57,21 +71,28 @@ export class LogService {
   }
 
   async update(id: number, updateDto: Log): Promise<Log> {
-    await this.db.updateTable('Log')
-      .set(updateDto)
-      .where('id', '=', id)
-      .execute();
+    try {
+      await this.db.updateTable('Log')
+        .set(updateDto)
+        .where('id', '=', id)
+        .execute();
 
-    return await this.findOne(id);
+      return await this.findOne(id);
+    } catch (error) {
+      throw new HttpException('Error updating log: ' + error.message, 500);
+    }
   }
 
   async remove(id: number): Promise<Log> {
     const log = await this.findOne(id);
+    try {
+      this.db.deleteFrom('Log')
+        .where('id', '=', id)
+        .execute();
 
-    this.db.deleteFrom('Log')
-      .where('id', '=', id)
-      .execute();
-
-    return log;
+      return log;
+    } catch (error) {
+      throw new HttpException('Error deleting log: ' + error.message, 500);
+    }
   }
 }

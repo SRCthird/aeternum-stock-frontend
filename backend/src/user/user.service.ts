@@ -13,21 +13,30 @@ export class UserService {
   }
 
   async create(createDto: User): Promise<User> {
-    const { insertId } = await this.db.insertInto('User')
-      .values(createDto)
-      .executeTakeFirstOrThrow();
-
-    return await this.findOne(Number(insertId));
+    try {
+      const { insertId } = await this.db.insertInto('User')
+        .values(createDto)
+        .executeTakeFirstOrThrow();
+      return await this.findOne(Number(insertId));
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('User already exists', 409);
+      }
+      throw new HttpException('User not created', 500);
+    }
   }
 
   async findAll(email: string): Promise<User[]> {
     try {
       return await this.db.selectFrom('User')
         .selectAll()
-        .where('email', '=', email)
+        .where((eb) => {
+          if (!email) return eb('id', '>', 0);
+          return eb('email', '=', email)
+        })
         .execute();
     } catch (error) {
-      throw new HttpException('Error fetching users: ' + error.message, 500);
+      return [] as User[];
     }
   }
 
@@ -36,19 +45,27 @@ export class UserService {
       return await this.db.selectFrom('User')
         .selectAll()
         .where('id', '=', id)
-        .executeTakeFirst();
+        .executeTakeFirstOrThrow();
     } catch (error) {
       throw new HttpException('User not found', 404);
     }
   }
 
   async update(id: number, updateDto: User): Promise<User> {
-    await this.db.updateTable('User')
+    updateDto.updatedAt = new Date();
+    try {
+      await this.db.updateTable('User')
       .set(updateDto)
       .where('id', '=', id)
       .execute();
 
-    return await this.findOne(id);
+      return await this.findOne(id);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('User already exists', 409);
+      }
+      throw new HttpException('User not updated', 500);
+    }
   }
 
   async remove(id: number): Promise<User> {

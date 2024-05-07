@@ -32,10 +32,13 @@ export class WarehouseService {
     try {
       return await this.db.selectFrom('Warehouse')
         .selectAll()
-        .where('name', '=', name)
+        .where((eb) =>{
+          if (!name) return eb('id', '>', 0);
+          return eb('name', 'like', `%${name}%`);
+        })
         .execute();
     } catch (error) {
-      throw new HttpException('Error fetching warehouses: ' + error.message, 500);
+      return [] as Warehouse[];
     }
   }
 
@@ -44,7 +47,7 @@ export class WarehouseService {
       return await this.db.selectFrom('Warehouse')
         .selectAll()
         .where('id', '=', id)
-        .executeTakeFirst();
+        .executeTakeFirstOrThrow();
     } catch (error) {
       throw new HttpException('Warehouse not found', 404);
     }

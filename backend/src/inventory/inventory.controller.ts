@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
-import { Inventory, Prisma } from '@prisma/client';
+import { Inventory } from '@prisma/client';
 
 /**
 *model Inventory {
@@ -23,8 +23,12 @@ export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) { }
 
   @Post()
-  create(@Body() createDto: Inventory, @Body('comments') comments?: string, @Query('fromLocation') fromLocation?: string) {
-    return this.inventoryService.create(createDto, comments, fromLocation);
+  create(
+    @Body() createDto: Inventory, 
+    @Body('fromLocation') fromLocation?: string,
+    @Body('comments') comments?: string 
+  ) {
+    return this.inventoryService.create(createDto, fromLocation, comments);
   }
 
   @Get()
@@ -52,8 +56,13 @@ export class InventoryController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: Inventory, @Body('comments') comments?: string, @Query('fromLocation') fromLocation?: string) {
-    return this.inventoryService.update(+id, updateDto, comments, fromLocation);
+  update(
+    @Param('id') id: string, 
+    @Body() updateDto: Inventory, 
+    @Body('fromLocation') fromLocation?: string,
+    @Body('comments') comments?: string
+  ) {
+    return this.inventoryService.update(+id, updateDto, fromLocation, comments);
   }
 
   @Delete(':id')
