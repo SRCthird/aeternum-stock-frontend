@@ -70,10 +70,10 @@ model Inventory {
   createdAt DateTime @default(now())
   createdBy String
   updatedAt DateTime? @updatedAt
-  updatedBy String
+  updatedBy String?
 
   createdUser  User         @relation("CreatedUser", fields: [createdBy], references: [email])
-  updatedUser  User         @relation("UpdatedUser", fields: [updatedBy], references: [email])
+  updatedUser  User?         @relation("UpdatedUser", fields: [updatedBy], references: [email])
   productLot   ProductLot   @relation(fields: [lotNumber], references: [lotNumber])
   inventoryBay InventoryBay @relation(fields: [location], references: [name])
 }
