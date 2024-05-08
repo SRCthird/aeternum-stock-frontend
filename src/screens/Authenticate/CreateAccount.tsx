@@ -94,7 +94,6 @@ const CreateAccount = ({ setMode }: Props) => {
           label="First Name"
           value={firstName}
           onChangeText={setFirstName}
-          secureTextEntry
           style={styles.input}
           onSubmitEditing={() => refLast.current.focus()}
         />
@@ -103,7 +102,6 @@ const CreateAccount = ({ setMode }: Props) => {
           label="Last Name"
           value={lastName}
           onChangeText={setLastName}
-          secureTextEntry
           style={styles.input}
           onSubmitEditing={() => refEndpoint.current.focus()}
         />
