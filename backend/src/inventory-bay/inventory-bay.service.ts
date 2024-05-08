@@ -5,7 +5,7 @@ import { DatabaseService } from 'src/database/database.service';
 @Injectable()
 export class InventoryBayService {
 
-  constructor(readonly databaseService: DatabaseService) {}
+  constructor(readonly databaseService: DatabaseService) { }
 
   async create(createDto: InventoryBay): Promise<InventoryBay> {
     const warehouse = await this.databaseService.selectFrom('Warehouse')
@@ -40,14 +40,19 @@ export class InventoryBayService {
     try {
       return await this.databaseService.selectFrom('InventoryBay')
         .selectAll()
-        .where((eb) => eb.or([
-          name ? eb('name', '=', name) : null,
-          warehouseName ? eb('warehouseName', '=', warehouseName) : null,
-          maxUniqueLots ? eb('maxUniqueLots', '=', maxUniqueLots) : null
-        ]))      
+        .where((eb) => {
+          if (!name && !warehouseName && !maxUniqueLots) {
+            return eb('id', '>', 0);
+          }
+          return eb.or([
+            name ? eb('name', '=', name) : null,
+            warehouseName ? eb('warehouseName', '=', warehouseName) : null,
+            maxUniqueLots ? eb('maxUniqueLots', '=', maxUniqueLots) : null
+          ].filter((x) => x !== null))
+        })
         .execute();
     } catch (error) {
-      throw new HttpException('Error fetching users: ' + error.message, 500);
+      return [] as InventoryBay[];
     }
   }
 
@@ -56,36 +61,49 @@ export class InventoryBayService {
       return await this.databaseService.selectFrom('InventoryBay')
         .selectAll()
         .where('id', '=', id)
-        .execute()[0];
+        .executeTakeFirstOrThrow();
     } catch (error) {
       throw new HttpException('Bay not found', 404);
     }
   }
 
   async update(id: number, updateDto: InventoryBay): Promise<InventoryBay> {
-    await this.databaseService.updateTable('InventoryBay')
-      .set(updateDto)
-      .where('id', '=', id)
-      .execute();
+    try {
+      await this.databaseService.updateTable('InventoryBay')
+        .set(updateDto)
+        .where('id', '=', id)
+        .execute();
 
-    return await this.findOne(id);
+      return await this.findOne(id);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('Duplicate bay name', HttpStatus.CONFLICT);
+      } else if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+        throw new HttpException('Warehouse does not exist', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Bay not found', 404);
+    }
   }
 
   async remove(id: number): Promise<InventoryBay> {
     const bay = await this.findOne(id);
 
-    const dependency = await this.databaseService.selectFrom('Inventory')
-      .selectAll()
-      .where('location', '=', bay.name)
-      .execute();
+    try {
+      const dependency = await this.databaseService.selectFrom('Inventory')
+        .selectAll()
+        .where('location', '=', bay.name)
+        .execute();
 
-    if (dependency.length > 0) {
-      throw new HttpException('Lot has dependencies', HttpStatus.NOT_ACCEPTABLE);
+      if (dependency.length > 0) {
+        throw new HttpException('Lot has dependencies', HttpStatus.NOT_ACCEPTABLE);
+      }
+      await this.databaseService.deleteFrom('InventoryBay')
+        .where('id', '=', id)
+        .execute();
+
+      return bay;
+    } catch (error) {
+      throw new HttpException('Bay has dependencies', 500);
     }
-    await this.databaseService.deleteFrom('InventoryBay')
-      .where('id', '=', id)
-      .execute();
-
-    return bay;
   }
 }
