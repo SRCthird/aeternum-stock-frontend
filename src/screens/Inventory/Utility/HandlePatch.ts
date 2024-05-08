@@ -15,38 +15,37 @@ type Props = {
 const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Props) => {
 
   const fullMove = async (id: number, item: Inventory) => {
-    api.patch('/api/inventory/' + id, item)
-    .then(_ => {
-      setKey(prev => prev + 1);
-      setSubmit(false);
-      setMode('view');
-    })
-    .catch(err => {
-      if (err.response.status === 400) {
-        Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
-      } else if (err.response.status === 422) {
-        Alert.alert('Error', 'Product lot does not exist');
-      } else if (err.response.status === 428) {
-        Alert.alert('Error', 'Inventory bay does not exist');
-      } else {
-        Alert.alert('Error', err.message);
-      }
-    });
-  }
-
- const subtractOld = async (item: Inventory, quantity: number) => {
-    api.patch('/api/inventory/' + item.id, { quantity: quantity, lotNumber: item.lotNumber })
+    api.patch(`/api/inventory/${id}`, item)
       .then(_ => {
         setKey(prev => prev + 1);
         setSubmit(false);
         setMode('view');
       })
       .catch(err => {
-        console.log('subtraction');
         if (err.response.status === 400) {
-          Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
+          Alert.alert('Error', 'Lot does not exist.');
         } else if (err.response.status === 422) {
-          Alert.alert('Error', 'Product lot does not exist');
+          Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
+        } else if (err.response.status === 428) {
+          Alert.alert('Error', 'Inventory bay does not exist');
+        } else {
+          Alert.alert('Error', err.message);
+        }
+      });
+  }
+
+  const subtractOld = async (item: Inventory, quantity: number) => {
+    api.patch(`/api/inventory/${item.id}`, { quantity: quantity })
+      .then(_ => {
+        setKey(prev => prev + 1);
+        setSubmit(false);
+        setMode('view');
+      })
+      .catch(err => {
+        if (err.response.status === 400) {
+          Alert.alert('Error', 'Lot does not exist.');
+        } else if (err.response.status === 422) {
+          Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
         } else if (err.response.status === 428) {
           Alert.alert('Error', 'Inventory bay does not exist');
         } else {
@@ -57,24 +56,26 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
 
   const createNew = async (item: Inventory) => {
     const { id: _, ...newData } = item;
-    api.post('/api/inventory/', newData)
-    .then(_ => {
-      setKey(prev => prev + 1);
-      setSubmit(false);
-      setMode('view');
-    })
-    .catch(err => {
-      console.log('creation');
-      if (err.response.status === 400) {
-        Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
-      } else if (err.response.status === 422) {
-        Alert.alert('Error', 'Product lot does not exist');
-      } else if (err.response.status === 428) {
-        Alert.alert('Error', 'Inventory bay does not exist');
-      } else {
-        Alert.alert('Error', err.message);
-      }
-    });
+    api.post(`/api/inventory/`, newData)
+      .then(_ => {
+        setKey(prev => prev + 1);
+        setSubmit(false);
+        setMode('view');
+      })
+      .catch(err => {
+        console.log(err);
+        if (err.response.status === 400) {
+          Alert.alert('Error', 'Inventory bay is at capacity for unique lots');
+        } else if (err.response.status === 422) {
+          Alert.alert('Error', 'Product lot does not exist');
+        } else if (err.response.status === 428) {
+          Alert.alert('Error', 'Inventory bay does not exist');
+        } else if (err.response.status === 409) {
+          Alert.alert('Error', 'Overflow of lot size. Check lot quantity.');
+        } else {
+          Alert.alert('Error', err.message);
+        }
+      });
   }
 
   if (newItem.location === oldItem.location) {
@@ -86,7 +87,7 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
     return;
   }
   await subtractOld(oldItem, oldItem.quantity - newItem.quantity)
-      .then(_ => createNew(newItem));
+    .then(_ => createNew(newItem));
   setSubmit(false);
 }
 

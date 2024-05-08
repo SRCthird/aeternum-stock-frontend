@@ -1,18 +1,18 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TextInput } from 'react-native-paper';
 import { Inventory } from "./Hooks/useInventory";
-import { Alert, Text, View } from "react-native";
+import { Alert, View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import useProductLotList from "../ProductLot/Hooks/useProductLotList";
 import useInventoryBayList from "../InventoryBay/Hooks/useInventoryBayList";
-import { Picker } from "@react-native-picker/picker";
 import NumberInput from "@src/components/NumberInput";
 import DatePicker from "@components/DatePicker";
 import useLotLookup from "../ProductLot/Hooks/useLotLookup";
 import { useAccount } from "@src/context/AccountContext";
 import SearchableDropDown from "@src/components/SearchableDropDown";
+import { AxiosError } from "axios";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -53,20 +53,23 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
 
   useEffect(() => {
     if (!submit) return;
-    const { id: _, ...putData } = data;
-    api.post('/api/inventory/', putData)
+    const { id: _, ...newData } = data;
+    api.post(`/api/inventory/`, newData)
       .then(_ => {
         setKey(prev => prev + 1);
         setSubmit(false);
         setMode('view');
       })
-      .catch(err => {
-        if (err.response.status === 400) {
-          Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
-        } else if (err.response.status === 422) {
+      .catch((err: AxiosError) => {
+        console.log(JSON.stringify(err.toJSON(), undefined, 2));
+        if (err.response?.status === 400) {
+          Alert.alert('Error', 'Inventory bay is at capacity for unique lots');
+        } else if (err.response?.status === 422) {
           Alert.alert('Error', 'Product lot does not exist');
-        } else if (err.response.status === 428) {
+        } else if (err.response?.status === 428) {
           Alert.alert('Error', 'Inventory bay does not exist');
+        } else if (err.response?.status === 409) {
+          Alert.alert('Error', 'Overflow of lot size. Check lot quantity.');
         } else {
           Alert.alert('Error', err.message);
         }

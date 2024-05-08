@@ -25,6 +25,10 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
     "@prisma/client": "^5.12.1",
+    "dotenv": "^16.4.5",
+    "fs": "^0.0.1-security",
+    "kysely": "^0.27.3",
+    "mysql2": "^3.9.7",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

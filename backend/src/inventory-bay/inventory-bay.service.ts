@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InventoryBay } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
@@ -7,64 +7,103 @@ export class InventoryBayService {
 
   constructor(readonly databaseService: DatabaseService) { }
 
-  async create(createDto: Prisma.InventoryBayCreateInput) {
-    const obj: Prisma.InventoryBayCreateInput & {warehouseName?: string} = {...createDto};
+  async create(createDto: InventoryBay): Promise<InventoryBay> {
+    const warehouse = await this.databaseService.selectFrom('Warehouse')
+      .select('name')
+      .where('name', '=', createDto.warehouseName)
+      .execute();
 
-    const warehouse = await this.databaseService.warehouse.findMany({
-      select: {
-        name: true,
-      }
-    });
-
-    const warehouseExist = warehouse.find((w) => w.name === obj.warehouseName);
-
-    if (!warehouseExist) {
+    if (warehouse.length === 0) {
       throw new BadRequestException('Warehouse does not exist');
     }
-    return this.databaseService.inventoryBay.create({ data: createDto });
+
+    const { insertId } = await this.databaseService.insertInto('InventoryBay')
+      .values(createDto)
+      .executeTakeFirstOrThrow();
+
+    return this.findOne(Number(insertId));
   }
 
-  async list() {
-    const bays = await this.databaseService.inventoryBay.findMany({
-      select: {
-        name: true,
-      },
-    });
+  async list(): Promise<string[]> {
+    const bays = await this.databaseService.selectFrom('InventoryBay')
+      .select('name')
+      .execute();
 
-    return bays.map((bay) => bay.name);
+    return bays.map(bay => bay.name);
   }
 
   async findAll(
     name?: string,
     warehouseName?: string,
     maxUniqueLots?: number,
-  ) {
-    const query: Prisma.InventoryBayFindManyArgs = {
-      where: {
-        name: {
-          startsWith: name,
-        },
-        warehouseName: {
-          startsWith: warehouseName,
-        },
-      },
-    };
-
-    if (maxUniqueLots) {
-      query.where.maxUniqueLots = maxUniqueLots;
+  ): Promise<InventoryBay[]> {
+    try {
+      return await this.databaseService.selectFrom('InventoryBay')
+        .selectAll()
+        .where((eb) => {
+          if (!name && !warehouseName && !maxUniqueLots) {
+            return eb('id', '>', 0);
+          }
+          return eb.or([
+            name ? eb('name', '=', name) : null,
+            warehouseName ? eb('warehouseName', '=', warehouseName) : null,
+            maxUniqueLots ? eb('maxUniqueLots', '=', maxUniqueLots) : null
+          ].filter((x) => x !== null))
+        })
+        .execute();
+    } catch (error) {
+      return [] as InventoryBay[];
     }
-    return this.databaseService.inventoryBay.findMany(query);
   }
 
-  async findOne(id: number) {
-    return this.databaseService.inventoryBay.findUnique({ where: { id } });
+  async findOne(id: number): Promise<InventoryBay> {
+    try {
+      return await this.databaseService.selectFrom('InventoryBay')
+        .selectAll()
+        .where('id', '=', id)
+        .executeTakeFirstOrThrow();
+    } catch (error) {
+      throw new HttpException('Bay not found', 404);
+    }
   }
 
-  async update(id: number, updateDto: Prisma.InventoryBayUpdateInput) {
-    return this.databaseService.inventoryBay.update({ where: { id }, data: updateDto });
+  async update(id: number, updateDto: InventoryBay): Promise<InventoryBay> {
+    try {
+      await this.databaseService.updateTable('InventoryBay')
+        .set(updateDto)
+        .where('id', '=', id)
+        .execute();
+
+      return await this.findOne(id);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('Duplicate bay name', HttpStatus.CONFLICT);
+      } else if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+        throw new HttpException('Warehouse does not exist', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Bay not found', 404);
+    }
   }
 
-  async remove(id: number) {
-    return this.databaseService.inventoryBay.delete({ where: { id } });
+  async remove(id: number): Promise<InventoryBay> {
+    const bay = await this.findOne(id);
+
+    try {
+      const dependency = await this.databaseService.selectFrom('Inventory')
+        .selectAll()
+        .where('location', '=', bay.name)
+        .execute();
+
+      if (dependency.length > 0) {
+        throw new HttpException('Lot has dependencies', HttpStatus.NOT_ACCEPTABLE);
+      }
+      await this.databaseService.deleteFrom('InventoryBay')
+        .where('id', '=', id)
+        .execute();
+
+      return bay;
+    } catch (error) {
+      throw new HttpException('Bay has dependencies', 500);
+    }
   }
 }

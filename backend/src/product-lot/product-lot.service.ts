@@ -1,47 +1,33 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ProductLot } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class ProductLotService {
 
-  constructor(readonly databaseService: DatabaseService) { }
+  constructor(readonly databaseService: DatabaseService) {}
 
-  async create(createDto: Prisma.ProductLotCreateInput) {
-    const obj: Prisma.ProductLotCreateInput & {productName?: string } = {...createDto};
+  async create(createDto: ProductLot): Promise<ProductLot> {
+    try {
+      const { insertId } = await this.databaseService.insertInto('ProductLot')
+        .values(createDto)
+        .executeTakeFirstOrThrow();
 
-    const lots = await this.databaseService.productLot.findMany({
-      where: {
-        OR: [
-          { lotNumber: obj.lotNumber },
-          { internalReference: obj.internalReference },
-        ]
-      },
-    });
-    
-    if (lots.length > 0) {
-      throw new HttpException('Lot already exists.', HttpStatus.CONFLICT);
+      return this.findOne(Number(insertId));
+    } catch (error) {
+      if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+        throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
+      } else if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('Lot already exists.', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error creating lot: ' + error.message, 500);
     }
-
-    const product = await this.databaseService.product.findMany({
-      select: {
-        name: true
-      },
-    })
-    const productExists = product.find((p) => p.name === obj.productName);
-    if (!productExists) {
-      throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
-    }
-
-    return this.databaseService.productLot.create({ data: createDto });
   }
 
-  async list() {
-    const lots = await this.databaseService.productLot.findMany({
-      select: {
-        lotNumber: true,
-      }
-    });
+  async list(): Promise<string[]> {
+    const lots = await this.databaseService.selectFrom('ProductLot')
+      .select('lotNumber')
+      .execute();
 
     return lots.map(lot => lot.lotNumber);
   }
@@ -50,45 +36,67 @@ export class ProductLotService {
     lotNumber?: string,
     internalReference?: string,
     productName?: string
-  ) {
-    const query: Prisma.ProductLotFindManyArgs = {
-      where: {
-        lotNumber: {
-          startsWith: lotNumber,
-        },
-        internalReference: {
-          startsWith: internalReference,
-        },
-        productName: {
-          startsWith: productName,
-        },
-      },
-    
-    };
-    return this.databaseService.productLot.findMany(query);
-  }
-  
-
-  async findOne(id: number) {
-    return this.databaseService.productLot.findUnique({ where: { id } });
-  }
-
-  async update(id: number, updateDto: Prisma.ProductLotUpdateInput) {
-    return this.databaseService.productLot.update({ where: { id }, data: updateDto });
-  }
-
-  async remove(id: number) {
-    const dependency = await this.databaseService.inventory.findMany({
-      where: {
-        productLot: {
-          id: id
-        }
-      },
-    })
-
-    if (dependency.length > 0) {
-      throw new HttpException('Lot has dependencies', HttpStatus.NOT_ACCEPTABLE);
+  ): Promise<ProductLot[]> {
+    try {
+      return await this.databaseService.selectFrom('ProductLot')
+        .selectAll()
+        .where((eb) => {
+          if (!lotNumber && !internalReference && !productName) return eb('id', '>', 0);
+          return eb.or([
+            lotNumber ? eb('lotNumber', '=', lotNumber) : null,
+            internalReference ? eb('internalReference', '=', internalReference) : null,
+            productName ? eb('productName', '=', productName) : null
+          ].filter((x) => x !== null))
+        })
+        .execute();
+    } catch (error) {
+      return [] as ProductLot[];
     }
-    return this.databaseService.productLot.delete({ where: { id } });
+  }
+
+
+  async findOne(id: number): Promise<ProductLot> {
+    try {
+      return await this.databaseService.selectFrom('ProductLot')
+        .selectAll()
+        .where('id', '=', id)
+        .executeTakeFirstOrThrow();
+    } catch (error) {
+      throw new HttpException('Lot not found', 404);
+    }
+  }
+
+  async update(id: number, updateDto: ProductLot): Promise<ProductLot> {
+    try {
+      await this.databaseService.updateTable('ProductLot')
+        .set(updateDto)
+        .where('id', '=', id)
+        .execute();
+
+      return await this.findOne(id);
+    } catch (error) {
+      if (String(error.code).includes('ER_ROW_IS_REFERENCED')) {
+        throw new HttpException('Product does not exist', HttpStatus.NOT_FOUND);
+      } else if (error.code === 'ER_DUP_ENTRY') {
+        throw new HttpException('Lot already exists.', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error creating lot: ' + error.message, 500);
+    }
+  }
+
+  async remove(id: number): Promise<ProductLot> {
+    const lot = await this.findOne(id);
+    try{
+      await this.databaseService.deleteFrom('ProductLot')
+      .where('id', '=', id)
+      .execute();
+
+      return lot;
+    } catch (error) {
+      if (String(error.code).includes('ER_ROW_IS_REFERENCED')) {
+        throw new HttpException('Lot has dependencies', HttpStatus.CONFLICT);
+      }
+      throw new HttpException('Error deleting lot: ' + error.message, 500);
+    }
   }
 }

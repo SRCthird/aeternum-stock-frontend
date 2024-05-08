@@ -1,63 +1,93 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { HttpException, Injectable } from '@nestjs/common';
+import { Log } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class LogService {
 
-  constructor(readonly databaseService: DatabaseService) { }
+  constructor(readonly databaseService: DatabaseService) {}
 
-  create(createDto: Prisma.LogCreateInput) {
-    return this.databaseService.log.create({ data: createDto });
+  async create(createDto: Log): Promise<Log> {
+    try {
+      const { insertId } = await this.databaseService.insertInto('Log')
+        .values(createDto)
+        .executeTakeFirstOrThrow();
+
+      return await this.findOne(Number(insertId));
+    } catch (error) {
+      throw new HttpException('Error creating log: ' + error.message, 500);
+    }
   }
 
-  findAll(
+  async findAll(
     fromLocation?: string,
     toLocation?: string,
     username?: string,
     lotNumber?: string,
     startDate?: string,
     endDate?: string
-  ) {
-    const query: Prisma.LogFindManyArgs = {
-      where: {
-        fromLocation: {
-          startsWith: fromLocation
-        },
-        toLocation: {
-          startsWith: toLocation
-        },
-        user: {
-          startsWith: username
-        },
-        lotNumber: {
-          startsWith: lotNumber
-        },
-      },
-      orderBy: {
-        dateTime: 'desc'
-      }
-    };
-
-    if (startDate && endDate) {
-      query.where.dateTime = {
-        gte: new Date(startDate),
-        lte: new Date(endDate)
-      };
+  ): Promise<Log[]> {
+    try {
+      return await this.databaseService.selectFrom('Log')
+        .selectAll()
+        .where((eb) => {
+          if (
+            !fromLocation &&
+            !toLocation &&
+            !username &&
+            !lotNumber &&
+            !startDate &&
+            !endDate
+          ) return eb('id', '>', 0);
+          return eb.or([
+            fromLocation ? eb('fromLocation', '=', fromLocation) : null,
+            toLocation ? eb('toLocation', '=', toLocation) : null,
+            username ? eb('user', '=', username) : null,
+            lotNumber ? eb('lotNumber', '=', lotNumber) : null,
+            startDate ? eb('dateTime', '>=', new Date(startDate)) : null,
+            endDate ? eb('dateTime', '<=', new Date(endDate)) : null
+          ].filter((x) => x !== null))
+        })
+        .execute();
+    } catch (error) {
+      return [] as Log[];
     }
-
-    return this.databaseService.log.findMany(query);
   }
 
-  findOne(id: number) {
-    return this.databaseService.log.findUnique({ where: { id } });
+  async findOne(id: number): Promise<Log> {
+    try {
+      return await this.databaseService.selectFrom('Log')
+        .selectAll()
+        .where('id', '=', id)
+        .execute()[0];
+    } catch (error) {
+      throw new HttpException('Log not found', 404);
+    }
   }
 
-  update(id: number, updateDto: Prisma.LogUpdateInput) {
-    return this.databaseService.log.update({ where: { id }, data: updateDto });
+  async update(id: number, updateDto: Log): Promise<Log> {
+    try {
+      await this.databaseService.updateTable('Log')
+        .set(updateDto)
+        .where('id', '=', id)
+        .execute();
+
+      return await this.findOne(id);
+    } catch (error) {
+      throw new HttpException('Error updating log: ' + error.message, 500);
+    }
   }
 
-  remove(id: number) {
-    return this.databaseService.log.delete({ where: { id } });
+  async remove(id: number): Promise<Log> {
+    const log = await this.findOne(id);
+    try {
+      this.databaseService.deleteFrom('Log')
+        .where('id', '=', id)
+        .execute();
+
+      return log;
+    } catch (error) {
+      throw new HttpException('Error deleting log: ' + error.message, 500);
+    }
   }
 }

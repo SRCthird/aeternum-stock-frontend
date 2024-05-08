@@ -1,59 +1,78 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Warehouse } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class WarehouseService {
 
-  constructor(readonly databaseService: DatabaseService) { }
+  constructor(readonly databaseService: DatabaseService) {}
 
-  async create(createDto: Prisma.WarehouseCreateInput) {
-    return this.databaseService.warehouse.create({ data: createDto });
+  async create(createDto: Warehouse): Promise<Warehouse> {
+    const { insertId } = await this.databaseService.insertInto('Warehouse')
+      .values(createDto)
+      .executeTakeFirstOrThrow();
+
+    return await this.findOne(Number(insertId));
   }
 
-  async list() {
-    const warehouses = await this.databaseService.warehouse.findMany({
-      select: {
-        name: true,
-      }
-    });
-
+  async list(): Promise<string[]> {
+    const warehouses = await this.databaseService
+      .selectFrom('Warehouse')
+      .select('name')
+      .execute();
     return warehouses.map(warehouse => warehouse.name);
   }
 
-  async findAll(
-    name?: string,
-  ) {
-    const query: Prisma.WarehouseFindManyArgs = {
-      where: {
-        name: {
-          contains: name,
-        },
-      },
-    };
-    return this.databaseService.warehouse.findMany(query);
+  async findAll(name?: string): Promise<Warehouse[]> {
+    try {
+      return await this.databaseService.selectFrom('Warehouse')
+        .selectAll()
+        .where((eb) =>{
+          if (!name) return eb('id', '>', 0);
+          return eb('name', 'like', `%${name}%`);
+        })
+        .execute();
+    } catch (error) {
+      return [] as Warehouse[];
+    }
   }
 
-  async findOne(id: number) {
-    return this.databaseService.warehouse.findUnique({ where: { id } });
+  async findOne(id: number): Promise<Warehouse> {
+    try {
+      return await this.databaseService.selectFrom('Warehouse')
+        .selectAll()
+        .where('id', '=', id)
+        .executeTakeFirstOrThrow();
+    } catch (error) {
+      throw new HttpException('Warehouse not found', 404);
+    }
   }
 
-  async update(id: number, updateDto: Prisma.WarehouseUpdateInput) {
-    return this.databaseService.warehouse.update({ where: { id }, data: updateDto });
+  async update(id: number, updateDto: Warehouse): Promise<Warehouse> {
+    await this.databaseService.updateTable('Warehouse')
+      .set(updateDto)
+      .where('id', '=', id)
+      .execute();
+
+    return await this.findOne(id);
   }
 
-  async remove(id: number) {
-    const dependency = await this.databaseService.inventoryBay.findMany({
-      where: {
-        warehouse: {
-          id: id
-        }
-      },
-    })
+  async remove(id: number): Promise<Warehouse> {
+    const warehouse = await this.findOne(id);
+
+    const dependency = await this.databaseService.selectFrom('InventoryBay')
+      .selectAll()
+      .where('warehouseName', '=', warehouse.name)
+      .execute();
 
     if (dependency.length > 0) {
       throw new HttpException('Warehouse has dependencies', HttpStatus.NOT_ACCEPTABLE);
     }
-    return this.databaseService.warehouse.delete({ where: { id } });
+
+    await this.databaseService.deleteFrom('Warehouse')
+      .where('id', '=', id)
+      .execute();
+
+    return warehouse;
   }
 }
