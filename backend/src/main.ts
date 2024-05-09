@@ -17,4 +17,5 @@ async function bootstrap() {
   core.setGlobalPrefix('api');
   await core.listen(5000);
 }
-bootstrap();
+bootstrap()
+  .catch((err) => console.error(err));
