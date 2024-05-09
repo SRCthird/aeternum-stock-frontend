@@ -1,4 +1,3 @@
-import { AntDesign } from "@expo/vector-icons";
 import useInventory from "@src/screens/Inventory/Hooks/useInventory";
 import useLog from "@src/screens/Log/hooks/useLogs";
 import { ProductLot } from "@src/screens/ProductLot/Hooks/useProductLot";
@@ -33,7 +32,7 @@ const LotProfile = ({ item, setMode }: Props) => {
             <Card.Content key={inventory.id}>
               <Paragraph>Location: {inventory.location}</Paragraph>
               <Paragraph>Quantity: {inventory.quantity}</Paragraph>
-              <Caption>Updated at: {formatDate(inventory.updatedAt)}</Caption>
+              <Caption>Created at: {formatDate(inventory.createdAt)}</Caption>
               {inventory.comments && <Paragraph>Comments: {inventory.comments}</Paragraph>}
             </Card.Content>
           )) : <Paragraph>Not found in Inventory</Paragraph>}
@@ -44,8 +43,7 @@ const LotProfile = ({ item, setMode }: Props) => {
           {logs.map((log) => (
             <Card.Content key={log.id}>
               <Divider />
-              <Paragraph>From: {log.fromLocation}</Paragraph>
-              <Paragraph>To: {log.toLocation}</Paragraph>
+              <Paragraph>Transfer: {log.fromLocation}  to  {log.toLocation}</Paragraph>
               <Paragraph>Quantity Moved: {log.quantityMoved}</Paragraph>
               <Caption>Date: {formatDate(log.dateTime)}</Caption>
               <Paragraph>User: {log.user}</Paragraph>
