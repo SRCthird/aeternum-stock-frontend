@@ -13,9 +13,11 @@ type Props = {
 }
 
 const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Props) => {
-
-  const fullMove = async (id: number, item: Inventory) => {
-    api.patch(`/api/inventory/${id}`, item)
+  const fullMove = async (id: number, fromLocation: string, item: Inventory) => {
+    api.patch(`/api/inventory/${id}`, {
+      ...item,
+      fromLocation
+    })
       .then(_ => {
         setKey(prev => prev + 1);
         setSubmit(false);
@@ -83,7 +85,7 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
     return;
   }
   if (newItem.quantity === oldItem.quantity) {
-    await fullMove(oldItem.id, newItem);
+    await fullMove(oldItem.id, oldItem.location, newItem);
     return;
   }
   await subtractOld(oldItem, oldItem.quantity - newItem.quantity)
