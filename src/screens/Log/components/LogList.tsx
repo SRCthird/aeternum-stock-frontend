@@ -55,9 +55,9 @@ const LogList = ({ headerNode, setItem, setMode }: Props) => {
               data={
                 logs.filter((item) =>
                   item.user.includes(searchQuery) ||
-                  item.lotNumber.includes(searchQuery) ||
-                  item.toLocation.includes(searchQuery) ||
-                  item.fromLocation.includes(searchQuery) ||
+                  item.lot_number.includes(searchQuery) ||
+                  item.to_location.includes(searchQuery) ||
+                  item.from_location.includes(searchQuery) ||
                   item.comments.includes(searchQuery)
                 )
               }

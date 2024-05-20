@@ -23,9 +23,9 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
 
   const [data, setData] = useState<ProductLot>({
     id: 0,
-    lotNumber: "",
-    internalReference: "",
-    productName: "",
+    lot_number: "",
+    internal_reference: "",
+    product_name: "",
     quantity: 0,
   });
 
@@ -66,9 +66,9 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
     }}>
       <SearchableDropDown
         label="Product Name"
-        selectedValue={data.productName}
+        selectedValue={data.product_name}
         onValueChange={(itemValue) => {
-          setData({ ...data, productName: itemValue });
+          setData({ ...data, product_name: itemValue });
         }}
         items={products}
         onSubmitEditing={() => refLotNumber.current.focus()}
@@ -82,7 +82,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
         label="Lot Number"
         placeholder="enter lot number."
         mode="outlined"
-        onChangeText={text => { setData({ ...data, lotNumber: text }) }}
+        onChangeText={text => { setData({ ...data, lot_number: text }) }}
         onSubmitEditing={() => refInternal.current.focus()}
       />
       <TextInput
@@ -94,7 +94,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
         label="Workorder"
         placeholder="enter internal reference/workorder."
         mode="outlined"
-        onChangeText={text => { setData({ ...data, internalReference: text }) }}
+        onChangeText={text => { setData({ ...data, internal_reference: text }) }}
         onSubmitEditing={() => refQuantity.current.focus()}
       />
       <TextInput

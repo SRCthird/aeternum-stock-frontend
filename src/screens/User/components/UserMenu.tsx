@@ -29,7 +29,7 @@ const UserMenu = ({ navigation, Appbar }: Props) => {
       }
     >
       <Menu.Item
-        title={user.firstName + ' ' + user.lastName}
+        title={user.first_name + ' ' + user.last_name}
       />
       <Menu.Item
         title="View Account"

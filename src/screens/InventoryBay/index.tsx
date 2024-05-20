@@ -20,8 +20,8 @@ const InventoryBayIndex = ({ navigation }: Props) => {
   const [item, setItem] = useState<InventoryBay>({
     id: 0,
     name: '',
-    warehouseName: '',
-    maxUniqueLots: 0,
+    warehouse_name: '',
+    max_unique_lots: 0,
   });
 
   useEffect(() => {

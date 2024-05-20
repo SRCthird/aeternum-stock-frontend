@@ -24,10 +24,10 @@ const InventoryIndex = ({ navigation, route }: Props) => {
     lotNumber: '',
     location: '',
     quantity: 0,
-    createdAt: new Date(),
-    createdBy: '',
-    updatedAt: new Date(),
-    updatedBy: '',
+    created_at: new Date(),
+    created_by: '',
+    from_location: 'Operations',
+    comments: '',
   });
 
   return (

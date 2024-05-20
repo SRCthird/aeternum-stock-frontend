@@ -25,8 +25,8 @@ const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
   const [data, setData] = useState<InventoryBay>({
     id: 0,
     name: '',
-    warehouseName: '',
-    maxUniqueLots: 0,
+    warehouse_name: '',
+    max_unique_lots: 0,
   });
 
   const [submit, setSubmit] = useState(false);
@@ -65,8 +65,8 @@ const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
       />
       <DropDown
         label="Warehouse"
-        selectedValue={data.warehouseName}
-        onValueChange={(itemValue, _) => { setData({ ...data, warehouseName: itemValue }) }}
+        selectedValue={data.warehouse_name}
+        onValueChange={(itemValue, _) => { setData({ ...data, warehouse_name: itemValue }) }}
         selection={
           isLoading ? (
             <Picker.Item label="Loading..." value="" />
@@ -77,8 +77,8 @@ const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
       />
       <NumberInput
         label="Max unique lots"
-        value={data.maxUniqueLots}
-        onChange={maxUniqueLots => setData({ ...data, maxUniqueLots })}
+        value={data.max_unique_lots}
+        onChange={max_unique_lots => setData({ ...data, max_unique_lots })}
       />
       <View style={{ flex: 1 }}></View>
       <SaveButton setSubmit={setSubmit} />

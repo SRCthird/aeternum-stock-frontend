@@ -20,7 +20,7 @@ const UserListItem = ({ user, onUserSelect }: Props) => {
       }}
     >
       <Card.Title
-        title={`${user.firstName} ${user.lastName}`}
+        title={`${user.first_name} ${user.last_name}`}
         subtitle={user.email}
         left={(props) => <Avatar.Image {...props} source={{ uri: avatarUrl }} />}
       />

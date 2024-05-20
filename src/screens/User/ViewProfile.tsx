@@ -36,12 +36,12 @@ const ViewProfile = ({ user, setMode, navigation }: Props) => {
           {user.image && (
             <Image source={{ uri: user.image }} style={styles.image} />
           )}
-          <Title style={styles.title}>{user.firstName} {user.lastName}</Title>
+          <Title style={styles.title}>{user.first_name} {user.last_name}</Title>
           <Paragraph style={styles.paragraph}>{user.email}</Paragraph>
           <Text style={styles.text}>Role: {user.role}</Text>
           {user.position && <Text style={styles.text}>Position: {user.position}</Text>}
           {user.bio && <Text style={styles.text}>Bio: {user.bio}</Text>}
-          <Text style={styles.text}>Member since: {new Date(user.createdAt).toLocaleDateString()}</Text>
+          <Text style={styles.text}>Member since: {new Date(user.created_at).toLocaleDateString()}</Text>
         </Card.Content>
       </Card>
     </ScrollView>

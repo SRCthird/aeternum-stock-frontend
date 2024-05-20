@@ -21,6 +21,7 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
   }, [selectedValue]);
 
   useEffect(() => {
+    console.log(items);
     if (showDropdown) {
       inputRef.current?.focus();
     }

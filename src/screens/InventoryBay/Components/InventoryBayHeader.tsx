@@ -46,8 +46,8 @@ const InventoryBayHeader = ({ title, setKey, setMode, setItem, navigation }: Pro
         setItem({
           id: 0,
           name: '',
-          warehouseName: '',
-          maxUniqueLots: 0,
+          warehouse_name: '',
+          max_unique_lots: 0,
         });
       }} />
       <Appbar.Action icon="refresh" onPress={() => {

@@ -8,7 +8,6 @@ import SaveButton from "@src/components/SaveButton";
 import useProductLotList from "../ProductLot/Hooks/useProductLotList";
 import useInventoryBayList from "../InventoryBay/Hooks/useInventoryBayList";
 import NumberInput from "@src/components/NumberInput";
-import DatePicker from "@components/DatePicker";
 import DeleteButton from "@src/components/DeleteButton";
 import handlePatch from "./Utility/HandlePatch";
 import SearchableDropDown from "@src/components/SearchableDropDown";
@@ -31,9 +30,8 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
   useEffect(() => {
     setData({
       ...data,
-      updatedAt: new Date(),
-      updatedBy: user.email,
-      fromLocation: item.location,
+      updated_by: user.email,
+      from_location: item.location,
       comments: ""
     });
     if (state === 'release') {
@@ -95,9 +93,9 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
     }}>
       <SearchableDropDown
         label="Lot Number"
-        selectedValue={data.lotNumber}
-        onValueChange={(lotNumber) => {
-          setData({ ...data, lotNumber });
+        selectedValue={data.lot_number}
+        onValueChange={(lot_number) => {
+          setData({ ...data, lot_number });
         }}
         items={lots}
       />
@@ -116,13 +114,6 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
         max={item.quantity}
         onChange={(quantity) => {
           setData({ ...data, quantity });
-        }}
-      />
-      <DatePicker
-        label="Updated At"
-        date={data.updatedAt || new Date()}
-        onConfirm={(updatedAt) => {
-          setData({ ...data, updatedAt });
         }}
       />
       <TextInput
@@ -144,7 +135,7 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
           margin: 10,
         }}
         label="Updated By"
-        value={data.updatedBy}
+        value={data.updated_by}
         mode="outlined"
       />
       <View style={{ flex: 1 }}></View>

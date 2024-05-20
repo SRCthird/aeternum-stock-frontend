@@ -8,12 +8,12 @@ export type User = {
   password: string;
   role: string;
   position?: string;
-  firstName?: string;
-  lastName?: string;
+  first_name?: string;
+  last_name?: string;
   bio?: string;
   image?: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at?: string;
 }
 
 export type createUser = {
@@ -21,10 +21,10 @@ export type createUser = {
   email: string;
   password: string;
   role?: string;
-  firstName?: string;
-  lastName?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  first_name?: string;
+  last_name?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 type Props = {
@@ -38,16 +38,14 @@ const useUser = ({ id, email }: Props) => {
     email: '',
     password: '',
     role: '',
-    createdAt: '',
-    updatedAt: ''
+    created_at: ''
   }]);
   const [user, setUser] = useState<User>({
     id: 0,
     email: '',
     password: '',
     role: '',
-    createdAt: '',
-    updatedAt: ''
+    created_at: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);

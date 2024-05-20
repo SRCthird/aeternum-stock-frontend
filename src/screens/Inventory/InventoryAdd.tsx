@@ -8,7 +8,6 @@ import SaveButton from "@src/components/SaveButton";
 import useProductLotList from "../ProductLot/Hooks/useProductLotList";
 import useInventoryBayList from "../InventoryBay/Hooks/useInventoryBayList";
 import NumberInput from "@src/components/NumberInput";
-import DatePicker from "@components/DatePicker";
 import useLotLookup from "../ProductLot/Hooks/useLotLookup";
 import { useAccount } from "@src/context/AccountContext";
 import SearchableDropDown from "@src/components/SearchableDropDown";
@@ -17,7 +16,7 @@ import { AxiosError } from "axios";
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
   setMode: (mode: mode) => void;
-  defaultItem?: { lotNumber: string, quantity: number };
+  defaultItem?: { lot_number: string, quantity: number };
 }
 
 const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
@@ -27,26 +26,23 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
 
   const [data, setData] = useState<Inventory>({
     id: 0,
-    lotNumber: '',
+    lot_number: '',
     location: '',
     quantity: 0,
-    createdAt: new Date(),
-    createdBy: user.email,
-    updatedAt: new Date(),
-    updatedBy: user.email,
-    fromLocation: 'Operations',
+    created_by: user.email,
+    from_location: 'Operations',
+    comments: 'Created from mobile app',
   });
   const [submit, setSubmit] = useState(false);
-  const { result: lotLookup, isLoading: lotLookupLoading } = useLotLookup({ lotNumber: data.lotNumber });
+  const { result: lotLookup, isLoading: lotLookupLoading } = useLotLookup({ lot_number: data.lot_number });
 
   useEffect(() => {
     if (defaultItem) {
       setData({
         ...data,
-        lotNumber: defaultItem.lotNumber,
+        lot_number: defaultItem.lot_number,
         quantity: defaultItem.quantity,
-        createdBy: user.email,
-        updatedBy: user.email,
+        created_by: user.email,
       });
     }
   }, []);
@@ -61,9 +57,8 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
         setMode('view');
       })
       .catch((err: AxiosError) => {
-        console.log(JSON.stringify(err.toJSON(), undefined, 2));
-        if (err.response?.status === 400) {
-          Alert.alert('Error', 'Inventory bay is at capacity for unique lots');
+        if (err.response?.status === 413) {
+          Alert.alert('Error', 'Inventory bay is at capacity or doesn\'t exist');
         } else if (err.response?.status === 422) {
           Alert.alert('Error', 'Product lot does not exist');
         } else if (err.response?.status === 428) {
@@ -87,9 +82,9 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
       <SearchableDropDown
         label="Lot Number"
         placeholder="Select a lot number"
-        selectedValue={data.lotNumber}
-        onValueChange={(lotNumber) => {
-          setData({ ...data, lotNumber });
+        selectedValue={data.lot_number}
+        onValueChange={(lot_number) => {
+          setData({ ...data, lot_number });
         }}
         items={lots}
       />
@@ -108,13 +103,6 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
         max={lotLookup[0]?.quantity ?? 0}
         onChange={(quantity) => {
           setData({ ...data, quantity });
-        }}
-      />
-      <DatePicker
-        label="Created At"
-        date={data.createdAt}
-        onConfirm={(createdAt) => {
-          setData({ ...data, createdAt });
         }}
       />
       <TextInput

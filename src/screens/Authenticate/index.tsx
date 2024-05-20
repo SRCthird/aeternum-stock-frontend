@@ -25,8 +25,7 @@ const Authenticate = ({ children }: Props) => {
     email: '',
     password: '',
     role: '',
-    createdAt: '',
-    updatedAt: ''
+    created_at: ''
   });
 
   useEffect(() => {

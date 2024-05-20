@@ -38,8 +38,8 @@ const ProductEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props
                 setMode('view');
               })
               .catch(err => {
-                if (err.response.status === 406) {
-                  Alert.alert("Error", "Product has lot dependencies.");
+                if (err.response.status === 409) {
+                  Alert.alert("Error", "Product is in use.");
                 } else {
                   Alert.alert("Error", "Failed to delete product.\n" + err.message);
                 }

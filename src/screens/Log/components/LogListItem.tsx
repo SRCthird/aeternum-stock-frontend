@@ -28,14 +28,14 @@ const LogListItem = ({ log, setItem, setMode }: Props) => {
       }}
     >
       <Card.Content style={styles.line}>
-        <Text style={styles.text}>{formatDate(log.dateTime)}</Text>
-        <Text style={styles.text}>{log.lotNumber}</Text>
-        <Text style={styles.text}>{log.quantityMoved}</Text>
+        <Text style={styles.text}>{formatDate(log.date_time)}</Text>
+        <Text style={styles.text}>{log.lot_number}</Text>
+        <Text style={styles.text}>{log.quantity_moved}</Text>
       </Card.Content>
       <Card.Content style={styles.comments}>
-        <Text style={styles.text}>{log.fromLocation}</Text>
+        <Text style={styles.text}>{log.from_location}</Text>
         <AntDesign name="arrowright" size={24} color="black" />
-        <Text style={styles.text}>{log.toLocation}</Text>
+        <Text style={styles.text}>{log.to_location}</Text>
       </Card.Content>
     </Card>
   )

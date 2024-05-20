@@ -51,13 +51,13 @@ const InventoryHeader = ({ setKey, setMode, setItem, navigation }: Props) => {
         setMode('add');
         setItem({
           id: 0,
-          lotNumber: '',
+          lot_number: '',
           location: '',
           quantity: 0,
-          createdAt: new Date(),
-          createdBy: '',
-          updatedAt: new Date(),
-          updatedBy: '',
+          created_at: new Date(),
+          created_by: '',
+          from_location: '',
+          comments: '',
         });
       }} />
       <Appbar.Action icon="refresh" onPress={() => {

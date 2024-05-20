@@ -54,9 +54,9 @@ const InventoryView = ({ setMode, setItem, headerNode }: Props) => {
             }}
             data={result.filter((item) => 
                 item.location.includes(searchQuery) ||
-                item.lotNumber.includes(searchQuery) ||
-                item.createdBy.includes(searchQuery) ||
-                item.updatedBy.includes(searchQuery)
+                item.lot_number.includes(searchQuery) ||
+                item.created_by.includes(searchQuery) ||
+                item.updated_by?.includes(searchQuery)
             )}
             renderItem={({ item }) => (
               <InventoryListItem
