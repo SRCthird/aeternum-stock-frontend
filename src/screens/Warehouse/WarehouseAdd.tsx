@@ -32,7 +32,6 @@ const WarehouseAdd = ({ key_, setKey, setMode, navigation }: Props) => {
     const { id: _, ...putData } = data;
     api.post('/api/warehouse/', putData)
       .then(res => {
-        console.log(res.data);
         setKey(key_ + 1);
         setSubmit(false);
         setMode('view');

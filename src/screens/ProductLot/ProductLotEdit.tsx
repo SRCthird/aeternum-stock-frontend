@@ -97,7 +97,6 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
         label="Product Name"
         selectedValue={data.product_name}
         onValueChange={(itemValue) => {
-          console.log(itemValue);
           setData({ ...data, product_name: itemValue });
         }}
         items={products}

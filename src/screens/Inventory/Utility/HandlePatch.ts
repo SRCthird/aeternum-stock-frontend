@@ -62,7 +62,6 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
         setMode('view');
       })
       .catch(err => {
-        console.log(err);
         if (err.response.status === 400) {
           Alert.alert('Error', 'Inventory bay is at capacity for unique lots');
         } else if (err.response.status === 422) {
@@ -76,7 +75,6 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
         }
       });
   }
-  console.log(newItem, oldItem);
 
   newItem.from_location = oldItem.location;
   if (newItem.location === oldItem.location) {
