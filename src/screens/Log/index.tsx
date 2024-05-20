@@ -17,12 +17,12 @@ const LogIndex = ({ navigation }: Props) => {
   const [key, setKey] = useState<number>(0);
   const [item, setItem] = useState<Log>({
     id: 0,
-    fromLocation: '',
-    toLocation: '',
-    dateTime: new Date(),
+    from_location: '',
+    to_location: '',
+    date_time: new Date(),
     user: '',
-    lotNumber: '',
-    quantityMoved: 0,
+    lot_number: '',
+    quantity_moved: 0,
     comments: ''
   });
 

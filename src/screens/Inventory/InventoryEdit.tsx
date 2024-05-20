@@ -22,8 +22,8 @@ type Props = {
 
 const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
   const { user } = useAccount();
-  const { result: lots, isLoading: lotsLoading } = useProductLotList();
-  const { result: locations, isLoading: locationsLoading } = useInventoryBayList();
+  const { result: lots } = useProductLotList();
+  const { result: locations } = useInventoryBayList();
 
   const [data, setData] = useState<Inventory>(item);
 

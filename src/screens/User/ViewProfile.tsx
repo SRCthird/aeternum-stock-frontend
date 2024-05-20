@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { RootStackParamList } from ".."
 import { User } from "../Authenticate/Hooks/useUser"
-import { View, StyleSheet, Image, ScrollView } from 'react-native'
+import { StyleSheet, Image, ScrollView } from 'react-native'
 import { Card, Title, Paragraph, Text } from 'react-native-paper'
 import { useAccount } from "@src/context/AccountContext"
 

@@ -24,10 +24,7 @@ type Props = {
 
 
 const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
-  const { result: warehouses, isLoading } = useWarehouseList();
-  const [menuVisible, setMenuVisible] = useState(false);
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
+  const { result: warehouses } = useWarehouseList();
 
   const [data, setData] = useState<InventoryBay>(item);
   const [submit, setSubmit] = useState(false);

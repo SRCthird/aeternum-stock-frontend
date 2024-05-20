@@ -5,7 +5,6 @@ import { Alert, View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
-import NumberInput from "@src/components/NumberInput";
 import useProductList from "../Product/Hooks/useProductList";
 import SearchableDropDown from "@src/components/SearchableDropDown";
 
@@ -19,7 +18,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
   const refLotNumber = useRef<TextInput>();
   const refInternal = useRef<TextInput>();
   const refQuantity = useRef<TextInput>();
-  const { result: products, isLoading } = useProductList();
+  const { result: products } = useProductList();
 
   const [data, setData] = useState<ProductLot>({
     id: 0,

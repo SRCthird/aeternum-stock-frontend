@@ -1,8 +1,6 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text, Avatar, Card } from 'react-native-paper';
 import { User } from "@src/screens/Authenticate/Hooks/useUser";
-import { mode } from '@src/utils/types';
 
 interface Props {
   user: User;

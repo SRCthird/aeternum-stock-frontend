@@ -21,8 +21,8 @@ type Props = {
 
 const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
   const { user } = useAccount();
-  const { result: lots, isLoading: lotsLoading } = useProductLotList();
-  const { result: locations, isLoading: locationsLoading } = useInventoryBayList();
+  const { result: lots } = useProductLotList();
+  const { result: locations } = useInventoryBayList();
 
   const [data, setData] = useState<Inventory>({
     id: 0,
@@ -34,7 +34,7 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
     comments: 'Created from mobile app',
   });
   const [submit, setSubmit] = useState(false);
-  const { result: lotLookup, isLoading: lotLookupLoading } = useLotLookup({ lot_number: data.lot_number });
+  const { result: lotLookup } = useLotLookup({ lot_number: data.lot_number });
 
   useEffect(() => {
     if (defaultItem) {
