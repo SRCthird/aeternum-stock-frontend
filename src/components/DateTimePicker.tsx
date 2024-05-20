@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 type Props = {
   label: string;
@@ -13,7 +13,7 @@ const DateTimePickerComponent = ({ label, dateTime, onConfirm }: Props) => {
 
   const validDateTime = dateTime instanceof Date ? dateTime : new Date();
 
-  const onChange = (event, selectedDateTime) => {
+const onChange = (_: DateTimePickerEvent, selectedDateTime?: Date) => {
     const currentDateTime = selectedDateTime || validDateTime;
     setShow(Platform.OS === 'ios');
     onConfirm(currentDateTime);
