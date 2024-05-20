@@ -47,7 +47,7 @@ export const validateUserRemote = async (endpoint: string, apiKey: string, usern
       if (res.data.length === 0) return;
       const passwd: string = res.data[0].password || "";
       if (passwd === password) return;
-      throw new Error('User already exists in database');
+      throw new Error('User does not match remote credentials');
     })
     .catch(err => {
       throw new Error(err);
