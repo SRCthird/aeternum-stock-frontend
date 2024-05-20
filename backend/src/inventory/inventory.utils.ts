@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Inventory } from "@prisma/client";
+import { DatabaseService } from "src/database/database.service";
 
 type UpdateInventory = {
   id?: number;
@@ -22,6 +23,8 @@ type CreateInventory = {
 @Injectable()
 export class InventoryUtils {
 
+  constructor(readonly databaseService: DatabaseService) { }
+
   scrubCreateDto(createDto: Inventory): CreateInventory {
     return {
       lotNumber: createDto.lotNumber,
@@ -34,7 +37,6 @@ export class InventoryUtils {
 
 
   scrubUpdateDto(updateDto: Inventory): UpdateInventory {
-    console.log(updateDto);
     let scrubbed: UpdateInventory = {};
     if (updateDto.lotNumber) scrubbed.lotNumber = updateDto.lotNumber
     if (updateDto.location) scrubbed.location = updateDto.location;
@@ -43,6 +45,45 @@ export class InventoryUtils {
     if (updateDto.updatedBy) scrubbed.updatedAt = new Date();
     console.log(scrubbed);
     return scrubbed;
+  }
+
+  async mergeLot(dto: Inventory, fromLocation: string, comment?: string) {
+    const mergableLots = await this.databaseService.selectFrom('Inventory')
+      .selectAll()
+      .where('location', '=', dto.location)
+      .where('lotNumber', '=', dto.lotNumber)
+      .executeTakeFirst();
+
+    if (mergableLots) {
+      await this.databaseService.updateTable('Inventory')
+        .where('id', '=', mergableLots.id)
+        .set({
+          quantity: (mergableLots.quantity + dto.quantity),
+          updatedBy: dto.createdBy,
+          updatedAt: new Date()
+        })
+        .execute();
+
+      await this.databaseService.insertInto('Log')
+        .values({
+          fromLocation: fromLocation,
+          toLocation: dto.location,
+          dateTime: new Date(),
+          user: dto.createdBy,
+          lotNumber: dto.lotNumber,
+          quantityMoved: dto.quantity,
+          comments: comment || 'Inventory updated'
+        })
+        .execute();
+
+      const merged = await this.databaseService.selectFrom('Inventory')
+        .selectAll()
+        .where('id', '=', mergableLots.id)
+        .executeTakeFirst();
+
+      return merged;
+    }
+    throw new Error('Inventory not mergable');
   }
 };
 

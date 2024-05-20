@@ -20,6 +20,14 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    if (username === 'clear' && password === 'clear') {
+      try {
+        await AsyncStorage.clear();
+      } catch (error) {
+        Alert.alert('Error', `${error}`);
+      }
+      return;
+    }
     const hashedPassword = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA256,
       password

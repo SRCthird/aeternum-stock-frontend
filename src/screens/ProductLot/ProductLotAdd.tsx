@@ -91,7 +91,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
           minWidth: '100%',
           margin: 10,
         }}
-        label="Internal Reference"
+        label="Workorder"
         placeholder="enter internal reference/workorder."
         mode="outlined"
         onChangeText={text => { setData({ ...data, internalReference: text }) }}

@@ -196,6 +196,16 @@ export class InventoryService {
     }
 
     try {
+      const mergedLot = await this.inventoryUtils.mergeLot(updateDto, fromLocation);
+      await this.databaseService.deleteFrom('Inventory')
+        .where('id', '=', id)
+        .execute();
+      return mergedLot;
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
       await this.databaseService.updateTable('Inventory')
         .where('id', '=', id)
         .set(this.inventoryUtils.scrubUpdateDto(updateDto))

@@ -43,7 +43,7 @@ const InventoryListItem = ({ listItem, setMode, setItem }: Props) => {
   });
 
   useEffect(() => {
-    if (listItem.updatedAt !== listItem.createdAt) {
+    if (formatDate(listItem.updatedAt) !== "Invalid date") {
       setEdited(true);
     }
   }, []);

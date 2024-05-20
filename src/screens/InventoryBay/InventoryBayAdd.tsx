@@ -11,7 +11,6 @@ import DropDown from "@src/components/DropDown";
 import useWarehouseList from "../Warehouse/Hooks/useWarehouseList";
 import { Picker } from "@react-native-picker/picker";
 import NumberInput from "@src/components/NumberInput";
-import InventoryBayHeader from "./Components/InventoryBayHeader";
 
 type Props = {
   key_: number;
@@ -48,50 +47,41 @@ const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
   }, [submit]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <InventoryBayHeader
-        title="Add Inventory Bay"
-        setKey={setKey}
-        setItem={setData}
-        setMode={setMode}
-        navigation={navigation}
+    <View style={{
+      flex: 1,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      padding: 10,
+    }}>
+      <TextInput
+        style={{
+          minWidth: '100%',
+          margin: 10,
+        }}
+        label="Name"
+        placeholder="Enter Inventory Bay name"
+        mode="outlined"
+        onChangeText={text => { setData({ ...data, name: text }) }}
       />
-      <View style={{ 
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 10,
-      }}>
-        <TextInput 
-          style={{ 
-            minWidth: '100%', 
-            margin: 10, 
-          }} 
-          label="Name" 
-          placeholder="Enter Inventory Bay name"
-          mode="outlined" 
-          onChangeText={text => { setData({ ...data, name: text }) }}
-        />
-        <DropDown
-          label="Warehouse"
-          selectedValue={data.warehouseName}
-          onValueChange={(itemValue, _) => { setData({ ...data, warehouseName: itemValue }) }}
-          selection={
-            isLoading ? (
-              <Picker.Item label="Loading..." value="" />
-            ) : warehouses.map((warehouse, index) => (
-              <Picker.Item key={index} label={warehouse} value={warehouse} />
-            ))
-          }
-        />
-        <NumberInput
-          label="Max unique lots"
-          value={data.maxUniqueLots}
-          onChange={maxUniqueLots => setData({ ...data, maxUniqueLots })}
-        />
-        <View style={{ flex: 1 }}></View>
-        <SaveButton setSubmit={setSubmit} />
-      </View>
+      <DropDown
+        label="Warehouse"
+        selectedValue={data.warehouseName}
+        onValueChange={(itemValue, _) => { setData({ ...data, warehouseName: itemValue }) }}
+        selection={
+          isLoading ? (
+            <Picker.Item label="Loading..." value="" />
+          ) : warehouses.map((warehouse, index) => (
+            <Picker.Item key={index} label={warehouse} value={warehouse} />
+          ))
+        }
+      />
+      <NumberInput
+        label="Max unique lots"
+        value={data.maxUniqueLots}
+        onChange={maxUniqueLots => setData({ ...data, maxUniqueLots })}
+      />
+      <View style={{ flex: 1 }}></View>
+      <SaveButton setSubmit={setSubmit} />
     </View>
   );
 }

@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { RootStackParamList } from "@screens";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InventoryBayView from "./InventoryBayView";
 import { InventoryBay } from "./Hooks/useInventoryBay";
 import InventoryBayEdit from "./InventoryBayEdit";
@@ -16,12 +16,23 @@ type Props = {
 const InventoryBayIndex = ({ navigation }: Props) => {
   const [key, setKey] = useState<number>(0);
   const [mode, setMode] = useState<mode>('view');
+  const [title, setTitle] = useState<string>('Inventory Bay');
   const [item, setItem] = useState<InventoryBay>({
     id: 0,
     name: '',
     warehouseName: '',
     maxUniqueLots: 0,
   });
+
+  useEffect(() => {
+    if (mode === 'view') {
+      setTitle('Inventory Bay');
+    } else if (mode === 'edit') {
+      setTitle(`Edit Inventory Bay: ${item.id}`);
+    } else if (mode === 'add') {
+      setTitle('Add Inventory Bay');
+    }
+  }, [mode]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -43,7 +54,7 @@ const InventoryBayIndex = ({ navigation }: Props) => {
       ) : (
         <View style={{ flex: 1 }}>
           <InventoryBayHeader
-            title="Inventory Bay"
+            title={title}
             setKey={setKey}
             setMode={setMode}
             setItem={setItem}

@@ -74,86 +74,43 @@ const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: 
   }, [submit]);
 
   return (
-    <>
-      <Appbar style={{
-        height: 80,
-        width: '100%',
-        paddingTop: 25,
-      }}>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
-          }
-        >
-          <Menu.Item
-            title="Home"
-            onPress={() => {
-              navigation.navigate('Actions');
-              closeMenu();
-            }}
-          />
-          <Menu.Item
-            title="Inventory Bay View"
-            onPress={() => {
-              setMode('view');
-              closeMenu();
-            }}
-          />
-        </Menu>
-        <Appbar.Content title={"ID: " + item.id} />
-        <Appbar.Action icon="plus" onPress={() => {
-          setMode('add');
-          setItem({
-            id: 0,
-            name: '',
-            warehouseName: '',
-            maxUniqueLots: 0,
-          });
-        }} />
-        <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key_ + 1);
-        }} />
-      </Appbar>
-      <View style={{
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 10,
-      }}>
-        <TextInput
-          style={{
-            minWidth: '100%',
-            margin: 10,
-          }}
-          label="Name"
-          defaultValue={item.name}
-          placeholder="Enter Inventory Bay name."
-          mode="outlined"
-          onChangeText={text => { setData({ ...data, name: text }) }}
-        />
-        <DropDown
-          label="Warehouse"
-          selectedValue={data.warehouseName}
-          onValueChange={(itemValue, _) => { setData({ ...data, warehouseName: itemValue }) }}
-          selection={
-            warehouses.map((warehouse, index) => (
-              <Picker.Item key={index} label={warehouse} value={warehouse} />
-            ))
-          }
-        />
-        <NumberInput
-          label="Max unique lots"
-          defaultValue={item.maxUniqueLots}  
-          value={data.maxUniqueLots}
-          onChange={maxUniqueLots => setData({ ...data, maxUniqueLots })}
-        />
-        <View style={{ flex: 1 }}></View>
-        <SaveButton setSubmit={setSubmit} />
-        <DeleteButton onPress={() => deleteAlert(item)} />
-      </View>
-    </>
+    <View style={{
+      flex: 1,
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      padding: 10,
+    }}>
+      <TextInput
+        style={{
+          minWidth: '100%',
+          margin: 10,
+        }}
+        label="Name"
+        defaultValue={item.name}
+        placeholder="Enter Inventory Bay name."
+        mode="outlined"
+        onChangeText={text => { setData({ ...data, name: text }) }}
+      />
+      <DropDown
+        label="Warehouse"
+        selectedValue={data.warehouseName}
+        onValueChange={(itemValue, _) => { setData({ ...data, warehouseName: itemValue }) }}
+        selection={
+          warehouses.map((warehouse, index) => (
+            <Picker.Item key={index} label={warehouse} value={warehouse} />
+          ))
+        }
+      />
+      <NumberInput
+        label="Max unique lots"
+        defaultValue={item.maxUniqueLots}
+        value={data.maxUniqueLots}
+        onChange={maxUniqueLots => setData({ ...data, maxUniqueLots })}
+      />
+      <View style={{ flex: 1 }}></View>
+      <SaveButton setSubmit={setSubmit} />
+      <DeleteButton onPress={() => deleteAlert(item)} />
+    </View>
   );
 }
 
