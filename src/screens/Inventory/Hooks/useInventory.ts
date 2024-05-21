@@ -4,49 +4,47 @@ import { useEffect, useState } from 'react'
 
 export type Inventory = {
   id: number;
-  lotNumber: string;
+  lot_number: string;
   location: string;
   quantity: number;
-  createdAt: Date;
-  createdBy: string;
-  updatedAt?: Date;
-  updatedBy: string;
-
-  // Sending not recieving
-  fromLocation?: string;
-  comments?: string;
+  created_at?: Date;
+  created_by: string;
+  updated_at?: Date;
+  updated_by?: string;
+  from_location: string;
+  comments: string;
 }
 
 type Props = {
   id?: number;
-  lotNumber?: string;
+  lot_number?: string;
   location?: string;
-  createdBy?: string;
-  updatedBy?: string;
+  created_by?: string;
+  updated_by?: string;
   startDate?: string;
   endDate?: string;
 }
-const useInventory = ({ id, lotNumber, location, createdBy, updatedBy, startDate, endDate }: Props) => {
+const useInventory = ({ id, lot_number, location, created_by, updated_by, startDate, endDate }: Props) => {
   const [result, setResult] = useState<Inventory[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
 
   const params: URLSearchParams = new URLSearchParams();
   if (id) params.append('id', id.toString());
-  if (lotNumber) params.append('lotNumber', lotNumber);
+  if (lot_number) params.append('lot_number', lot_number);
   if (location) params.append('location', location);
-  if (createdBy) params.append('createdBy', createdBy);
-  if (updatedBy) params.append('updatedBy', updatedBy);
+  if (created_by) params.append('created_by', created_by);
+  if (updated_by) params.append('updated_by', updated_by);
   if (startDate) params.append('startDate', startDate);
   if (endDate) params.append('endDate', endDate);
 
   useEffect(() => {
     if (
       id === 0 ||
-      lotNumber === '' ||
+      lot_number === '' ||
       location === '' ||
-      createdBy === '' ||
-      updatedBy === '' ||
+      created_by === '' ||
+      updated_by === '' ||
       startDate === '' ||
       endDate === ''
     ) return;

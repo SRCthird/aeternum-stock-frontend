@@ -43,7 +43,7 @@ const InventoryListItem = ({ listItem, setMode, setItem }: Props) => {
   });
 
   useEffect(() => {
-    if (formatDate(listItem.updatedAt) !== "Invalid date") {
+    if (formatDate(listItem.updated_at) !== "Invalid date") {
       setEdited(true);
     }
   }, []);
@@ -62,20 +62,20 @@ const InventoryListItem = ({ listItem, setMode, setItem }: Props) => {
       }}
     >
       <View style={styles.container}>
-        <Text style={styles.text}>{listItem.lotNumber}</Text>
+        <Text style={styles.text}>{listItem.lot_number}</Text>
         <Text style={styles.text}>{listItem.location}</Text>
         <Text style={styles.text}>{listItem.quantity}</Text>
       </View>
       <View style={styles.container}>
         <Text style={styles.label}>Created: </Text>
-        <Text style={styles.text}>{formatDate(listItem.createdAt)}</Text>
-        <Text style={styles.text}>{listItem.createdBy}</Text>
+        <Text style={styles.text}>{formatDate(listItem.created_at)}</Text>
+        <Text style={styles.text}>{listItem.created_by}</Text>
       </View>
       {edited && (
         <View style={styles.container}>
           <Text style={styles.label}>Updated: </Text>
-          <Text style={styles.text}>{formatDate(listItem.updatedAt)}</Text>
-          <Text style={styles.text}>{listItem.updatedBy}</Text>
+          <Text style={styles.text}>{formatDate(listItem.updated_at)}</Text>
+          <Text style={styles.text}>{listItem.updated_by}</Text>
         </View>
       )}
     </TouchableOpacity>

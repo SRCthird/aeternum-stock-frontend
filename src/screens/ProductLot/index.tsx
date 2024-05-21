@@ -18,9 +18,9 @@ const ProductLotIndex = ({ navigation }: Props) => {
   const [mode, setMode] = useState<mode>('view');
   const [item, setItem] = useState<ProductLot>({
     id: 0,
-    lotNumber: "",
-    internalReference: "",
-    productName: "",
+    lot_number: "",
+    internal_reference: "",
+    product_name: "",
     quantity: 0
   });
 

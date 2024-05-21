@@ -52,9 +52,9 @@ const ProductHeader = ({ navigation, label, setMode, setKey, setItem }: Props) =
         setMode('add');
         setItem({
           id: 0,
-          lotNumber: "",
-          internalReference: "",
-          productName: "",
+          lot_number: "",
+          internal_reference: "",
+          product_name: "",
           quantity: 0,
         });
       }} />

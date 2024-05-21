@@ -29,8 +29,8 @@ const InventoryBayListItem = ({ listItem, setMode, setItem }: Props) => {
       }}
     >
       <Text style={{ flex: 1 }}>{listItem.name}</Text>
-      <Text style={{ flex: 1 }}>{listItem.warehouseName}</Text>
-      <Text style={{ flex: 1 }}>{listItem.maxUniqueLots}</Text>
+      <Text style={{ flex: 1 }}>{listItem.warehouse_name}</Text>
+      <Text style={{ flex: 1 }}>{listItem.max_unique_lots}</Text>
     </TouchableOpacity>
   );
 }

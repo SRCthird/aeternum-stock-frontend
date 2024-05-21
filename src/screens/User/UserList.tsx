@@ -1,7 +1,6 @@
 import { FlatList, Text } from "react-native";
 import useUser, { User } from "../Authenticate/Hooks/useUser";
 import UserListItem from "./components/UserListItem";
-import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   onUserSelect: (user: User) => void;

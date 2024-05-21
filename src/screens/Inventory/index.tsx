@@ -21,13 +21,13 @@ const InventoryIndex = ({ navigation, route }: Props) => {
   const [mode, setMode] = useState<mode>('view');
   const [item, setItem] = useState<Inventory>({
     id: 0,
-    lotNumber: '',
+    lot_number: '',
     location: '',
     quantity: 0,
-    createdAt: new Date(),
-    createdBy: '',
-    updatedAt: new Date(),
-    updatedBy: '',
+    created_at: new Date(),
+    created_by: '',
+    from_location: 'Operations',
+    comments: '',
   });
 
   return (

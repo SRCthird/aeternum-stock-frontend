@@ -13,11 +13,8 @@ type Props = {
 }
 
 const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Props) => {
-  const fullMove = async (id: number, fromLocation: string, item: Inventory) => {
-    api.patch(`/api/inventory/${id}`, {
-      ...item,
-      fromLocation
-    })
+  const fullMove = async (id: number, item: Inventory) => {
+    api.patch(`/api/inventory/${id}`, {...item})
       .then(_ => {
         setKey(prev => prev + 1);
         setSubmit(false);
@@ -65,7 +62,6 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
         setMode('view');
       })
       .catch(err => {
-        console.log(err);
         if (err.response.status === 400) {
           Alert.alert('Error', 'Inventory bay is at capacity for unique lots');
         } else if (err.response.status === 422) {
@@ -80,12 +76,13 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
       });
   }
 
+  newItem.from_location = oldItem.location;
   if (newItem.location === oldItem.location) {
     Alert.alert('Error', 'Location must be different from the original location.');
     return;
   }
   if (newItem.quantity === oldItem.quantity) {
-    await fullMove(oldItem.id, oldItem.location, newItem);
+    await fullMove(oldItem.id, newItem);
     return;
   }
   await subtractOld(oldItem, oldItem.quantity - newItem.quantity)

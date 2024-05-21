@@ -8,8 +8,6 @@ import DeleteButton from "@components/DeleteButton";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import NumberInput from "@src/components/NumberInput";
-import { Picker } from '@react-native-picker/picker';
-import DropDown from "@src/components/DropDown";
 import SearchableDropDown from "@src/components/SearchableDropDown";
 
 type Props = {
@@ -20,7 +18,7 @@ type Props = {
 }
 
 const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
-  const { result: products, isLoading } = useProductList();
+  const { result: products } = useProductList();
 
   const [data, setData] = useState<ProductLot>(item);
   const [submit, setSubmit] = useState(false);
@@ -80,8 +78,8 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
         }}
         label="Lot Number"
         mode="outlined"
-        defaultValue={item.lotNumber}
-        onChangeText={text => { setData({ ...data, lotNumber: text }) }}
+        defaultValue={item.lot_number}
+        onChangeText={text => { setData({ ...data, lot_number: text }) }}
       />
       <TextInput
         style={{
@@ -90,15 +88,14 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
         }}
         label="Internal Reference"
         mode="outlined"
-        defaultValue={item.internalReference}
-        onChangeText={text => { setData({ ...data, internalReference: text }) }}
+        defaultValue={item.internal_reference}
+        onChangeText={text => { setData({ ...data, internal_reference: text }) }}
       />
       <SearchableDropDown
         label="Product Name"
-        selectedValue={data.productName}
+        selectedValue={data.product_name}
         onValueChange={(itemValue) => {
-          console.log(itemValue);
-          setData({ ...data, productName: itemValue });
+          setData({ ...data, product_name: itemValue });
         }}
         items={products}
       />

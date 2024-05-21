@@ -24,6 +24,10 @@ const EditProfile = ({ user, setUser, setMode, admin }: Props) => {
         setMode('view');
       })
       .catch(err => {
+        if (err.response.status === 409) {
+          Alert.alert('Error', 'Username already exists');
+          return;
+        }
         Alert.alert('Error', err.message || 'Failed to update profile');
       });
   };
@@ -41,17 +45,17 @@ const EditProfile = ({ user, setUser, setMode, admin }: Props) => {
       />
       <TextInput
         label="First Name"
-        value={data.firstName || ''}
+        value={data.first_name || ''}
         onChangeText={(value) =>{
-          setData({ ...data, firstName: value })
+          setData({ ...data, first_name: value })
         }}
         style={styles.input}
       />
       <TextInput
         label="Last Name"
-        value={data.lastName || ''}
+        value={data.last_name || ''}
         onChangeText={(value) =>{
-          setData({ ...data, lastName: value })
+          setData({ ...data, last_name: value })
         }}
         style={styles.input}
       />

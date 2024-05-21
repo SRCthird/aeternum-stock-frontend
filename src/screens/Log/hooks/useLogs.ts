@@ -3,22 +3,22 @@ import { useEffect, useState } from "react"
 
 export type Log = {
   id: number
-  fromLocation: string
-  toLocation: string
-  dateTime: Date
+  from_location: string
+  to_location: string
+  date_time: Date
   user: string
-  lotNumber: string
-  quantityMoved: number
+  lot_number: string
+  quantity_moved: number
   comments: string
 }
 
 type Props = {
   id?: number
   location?: string
-  lotNumber?: string
+  lot_number?: string
   user?: string
 }
-const useLog = ({ id, location, lotNumber, user }: Props) => {
+const useLog = ({ id, location, lot_number, user }: Props) => {
   const [logs, setLogs] = useState<Log[]>([])
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
@@ -27,14 +27,14 @@ const useLog = ({ id, location, lotNumber, user }: Props) => {
     if (
       id === 0 ||
       location === "" ||
-      lotNumber === "" ||
+      lot_number === "" ||
       user === ""
     ) return;
     let endpoint = `/api/log`
     if (id) endpoint += `/${id}`
-    if (location || lotNumber || user) endpoint += `?`
+    if (location || lot_number || user) endpoint += `?`
     if (location) endpoint += `location=${location}&`
-    if (lotNumber) endpoint += `lotNumber=${lotNumber}&`
+    if (lot_number) endpoint += `lot_number=${lot_number}&`
     if (user) endpoint += `user=${user}&`
     const controller = new AbortController();
     api.get<Log[]>(endpoint, { signal: controller.signal })

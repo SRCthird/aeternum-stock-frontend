@@ -53,7 +53,7 @@ const InventoryBayView = ({ headerNode, setMode, setItem }: Props) => {
             }}
             data={result.filter((item) => 
               item.name.includes(searchQuery) ||
-              item.warehouseName.includes(searchQuery)
+              item.warehouse_name.includes(searchQuery)
             )}
             renderItem={({ item }) => (
               <InventoryBayListItem

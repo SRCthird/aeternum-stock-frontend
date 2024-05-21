@@ -31,7 +31,7 @@ const ProductAdd = ({ key_, setKey, setMode, navigation }: Props) => {
     if (!submit) return;
     const { id: _, ...putData } = data;
     api.post('/api/product/', putData)
-      .then(res => {
+      .then(_ => {
         setKey(key_ + 1);
         setSubmit(false);
         setMode('view');
@@ -72,7 +72,7 @@ const ProductAdd = ({ key_, setKey, setMode, navigation }: Props) => {
           />
         </Menu>
         <Appbar.Content title="Input product" />
-        <Appbar.Action icon="plus" onPress={() => { console.log('add'); }} />
+        <Appbar.Action icon="plus" onPress={() => {  }} />
         <Appbar.Action icon="refresh" onPress={() => {
           setKey(key_ + 1);
         }} />

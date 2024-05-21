@@ -1,8 +1,6 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text, Avatar, Card } from 'react-native-paper';
 import { User } from "@src/screens/Authenticate/Hooks/useUser";
-import { mode } from '@src/utils/types';
 
 interface Props {
   user: User;
@@ -20,7 +18,7 @@ const UserListItem = ({ user, onUserSelect }: Props) => {
       }}
     >
       <Card.Title
-        title={`${user.firstName} ${user.lastName}`}
+        title={`${user.first_name} ${user.last_name}`}
         subtitle={user.email}
         left={(props) => <Avatar.Image {...props} source={{ uri: avatarUrl }} />}
       />

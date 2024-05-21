@@ -4,26 +4,26 @@ import { useEffect, useState } from 'react'
 import { ProductLot } from './useProductLot';
 
 export type LotQuery = {
-  lotNumber?: string;
-  internalReference?: string;
-  productName?: string;
+  lot_number?: string;
+  internal_reference?: string;
+  product_name?: string;
 }
 
-const useLotLookup = ({ lotNumber, internalReference, productName }: LotQuery) => {
+const useLotLookup = ({ lot_number, internal_reference, product_name }: LotQuery) => {
   const [result, setResult] = useState<ProductLot[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!lotNumber && !internalReference && !productName) return;
-    if (lotNumber === '' || internalReference === '' || productName === '') return;
+    if (!lot_number && !internal_reference && !product_name) return;
+    if (lot_number === '' || internal_reference === '' || product_name === '') return;
     setLoading(true);
 
     const controller = new AbortController();
     const queryParams = new URLSearchParams({
-      lotNumber: lotNumber || '',
-      internalReference: internalReference || '',
-      productName: productName || ''
+      lot_number: lot_number || '',
+      internal_reference: internal_reference || '',
+      product_name: product_name || ''
     });
 
     api.get(
@@ -40,7 +40,7 @@ const useLotLookup = ({ lotNumber, internalReference, productName }: LotQuery) =
         setLoading(false);
       });
     return () => controller.abort();
-  }, [lotNumber, internalReference, productName]);
+  }, [lot_number, internal_reference, product_name]);
 
   if (typeof result === 'string') {
     setResult([]);

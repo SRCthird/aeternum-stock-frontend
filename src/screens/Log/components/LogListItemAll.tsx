@@ -17,17 +17,17 @@ const LogListItem = ({ log }: Props) => {
   return (
     <Card style={styles.container} >
       <View style={styles.line}>
-        <Text style={styles.text}>{log.lotNumber}</Text>
-        <Text style={styles.text}>{log.quantityMoved}</Text>
+        <Text style={styles.text}>{log.lot_number}</Text>
+        <Text style={styles.text}>{log.quantity_moved}</Text>
       </View>
       <View style={styles.line}>
-        <Text style={styles.text}>{log.fromLocation}</Text>
+        <Text style={styles.text}>{log.from_location}</Text>
         <Text style={styles.text}>to</Text>
-        <Text style={styles.text}>{log.toLocation}</Text>
+        <Text style={styles.text}>{log.to_location}</Text>
       </View>
       <View style={styles.line}>
         <Text style={styles.text}>{log.user}</Text>
-        <Text style={styles.text}>{formatDate(log.dateTime)}</Text>
+        <Text style={styles.text}>{formatDate(log.date_time)}</Text>
       </View>
       <View style={styles.comments}>
         <Text style={styles.text}>Comments:</Text>

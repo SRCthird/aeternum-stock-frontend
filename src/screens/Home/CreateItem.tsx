@@ -15,9 +15,9 @@ const CreateItem = ({ setHomeMode, setTitle }: Props) => {
   const [mode, setMode] = useState<mode>('add');
   const [item, setItem] = useState<ProductLot>({
     id: 0,
-    lotNumber: '',
-    internalReference: '',
-    productName: '',
+    lot_number: '',
+    internal_reference: '',
+    product_name: '',
     quantity: 0,
   });
 
@@ -44,7 +44,7 @@ const CreateItem = ({ setHomeMode, setTitle }: Props) => {
             }
           }}
           defaultItem={{ 
-            lotNumber: item.lotNumber, 
+            lot_number: item.lot_number, 
             quantity: item.quantity 
           }}
         />

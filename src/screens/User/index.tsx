@@ -1,8 +1,8 @@
-import { Alert, Text, View } from "react-native";
+import { View } from "react-native";
 import UserHeader from "./components/UserHeader";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "..";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { mode } from "@src/utils/types";
 import { useAccount } from "@src/context/AccountContext";
 import ViewProfile from "./ViewProfile";

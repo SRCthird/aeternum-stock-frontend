@@ -53,9 +53,9 @@ const ProductListView = ({ headerNode, setMode, setItem }: Props) => {
               width: '100%',
             }}
             data={result.filter((item) =>
-              item.lotNumber.includes(searchQuery) ||
-              item.internalReference.includes(searchQuery) ||
-              item.productName.includes(searchQuery)
+              item.lot_number.includes(searchQuery) ||
+              item.internal_reference.includes(searchQuery) ||
+              item.product_name.includes(searchQuery)
             )}
             renderItem={({ item }) => (
               <ProductLotListItem

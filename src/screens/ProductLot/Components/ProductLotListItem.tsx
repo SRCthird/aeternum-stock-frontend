@@ -44,11 +44,11 @@ const ProductListItem = ({ listItem, setMode, setItem }: Props) => {
       }}
     >
       <View style={styles.container}>
-        <Text style={styles.text}>{listItem.lotNumber}</Text>
-        <Text style={styles.text}>{listItem.productName}</Text>
+        <Text style={styles.text}>{listItem.lot_number}</Text>
+        <Text style={styles.text}>{listItem.product_name}</Text>
       </View>
       <View style={styles.container}>
-        <Text style={styles.text}>{listItem.internalReference}</Text>
+        <Text style={styles.text}>{listItem.internal_reference}</Text>
         <Text style={styles.text}>{"Total: " + listItem.quantity}</Text>
       </View>
     </TouchableOpacity>

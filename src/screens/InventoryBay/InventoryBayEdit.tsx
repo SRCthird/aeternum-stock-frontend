@@ -24,10 +24,7 @@ type Props = {
 
 
 const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
-  const { result: warehouses, isLoading } = useWarehouseList();
-  const [menuVisible, setMenuVisible] = useState(false);
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
+  const { result: warehouses } = useWarehouseList();
 
   const [data, setData] = useState<InventoryBay>(item);
   const [submit, setSubmit] = useState(false);
@@ -93,8 +90,8 @@ const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: 
       />
       <DropDown
         label="Warehouse"
-        selectedValue={data.warehouseName}
-        onValueChange={(itemValue, _) => { setData({ ...data, warehouseName: itemValue }) }}
+        selectedValue={data.warehouse_name}
+        onValueChange={(itemValue, _) => { setData({ ...data, warehouse_name: itemValue }) }}
         selection={
           warehouses.map((warehouse, index) => (
             <Picker.Item key={index} label={warehouse} value={warehouse} />
@@ -103,9 +100,9 @@ const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: 
       />
       <NumberInput
         label="Max unique lots"
-        defaultValue={item.maxUniqueLots}
-        value={data.maxUniqueLots}
-        onChange={maxUniqueLots => setData({ ...data, maxUniqueLots })}
+        defaultValue={item.max_unique_lots}
+        value={data.max_unique_lots}
+        onChange={max_unique_lots => setData({ ...data, max_unique_lots })}
       />
       <View style={{ flex: 1 }}></View>
       <SaveButton setSubmit={setSubmit} />

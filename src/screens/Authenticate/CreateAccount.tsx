@@ -19,8 +19,8 @@ const CreateAccount = ({ setMode }: Props) => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
   const [verifyPassword, setVerifyPassword] = useState('');
   const [endpoint, setEndpoint] = useState('');
   const [apiKey, setApiKey] = useState('');
@@ -41,8 +41,8 @@ const CreateAccount = ({ setMode }: Props) => {
         postUser(endpoint, apiKey, { 
           email: username, 
           password: hashedPassword,
-          firstName: firstName,
-          lastName: lastName
+          first_name: first_name,
+          last_name: last_name
         })
           .then(() => {
             setMode('login');
@@ -92,7 +92,7 @@ const CreateAccount = ({ setMode }: Props) => {
         <TextInput
           ref={refFirst}
           label="First Name"
-          value={firstName}
+          value={first_name}
           onChangeText={setFirstName}
           style={styles.input}
           onSubmitEditing={() => refLast.current.focus()}
@@ -100,7 +100,7 @@ const CreateAccount = ({ setMode }: Props) => {
         <TextInput
           ref={refLast}
           label="Last Name"
-          value={lastName}
+          value={last_name}
           onChangeText={setLastName}
           style={styles.input}
           onSubmitEditing={() => refEndpoint.current.focus()}

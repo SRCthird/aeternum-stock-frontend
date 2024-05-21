@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 export type InventoryBay = {
   id: number;
   name: string;
-  warehouseName: string;
-  maxUniqueLots: number;
+  warehouse_name: string;
+  max_unique_lots: number;
 }
 
 const useInventoryBay = ({ id }: { id?: number }) => {

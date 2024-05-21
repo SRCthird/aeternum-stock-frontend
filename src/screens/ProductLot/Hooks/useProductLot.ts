@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react'
 
 export type ProductLot = {
   id: number;
-  lotNumber: string;
-  internalReference: string;
-  productName: string;
+  lot_number: string;
+  internal_reference: string;
+  product_name: string;
   quantity: number;
 }
 
