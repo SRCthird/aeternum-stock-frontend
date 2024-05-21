@@ -24,6 +24,10 @@ const EditProfile = ({ user, setUser, setMode, admin }: Props) => {
         setMode('view');
       })
       .catch(err => {
+        if (err.response.status === 409) {
+          Alert.alert('Error', 'Username already exists');
+          return;
+        }
         Alert.alert('Error', err.message || 'Failed to update profile');
       });
   };
