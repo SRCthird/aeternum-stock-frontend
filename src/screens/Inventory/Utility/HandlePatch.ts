@@ -53,7 +53,7 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
       });
   }
 
-  const createNew = async (item: Inventory) => {
+  const createNew = async (item: Inventory, subtracted: number) => {
     const { id: _, ...newData } = item;
     api.post(`/api/inventory/`, newData)
       .then(_ => {
@@ -63,12 +63,16 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
       })
       .catch(err => {
         if (err.response.status === 400) {
+          subtractOld(item, subtracted);
           Alert.alert('Error', 'Inventory bay is at capacity for unique lots');
         } else if (err.response.status === 422) {
+          subtractOld(item, subtracted);
           Alert.alert('Error', 'Product lot does not exist');
         } else if (err.response.status === 428) {
+          subtractOld(item, subtracted);
           Alert.alert('Error', 'Inventory bay does not exist');
         } else if (err.response.status === 409) {
+          subtractOld(item, subtracted);
           Alert.alert('Error', 'Overflow of lot size. Check lot quantity.');
         } else {
           Alert.alert('Error', err.message);
@@ -86,7 +90,7 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
     return;
   }
   await subtractOld(oldItem, oldItem.quantity - newItem.quantity)
-    .then(_ => createNew(newItem));
+    .then(_ => createNew(newItem, oldItem.quantity));
   setSubmit(false);
 }
 
