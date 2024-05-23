@@ -28,17 +28,17 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
   const [data, setData] = useState<Inventory>(item);
 
   useEffect(() => {
-    setData({
-      ...data,
+    setData(prev =>({
+      ...prev,
       updated_by: user.email,
       from_location: item.location,
       comments: ""
-    });
+    }));
     if (state === 'release') {
-      setData({ ...data, location: "Released" });
+      setData(prev=>({ ...prev, location: "Released" }));
     }
     if (state === 'scrap') {
-      setData({ ...data, location: "Scrapped" });
+      setData(prev=>({ ...prev, location: "Scrapped" }));
     }
   }, []);
 
@@ -46,6 +46,31 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
 
   useEffect(() => {
     if (!submit) return;
+    if (data.quantity === 0) {
+      Alert.alert('Error', 'Quantity cannot be 0');
+      setSubmit(false);
+      return;
+    }
+    if (data.comments === "") {
+      Alert.alert('Error', 'Comments cannot be empty');
+      setSubmit(false);
+      return;
+    }
+    if (data.location === "") {
+      Alert.alert('Error', 'Location cannot be empty');
+      setSubmit(false);
+      return;
+    }
+    if (data.lot_number === "") {
+      Alert.alert('Error', 'Lot Number cannot be empty');
+      setSubmit(false);
+      return;
+    }
+    if (data.updated_by === "") {
+      Alert.alert('Error', 'Error loading current user, please reload app');
+      setSubmit(false);
+      return;
+    }
     handlePatch({
       setKey: setKey,
       setMode: setMode,
@@ -139,7 +164,9 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
         mode="outlined"
       />
       <View style={{ flex: 1 }}></View>
-      <SaveButton setSubmit={setSubmit} />
+      <SaveButton 
+        setSubmit={setSubmit} 
+      />
       {(item.location === 'Scrapped' || item.location === 'Released') && (
         <DeleteButton onPress={() => deleteAlert(item)} />
       )}
