@@ -21,6 +21,7 @@ const UserHeader = ({ setMode, navigation }: Props) => {
       height: 80,
       width: '100%',
       paddingTop: 25,
+      backgroundColor: 'white',
     }}>
       <Menu
         visible={menuVisible}
@@ -44,10 +45,13 @@ const UserHeader = ({ setMode, navigation }: Props) => {
           }}
         />
       </Menu>
-      <Appbar.Content title="Account" />
-      <UserMenu 
-        navigation={navigation} 
-        Appbar={Appbar} 
+      <Appbar.Content
+        title="Account"
+        titleStyle={{ color: 'black' }}
+      />
+      <UserMenu
+        navigation={navigation}
+        Appbar={Appbar}
       />
     </Appbar>
   )

@@ -24,6 +24,7 @@ const InventoryBayHeader = ({ title, setKey, setMode, setItem, navigation }: Pro
       height: 80,
       width: '100%',
       paddingTop: 25,
+      backgroundColor: 'white',
     }}>
       <Menu
         visible={menuVisible}
@@ -40,7 +41,10 @@ const InventoryBayHeader = ({ title, setKey, setMode, setItem, navigation }: Pro
           }}
         />
       </Menu>
-      <Appbar.Content title={title} />
+      <Appbar.Content
+        title={title}
+        titleStyle={{ color: 'black' }}
+      />
       <Appbar.Action icon="plus" onPress={() => {
         setMode('add');
         setItem({

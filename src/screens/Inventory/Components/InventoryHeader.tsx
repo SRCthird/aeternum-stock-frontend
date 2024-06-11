@@ -23,6 +23,7 @@ const InventoryHeader = ({ setKey, setMode, setItem, navigation }: Props) => {
       height: 80,
       width: '100%',
       paddingTop: 25,
+      backgroundColor: 'white',
     }}>
       <Menu
         visible={menuVisible}
@@ -46,7 +47,10 @@ const InventoryHeader = ({ setKey, setMode, setItem, navigation }: Props) => {
           }}
         />
       </Menu>
-      <Appbar.Content title="Input product" />
+      <Appbar.Content 
+        title="Input product"
+        titleStyle={{ color: 'black' }}
+      />
       <Appbar.Action icon="plus" onPress={() => {
         setMode('add');
         setItem({

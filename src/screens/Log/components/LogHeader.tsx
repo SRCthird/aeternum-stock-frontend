@@ -22,6 +22,7 @@ const LogHeader = ({ label, setKey, setMode, navigation }: Props) => {
       height: 80,
       width: '100%',
       paddingTop: 25,
+      backgroundColor: 'white',
     }}>
       <Menu
         visible={menuVisible}
@@ -45,7 +46,10 @@ const LogHeader = ({ label, setKey, setMode, navigation }: Props) => {
           }}
         />
       </Menu>
-      <Appbar.Content title={label} />
+      <Appbar.Content 
+        title={label}
+        titleStyle={{ color: 'black' }}
+      />
       <Appbar.Action icon="refresh" onPress={() => {
         setKey(prev => prev + 1);
       }} />

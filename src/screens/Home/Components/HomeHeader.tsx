@@ -21,6 +21,7 @@ const Header = ({ title, setMode, navigation }: Props) => {
     <Appbar.Header
       style={{
         height: 50,
+        backgroundColor: 'white',
       }}
     >
       <Menu
@@ -31,6 +32,7 @@ const Header = ({ title, setMode, navigation }: Props) => {
         }
       >
         <Menu.Item
+
           title="Actions"
           onPress={() => {
             setMode('actions');
@@ -45,10 +47,13 @@ const Header = ({ title, setMode, navigation }: Props) => {
           }}
         />
       </Menu>
-      <Appbar.Content title={title} />
-      <UserMenu 
+      <Appbar.Content 
+        title={title}
+        titleStyle={{ color: 'black' }}
+      />
+      <UserMenu
         navigation={navigation}
-        Appbar={Appbar} 
+        Appbar={Appbar}
       />
     </Appbar.Header>
   );
