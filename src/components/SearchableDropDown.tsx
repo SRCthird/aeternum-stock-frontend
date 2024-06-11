@@ -31,16 +31,20 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
   );
 
   return (
-    <View>
+    <View
+      style={{ width: '100%' }}
+    >
       <TextInput
         label={label}
         value={filter}
         onFocus={() => setShowDropdown(true)}
         placeholder={placeholder || 'Tap to search...'}
         style={{
-          minWidth: '100%',
-          maxWidth: '100%',
-          margin: 10,
+          marginBottom: 10,
+          maxWidth: 700,
+          width: '100%',
+          alignSelf: 'center',
+          backgroundColor: '#fff',
         }}
         underlineColor="transparent"
         activeOutlineColor="#6d6875"
@@ -60,6 +64,13 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
           <TextInput
             ref={inputRef}
             value={filter}
+            style={{
+              marginBottom: 10,
+              maxWidth: 700,
+              width: '100%',
+              alignSelf: 'center',
+              backgroundColor: '#fff',
+            }}
             onChangeText={setFilter}
             onSubmitEditing={() => {
               if (filteredItems.length > 0) {
@@ -67,7 +78,7 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
                 setFilter(filteredItems[0]);
                 setShowDropdown(false);
               }
-              onSubmitEditing?.();              
+              onSubmitEditing?.();
             }}
             autoFocus={true}
             activeOutlineColor="#6d6875"

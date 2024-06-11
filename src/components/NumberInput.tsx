@@ -13,8 +13,11 @@ const NumberInput = ({ value, defaultValue, label, max, onChange, onSubmitEditin
   return (
     <TextInput
       style={{
-        minWidth: '100%',
-        margin: 10,
+        marginBottom: 10,
+        maxWidth: 700,
+        width: '100%',
+        alignSelf: 'center',
+        backgroundColor: '#fff',
       }}
       label={label}
       mode="outlined"
