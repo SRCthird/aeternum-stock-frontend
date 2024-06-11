@@ -24,6 +24,7 @@ const FindLotHeader = ({ navigation, label, setMode }: Props) => {
       height: 80,
       width: '100%',
       paddingTop: 25,
+      backgroundColor: 'white',
     }}>
       <Menu
         visible={menuVisible}
@@ -47,8 +48,11 @@ const FindLotHeader = ({ navigation, label, setMode }: Props) => {
           }}
         />
       </Menu>
-      <Appbar.Content title={label} />
-      <UserMenu 
+      <Appbar.Content
+        title={label}
+        titleStyle={{ color: 'black' }}
+      />
+      <UserMenu
         Appbar={Appbar}
         navigation={navigation}
       />

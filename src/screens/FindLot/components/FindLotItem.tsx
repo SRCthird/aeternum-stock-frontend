@@ -20,34 +20,39 @@ const LotProfile = ({ item, setMode }: Props) => {
 
   return (
     <ScrollView>
-      <Card style={{ margin: 10 }}>
+      <Card style={{ 
+        margin: 10,
+        backgroundColor: 'white'
+      }}>
         <Card.Title 
+          titleStyle={{ color: 'black' }}
           title={item.lot_number} 
+          subtitleStyle={{ color: 'black' }}
           subtitle={item.product_name} 
         />
         <Divider />
         <Card.Content>
-          <Title>Current Location</Title>
+          <Title style={{ color: 'black'}}>Current Location</Title>
           {result.length > 0 ? result.map((inventory) => (
             <Card.Content key={inventory.id}>
-              <Paragraph>Location: {inventory.location}</Paragraph>
-              <Paragraph>Quantity: {inventory.quantity}</Paragraph>
-              <Caption>Created at: {formatDate(inventory.created_at)}</Caption>
-              {inventory.comments && <Paragraph>Comments: {inventory.comments}</Paragraph>}
+              <Paragraph style={{ color: 'black'}}>Location: {inventory.location}</Paragraph>
+              <Paragraph style={{ color: 'black'}}>Quantity: {inventory.quantity}</Paragraph>
+              <Caption style={{ color: 'black'}}>Created at: {formatDate(inventory.created_at)}</Caption>
+              {inventory.comments && <Paragraph style={{ color: 'black'}}>Comments: {inventory.comments}</Paragraph>}
             </Card.Content>
-          )) : <Paragraph>Not found in Inventory</Paragraph>}
+          )) : <Paragraph style={{ color: 'black'}}>Not found in Inventory</Paragraph>}
         </Card.Content>
         <Divider />
         <Card.Content>
-          <Title>Log History</Title>
+          <Title style={{ color: 'black'}}>Log History</Title>
           {logs.map((log) => (
             <Card.Content key={log.id}>
               <Divider />
-              <Paragraph>Transfer: {log.from_location}  to  {log.to_location}</Paragraph>
-              <Paragraph>Quantity Moved: {log.quantity_moved}</Paragraph>
-              <Caption>Date: {formatDate(log.date_time)}</Caption>
-              <Paragraph>User: {log.user}</Paragraph>
-              {log.comments && <Paragraph>Comments: {log.comments}</Paragraph>}
+              <Paragraph style={{ color: 'black'}}>Transfer: {log.from_location}  to  {log.to_location}</Paragraph>
+              <Paragraph style={{ color: 'black'}}>Quantity Moved: {log.quantity_moved}</Paragraph>
+              <Caption style={{ color: 'black'}}>Date: {formatDate(log.date_time)}</Caption>
+              <Paragraph style={{ color: 'black'}}>User: {log.user}</Paragraph>
+              {log.comments && <Paragraph style={{ color: 'black'}}>Comments: {log.comments}</Paragraph>}
             </Card.Content>
           ))}
         </Card.Content>
