@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TextInput } from 'react-native-paper';
 import { Inventory } from "./Hooks/useInventory";
-import { Alert, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
@@ -115,6 +115,7 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
       justifyContent: 'flex-start',
       alignItems: 'center',
       padding: 10,
+      width: '100%'
     }}>
       <SearchableDropDown
         label="Lot Number"
@@ -142,10 +143,8 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
         }}
       />
       <TextInput
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor="black"
         label="Comments"
         value={data.comments}
         onChangeText={(comments) => {
@@ -155,10 +154,8 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
       />
       <TextInput
         disabled={true}
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor="black"
         label="Updated By"
         value={data.updated_by}
         mode="outlined"
@@ -173,6 +170,27 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  input: {
+    marginBottom: 10,
+    maxWidth: 700,
+    width: '100%',
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+  },
+  button: {
+    marginBottom: 10,
+    maxWidth: 700,
+    width: '100%',
+    alignSelf: 'center',
+  },
+});
 
 export default InventoryEdit;
 

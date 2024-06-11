@@ -108,8 +108,11 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
       <TextInput
         disabled={true}
         style={{
-          minWidth: '100%',
-          margin: 10,
+          marginBottom: 10,
+          maxWidth: 700,
+          width: '100%',
+          alignSelf: 'center',
+          backgroundColor: '#fff',
         }}
         label="Created By"
         value={user.email}
