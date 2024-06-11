@@ -6,6 +6,7 @@
     "ignore": [
       "backend/**"
     ],
+    "userInterfaceStyle": "light",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
