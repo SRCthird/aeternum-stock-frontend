@@ -7,6 +7,7 @@ import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import useProductList from "../Product/Hooks/useProductList";
 import SearchableDropDown from "@src/components/SearchableDropDown";
+import styles from '@utils/styles';
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -74,10 +75,8 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       />
       <TextInput
         ref={refLotNumber}
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor="black"
         label="Lot Number"
         placeholder="enter lot number."
         mode="outlined"
@@ -86,10 +85,8 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       />
       <TextInput
         ref={refInternal}
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor="black"
         label="Workorder"
         placeholder="enter internal reference/workorder."
         mode="outlined"
@@ -98,10 +95,8 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       />
       <TextInput
         ref={refQuantity}
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor="black"
         label="Lot Quantity"
         mode="outlined"
         keyboardType="numeric"

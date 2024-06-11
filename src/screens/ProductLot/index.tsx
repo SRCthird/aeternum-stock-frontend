@@ -25,7 +25,9 @@ const ProductLotIndex = ({ navigation }: Props) => {
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{
+      flex: 1,
+    }}>
       {mode === 'view' ? (
         <ProductLotView
           headerNode={
@@ -41,8 +43,9 @@ const ProductLotIndex = ({ navigation }: Props) => {
           setItem={setItem}
         />
       ) : (
-        <View style={{ flex: 1 }}>
-
+        <View style={{
+          flex: 1,
+        }}>
           <ProductHeader
             navigation={navigation}
             label="Product Lot"
