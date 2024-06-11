@@ -37,6 +37,7 @@ const WarehouseView = ({ headerNode, setMode, setItem }: Props) => {
                 width: '100%',
                 backgroundColor: 'white',
               }}
+              textColor="black"
             />
           </View>
         }
@@ -51,7 +52,9 @@ const WarehouseView = ({ headerNode, setMode, setItem }: Props) => {
             style={{
               width: '100%',
             }}
-            data={result}
+            data={result.filter((item) => 
+              item.name.includes(searchQuery)
+            )}
             renderItem={({ item }) => (
               <WarehouseListItem
                 listItem={item}

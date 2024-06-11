@@ -42,6 +42,7 @@ const ProductListView = ({ headerNode, setMode, setItem }: Props) => {
                 width: '100%',
                 backgroundColor: 'white',
               }}
+              textColor="black"
             />
           </View>
         }

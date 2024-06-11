@@ -44,6 +44,7 @@ const LogList = ({ headerNode, setItem, setMode }: Props) => {
                   width: '100%',
                   backgroundColor: 'white',
                 }}
+                textColor="black"
               />
             </View>
           }
