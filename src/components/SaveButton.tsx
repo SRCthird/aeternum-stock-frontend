@@ -1,5 +1,5 @@
 import { Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Button } from "react-native-paper";
 
 type Props = {
   setSubmit: (submit: boolean) => void;
@@ -7,18 +7,20 @@ type Props = {
 
 const SaveButton = ({ setSubmit }: Props) => {
   return (
-    <TouchableOpacity
+    <Button
       style={{
-        backgroundColor: '#219ebc',
-        padding: 15,
-        marginBottom: 5,
-        minWidth: '100%',
-        alignItems: 'center',
+        backgroundColor: '#d0bcff',
+        marginBottom: 10,
+        maxWidth: 700,
+        width: '100%',
+        alignSelf: 'center',
+        height: 70,
+        justifyContent: 'center'
       }}
       onPress={() => { setSubmit(true); }}
     >
       <Text style={{ color: '#ffffff', fontSize: 18 }}>Save</Text>
-    </TouchableOpacity>
+    </Button>
   )
 }
 

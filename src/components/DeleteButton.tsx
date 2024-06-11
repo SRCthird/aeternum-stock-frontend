@@ -1,5 +1,5 @@
 import { Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Button } from "react-native-paper";
 
 type Props = {
   onPress: () => void;
@@ -7,18 +7,20 @@ type Props = {
 
 const DeleteButton = ({ onPress }: Props) => {
   return (
-    <TouchableOpacity
+    <Button
       style={{
         backgroundColor: '#ff006e',
-        padding: 15,
-        marginBottom: 5,
-        minWidth: '100%',
-        alignItems: 'center',
+        marginBottom: 10,
+        maxWidth: 700,
+        width: '100%',
+        alignSelf: 'center',
+        height: 70,
+        justifyContent: 'center'
       }}
       onPress={onPress}
     >
       <Text style={{ color: '#ffffff', fontSize: 18 }}>Delete</Text>
-    </TouchableOpacity>
+    </Button>
   )
 }
 
