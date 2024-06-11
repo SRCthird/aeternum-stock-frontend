@@ -19,6 +19,7 @@ const AdminHeader = ({ title, navigation }: Props) => {
     <Appbar.Header
       style={{
         height: 50,
+        backgroundColor: 'white',
       }}
     >
       <Menu
@@ -43,7 +44,10 @@ const AdminHeader = ({ title, navigation }: Props) => {
           }}
         />
       </Menu>
-      <Appbar.Content title={title} />
+      <Appbar.Content 
+        title={title}
+        titleStyle={{ color: 'black' }}
+      />
       <UserMenu 
         navigation={navigation}
         Appbar={Appbar} 
