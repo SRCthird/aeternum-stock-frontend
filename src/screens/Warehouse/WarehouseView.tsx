@@ -1,66 +1,70 @@
-import { useState } from "react";
-import WarehouseList from "./Components/WarehouseList";
-import { Appbar, Menu } from 'react-native-paper';
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@screens";
+import useWarehouse, { Warehouse } from './Hooks/useWarehouse';
+import { FlatList, Text, View } from 'react-native';
+import WarehouseListItem from './Components/WarehouseListItem';
 import { mode } from '@utils/types';
-import { Warehouse } from "./Hooks/useWarehouse";
+import { ReactNode, useState } from 'react';
+import HiddenTop from '@src/components/HiddenTop';
+import { TextInput } from 'react-native-paper';
 
 type Props = {
-  key_: number;
-  setKey: (key_: number) => void;
+  headerNode: ReactNode;
   setMode: (mode: mode) => void;
   setItem: (item: Warehouse) => void;
-  navigation: StackNavigationProp<RootStackParamList, 'Warehouse'>;
 }
 
-const WarehouseView = ({ key_, setKey, setMode, setItem, navigation }: Props) => {
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
+const WarehouseView = ({ headerNode, setMode, setItem }: Props) => {
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const { result, error, isLoading } = useWarehouse({});
 
   return (
-    <>
-      <Appbar style={{
-        height: 80,
-        width: '100%',
-        paddingTop: 25,
-      }}>
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
-          }
-        >
-          <Menu.Item 
-            title="Home" 
-            onPress={() => { 
-              navigation.navigate('Actions');
-              closeMenu(); 
-            }} 
+    isLoading ? (
+      <Text>Loading...</Text>
+    ) : error ? (
+      <Text>{error}</Text>
+    ) : (
+      <HiddenTop
+        searchNode={
+          <View style={{
+            width: '100%',
+            padding: 10,
+            paddingTop: 30,
+          }}>
+            <TextInput
+              placeholder="Search..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              style={{
+                width: '100%',
+                backgroundColor: 'white',
+              }}
+            />
+          </View>
+        }
+        finalHeight={100}
+        headerNode={
+          <View style={{ width: '100%' }}>
+            {headerNode}
+          </View>
+        }
+        contentNode={
+          <FlatList
+            style={{
+              width: '100%',
+            }}
+            data={result}
+            renderItem={({ item }) => (
+              <WarehouseListItem
+                listItem={item}
+                setMode={setMode}
+                setItem={setItem}
+              />
+            )}
+            keyExtractor={(item) => item.id.toString()}
           />
-        </Menu>
-        <Appbar.Content title="" />
-        <Appbar.Action icon="plus" onPress={() => { 
-          setMode('add');
-          setItem({
-            id: 0,
-            name: '',
-          });
-        }} />
-        <Appbar.Action icon="refresh" onPress={() => {
-          setKey(key_ + 1);
-        }} />
-      </Appbar>
-      <WarehouseList 
-        setMode={setMode}
-        setItem={setItem}
+        }
       />
-    </>
+    )
   );
 }
 
 export default WarehouseView;
-

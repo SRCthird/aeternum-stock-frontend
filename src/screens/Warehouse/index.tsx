@@ -7,6 +7,7 @@ import { Warehouse } from "./Hooks/useWarehouse";
 import WarehouseEdit from "./WarehouseEdit";
 import WarehouseAdd from "./WarehouseAdd";
 import { mode } from '@utils/types';
+import WarehouseHeader from "./Components/WarehouseHeader";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Warehouse'>;
@@ -15,46 +16,62 @@ type Props = {
 const WarehouseIndex = ({ navigation }: Props) => {
   const [key, setKey] = useState<number>(0);
   const [mode, setMode] = useState<mode>('view');
+  const [title, setTitle] = useState<string>('Warehouse');
   const [item, setItem] = useState<Warehouse>({
     id: 0,
     name: '',
   });
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-    }}>
-      {mode === 'view' && (
+    <View style={{ flex: 1 }}>
+      {mode === 'view' ? (
         <WarehouseView
           key={key}
-          key_={key}
-          setKey={setKey}
           setMode={setMode}
           setItem={setItem}
-          navigation={navigation}
+          headerNode={
+            <WarehouseHeader
+              title={title}
+              navigation={navigation}
+              setKey={setKey}
+              setMode={setMode}
+              setItem={setItem}
+            />
+          }
         />
-      )}
-      {mode === 'edit' && (
-        <WarehouseEdit
-          key={key}
-          key_={key}
-          setKey={setKey}
-          setMode={setMode}
-          item={item}
-          setItem={setItem}
-          navigation={navigation}
-        />
-      )}
-      {mode === 'add' && (
-        <WarehouseAdd
-          key={key}
-          key_={key}
-          setKey={setKey}
-          setMode={setMode}
-          navigation={navigation}
-        />
+      ) : (
+        <View style={{
+          flex: 1,
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+        }}>
+          <WarehouseHeader
+            title={title}
+            navigation={navigation}
+            setKey={setKey}
+            setMode={setMode}
+            setItem={setItem}
+          />
+          {mode === 'edit' && (
+            <WarehouseEdit
+              key={key}
+              key_={key}
+              setKey={setKey}
+              setMode={setMode}
+              item={item}
+              setItem={setItem}
+              navigation={navigation}
+            />
+          )}
+          {mode === 'add' && (
+            <WarehouseAdd
+              key={key}
+              key_={key}
+              setKey={setKey}
+              setMode={setMode}
+            />
+          )}
+        </View>
       )}
     </View>
   );
