@@ -46,6 +46,7 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
           alignSelf: 'center',
           backgroundColor: '#fff',
         }}
+        textColor="black"
         underlineColor="transparent"
         activeOutlineColor="#6d6875"
         mode="outlined"
@@ -71,6 +72,7 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
               alignSelf: 'center',
               backgroundColor: '#fff',
             }}
+            textColor="black"
             onChangeText={setFilter}
             onSubmitEditing={() => {
               if (filteredItems.length > 0) {

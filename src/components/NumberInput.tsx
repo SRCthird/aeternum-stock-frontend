@@ -19,6 +19,7 @@ const NumberInput = ({ value, defaultValue, label, max, onChange, onSubmitEditin
         alignSelf: 'center',
         backgroundColor: '#fff',
       }}
+      textColor="black"
       label={label}
       mode="outlined"
       keyboardType="numeric"
