@@ -68,6 +68,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={username}
           onChangeText={setUsername}
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refPass.current.focus()}
         />
         <TextInput
@@ -77,6 +78,7 @@ const CreateAccount = ({ setMode }: Props) => {
           onChangeText={setPassword}
           secureTextEntry
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refVerifyPass.current.focus()}
         />
         <TextInput
@@ -86,6 +88,7 @@ const CreateAccount = ({ setMode }: Props) => {
           onChangeText={setVerifyPassword}
           secureTextEntry
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refFirst.current.focus()}
         />
         <View style={{ flex: 1 }}></View>
@@ -95,6 +98,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={first_name}
           onChangeText={setFirstName}
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refLast.current.focus()}
         />
         <TextInput
@@ -103,6 +107,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={last_name}
           onChangeText={setLastName}
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refEndpoint.current.focus()}
         />
         <View style={{ flex: 1 }}></View>
@@ -112,6 +117,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={endpoint}
           onChangeText={setEndpoint}
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refApiKey.current.focus()}
         />
         <TextInput
@@ -120,6 +126,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={apiKey}
           onChangeText={setApiKey}
           style={styles.input}
+          textColor="black"
           onSubmitEditing={handleCreateAccount}
         />
         <Button mode="contained" onPress={handleCreateAccount} style={styles.button}>
@@ -140,9 +147,16 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
+    maxWidth: 700,
+    width: '100%',
+    alignSelf: 'center',
+    backgroundColor: '#fff',
   },
   button: {
-    marginTop: 10,
+    marginBottom: 10,
+    maxWidth: 700,
+    width: '100%',
+    alignSelf: 'center',
   },
 });
 

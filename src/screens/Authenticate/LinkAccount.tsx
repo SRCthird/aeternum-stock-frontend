@@ -52,6 +52,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           value={username}
           onChangeText={setUsername}
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refPass.current.focus()}
         />
         <TextInput
@@ -61,6 +62,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           onChangeText={setPassword}
           secureTextEntry
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refEndpoint.current.focus()}
         />
         <TextInput
@@ -69,6 +71,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           value={endpoint}
           onChangeText={setEndpoint}
           style={styles.input}
+          textColor="black"
           onSubmitEditing={() => refApiKey.current.focus()}
         />
         <TextInput
@@ -77,6 +80,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           value={apiKey}
           onChangeText={setApiKey}
           style={styles.input}
+          textColor="black"
           onSubmitEditing={handleLinkAccount}
         />
         <Button mode="contained" onPress={handleLinkAccount} style={styles.button}>
@@ -95,9 +99,16 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
+    maxWidth: 700,
+    width: '100%',
+    alignSelf: 'center',
+    backgroundColor: '#fff',
   },
   button: {
-    marginTop: 10,
+    marginBottom: 10,
+    maxWidth: 700,
+    width: '100%',
+    alignSelf: 'center',
   },
 });
 

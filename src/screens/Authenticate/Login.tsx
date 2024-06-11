@@ -81,6 +81,7 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
         value={username}
         onChangeText={setUsername}
         style={styles.input}
+        textColor="black"
         onSubmitEditing={() => refPassword.current.focus()}
       />
       <TextInput
@@ -90,6 +91,7 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
+        textColor="black"
         onSubmitEditing={handleLogin}
       />
       <Button mode="contained" onPress={handleLogin} style={styles.button}>
@@ -111,9 +113,16 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
+    maxWidth: 700,
+    width: '100%',
+    alignSelf: 'center',
+    backgroundColor: '#fff',
   },
   button: {
-    marginTop: 10,
+    marginBottom: 10,
+    maxWidth: 700,
+    width: '100%',
+    alignSelf: 'center',
   },
 });
 
