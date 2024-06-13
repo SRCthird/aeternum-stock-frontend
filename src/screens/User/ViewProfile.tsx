@@ -1,7 +1,7 @@
 import { mode } from "@src/utils/types"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { User } from "../Authenticate/Hooks/useUser"
-import { Image, ScrollView } from 'react-native'
+import { Image, View } from 'react-native'
 import { Card, Title, Paragraph, Caption } from 'react-native-paper'
 import { useAccount } from "@src/context/AccountContext"
 import styles from "@src/utils/styles"
@@ -21,7 +21,7 @@ const ViewProfile = ({ user, setMode }: Props) => {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Card 
         style={styles.card_body}
         onPress={() => {
@@ -36,13 +36,14 @@ const ViewProfile = ({ user, setMode }: Props) => {
           )}
           <Title style={styles.card_title}>{user.first_name} {user.last_name}</Title>
           <Paragraph style={styles.card_paragraph}>{user.email}</Paragraph>
-          <Caption>Role: {user.role}</Caption>
-          {user.position && <Caption>Position: {user.position}</Caption>}
-          {user.bio && <Caption>Bio: {user.bio}</Caption>}
-          <Caption>Member since: {new Date(user.created_at).toLocaleDateString()}</Caption>
+          <Caption style={styles.card_caption}>Role: {user.role}</Caption>
+          {user.position && <Caption style={styles.card_caption}>Position: {user.position}</Caption>}
+          {user.bio && <Caption style={styles.card_caption}>Bio: {user.bio}</Caption>}
+          <Caption style={styles.card_caption}>Member since: {new Date(user.created_at).toLocaleDateString()}</Caption>
         </Card.Content>
       </Card>
-    </ScrollView>
+      <View style={{ flex: 1 }} />
+    </View>
   );
 };
 

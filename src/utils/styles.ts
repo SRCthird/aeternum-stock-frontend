@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   },
   card_title: {
     fontSize: 24,
+    color: "black",
     fontWeight: 'bold',
     textAlign: 'center',
   },
@@ -70,6 +71,9 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     marginBottom: 10,
+  },
+  card_caption: {
+    color: 'black'
   },
   image: {
     width: 150,
@@ -88,6 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     marginLeft: 10,
+    color: 'black'
   },
   card_container: {
     flexDirection: 'row',
