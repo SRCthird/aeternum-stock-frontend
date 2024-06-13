@@ -1,19 +1,16 @@
 {
   "expo": {
-    "name": "WHMSystem",
-    "slug": "WHMSystem",
-    "version": "1.0.0",
-    "ignore": [
-      "backend/**"
-    ],
-    "userInterfaceStyle": "light",
+    "name": "Aeternum Stock",
+    "slug": "aeternum-stock",
+    "version": "1.0.1",
+    "userInterfaceStyle": "automatic",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#343a40"
     },
     "assetBundlePatterns": [
       "**/*"
