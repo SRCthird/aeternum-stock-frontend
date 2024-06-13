@@ -18,9 +18,7 @@ const ProductList = ({ setMode, setItem }: Props) => {
       <Text>{error}</Text>
     ) : (
       <FlatList
-        style={{
-          width: '100%',
-        }}
+        style={{ width: '100%' }}
         data={result}
         renderItem={({ item }) => (
           <ProductListItem 

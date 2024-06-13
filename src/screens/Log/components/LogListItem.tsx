@@ -1,10 +1,10 @@
-import { StyleSheet, Text } from "react-native";
 import { Log } from "../hooks/useLogs";
 import moment from "moment";
-import { Card } from "react-native-paper";
+import { Card, Paragraph } from "react-native-paper";
 import { Dispatch, SetStateAction } from "react";
 import { mode } from "@src/utils/types";
 import { AntDesign } from '@expo/vector-icons';
+import styles from "@src/utils/styles";
 
 type Props = {
   log: Log
@@ -21,48 +21,24 @@ const LogListItem = ({ log, setItem, setMode }: Props) => {
 
   return (
     <Card
-      style={styles.container}
+      style={styles.card_body}
       onPress={() => {
         setItem(log);
         setMode('edit');
       }}
     >
-      <Card.Content style={styles.line}>
-        <Text style={styles.text}>{formatDate(log.date_time)}</Text>
-        <Text style={styles.text}>{log.lot_number}</Text>
-        <Text style={styles.text}>{log.quantity_moved}</Text>
+      <Card.Content style={styles.card_line}>
+        <Paragraph style={styles.card_paragraph}>{formatDate(log.date_time)}</Paragraph>
+        <Paragraph style={styles.card_paragraph}>{log.lot_number}</Paragraph>
+        <Paragraph style={styles.card_paragraph}>{log.quantity_moved}</Paragraph>
       </Card.Content>
-      <Card.Content style={styles.comments}>
-        <Text style={styles.text}>{log.from_location}</Text>
+      <Card.Content style={styles.card_comments}>
+        <Paragraph style={styles.card_paragraph}>{log.from_location}</Paragraph>
         <AntDesign name="arrowright" size={24} color="black" />
-        <Text style={styles.text}>{log.to_location}</Text>
+        <Paragraph style={styles.card_paragraph}>{log.to_location}</Paragraph>
       </Card.Content>
     </Card>
   )
 }
-
-const styles = StyleSheet.create({
-  line: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-  },
-  text: {
-    fontSize: 16
-  },
-  container: {
-    borderWidth: 1,
-    borderColor: "#000",
-    marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 10,
-  },
-  comments: {
-    borderTopWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-  }
-})
 
 export default LogListItem;

@@ -12,6 +12,7 @@ import NumberInput from "@src/components/NumberInput";
 import DropDown from "@src/components/DropDown";
 import useWarehouseList from "../Warehouse/Hooks/useWarehouseList";
 import { Picker } from "@react-native-picker/picker";
+import styles from "@src/utils/styles";
 
 type Props = {
   key_: number;
@@ -71,17 +72,10 @@ const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: 
   }, [submit]);
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 10,
-    }}>
+    <View style={styles.container}>
       <TextInput
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor={styles.input_text.color}
         label="Name"
         defaultValue={item.name}
         placeholder="Enter Inventory Bay name."

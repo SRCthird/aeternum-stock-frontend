@@ -66,12 +66,7 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }} />
-      <View style={{ 
-        width: '100%',
-        height: '20%',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
+      <View style={styles.title_card}>
         <Image
           source={require('../../../assets/Title2.png')}
         />
@@ -82,7 +77,7 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
         value={username}
         onChangeText={setUsername}
         style={styles.input}
-        textColor="black"
+        textColor={styles.input_text.color}
         onSubmitEditing={() => refPassword.current.focus()}
       />
       <TextInput
@@ -92,7 +87,7 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
         onChangeText={setPassword}
         secureTextEntry
         style={styles.input}
-        textColor="black"
+        textColor={styles.input_text.color}
         onSubmitEditing={handleLogin}
       />
       <Button mode="contained" onPress={handleLogin} style={styles.button}>

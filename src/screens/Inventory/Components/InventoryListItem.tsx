@@ -41,9 +41,9 @@ const InventoryListItem = ({ listItem, setMode, setItem }: Props) => {
     >
       <Card.Title
         titleStyle={styles.header_title}
-        title={listItem.lot_number}
+        title={listItem.lot_number + "  |  " + product}
         subtitleStyle={styles.header_title}
-        subtitle={product}
+        subtitle={listItem.location}
       />
       <Card.Content>
         <Paragraph style={styles.header_title}>Quantity: {listItem.quantity}</Paragraph>

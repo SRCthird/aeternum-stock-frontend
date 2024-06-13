@@ -1,5 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@screens";
+import styles from "@src/utils/styles";
 import { mode } from "@src/utils/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
@@ -18,17 +19,12 @@ const LogHeader = ({ label, setKey, setMode, navigation }: Props) => {
   const closeMenu = () => setMenuVisible(false);
 
   return (
-    <Appbar style={{
-      height: 80,
-      width: '100%',
-      paddingTop: 25,
-      backgroundColor: 'white',
-    }}>
+    <Appbar style={styles.header_bar}>
       <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
         anchor={
-          <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
+          <Appbar.Action icon="menu" color={styles.accents.color} onPress={openMenu} />
         }
       >
         <Menu.Item
@@ -48,7 +44,7 @@ const LogHeader = ({ label, setKey, setMode, navigation }: Props) => {
       </Menu>
       <Appbar.Content 
         title={label}
-        titleStyle={{ color: 'black' }}
+        titleStyle={styles.header_title}
       />
       <Appbar.Action icon="refresh" onPress={() => {
         setKey(prev => prev + 1);

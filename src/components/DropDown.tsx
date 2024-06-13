@@ -1,5 +1,6 @@
 import { Picker } from "@react-native-picker/picker"
-import { ReactNode,  } from "react";
+import styles from "@src/utils/styles";
+import { ReactNode, } from "react";
 import { Text, View } from "react-native"
 
 type Props = {
@@ -15,14 +16,7 @@ const DropDown = ({ label, placeHolder, selectedValue, loading, onValueChange, s
 
   return (
     <View
-      style={{
-        minWidth: '100%',
-        margin: 10,
-        backgroundColor: '#fffbfe',
-        borderWidth: 1,
-        borderRadius: 4,
-        borderColor: '#6d6875',
-      }}
+      style={styles.input}
     >
       <Text
         style={{
@@ -41,7 +35,7 @@ const DropDown = ({ label, placeHolder, selectedValue, loading, onValueChange, s
         selectedValue={selectedValue}
         onValueChange={onValueChange}
         style={{
-          minWidth: '100%',
+          width: '100%',
           borderRadius: 4,
           backgroundColor: 'transparent',
           padding: 10,

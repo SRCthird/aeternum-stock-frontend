@@ -4,6 +4,7 @@ import { TextInput, Button, Appbar } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
 import { authState as mode } from '.';
 import { postUser, validateUser } from './Utils';
+import styles from '@src/utils/styles';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -68,7 +69,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={username}
           onChangeText={setUsername}
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refPass.current.focus()}
         />
         <TextInput
@@ -78,7 +79,7 @@ const CreateAccount = ({ setMode }: Props) => {
           onChangeText={setPassword}
           secureTextEntry
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refVerifyPass.current.focus()}
         />
         <TextInput
@@ -88,7 +89,7 @@ const CreateAccount = ({ setMode }: Props) => {
           onChangeText={setVerifyPassword}
           secureTextEntry
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refFirst.current.focus()}
         />
         <View style={{ flex: 1 }}></View>
@@ -98,7 +99,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={first_name}
           onChangeText={setFirstName}
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refLast.current.focus()}
         />
         <TextInput
@@ -107,7 +108,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={last_name}
           onChangeText={setLastName}
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refEndpoint.current.focus()}
         />
         <View style={{ flex: 1 }}></View>
@@ -117,7 +118,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={endpoint}
           onChangeText={setEndpoint}
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refApiKey.current.focus()}
         />
         <TextInput
@@ -126,7 +127,7 @@ const CreateAccount = ({ setMode }: Props) => {
           value={apiKey}
           onChangeText={setApiKey}
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={handleCreateAccount}
         />
         <Button mode="contained" onPress={handleCreateAccount} style={styles.button}>
@@ -137,28 +138,4 @@ const CreateAccount = ({ setMode }: Props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    paddingTop: 80,
-    paddingBottom: 80,
-  },
-  input: {
-    marginBottom: 10,
-    maxWidth: 700,
-    width: '100%',
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-  },
-  button: {
-    marginBottom: 10,
-    maxWidth: 700,
-    width: '100%',
-    alignSelf: 'center',
-  },
-});
-
 export default CreateAccount;
-

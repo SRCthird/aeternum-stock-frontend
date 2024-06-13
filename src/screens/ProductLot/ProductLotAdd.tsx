@@ -58,12 +58,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
   }, [submit]);
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 10,
-    }}>
+    <View style={styles.container}>
       <SearchableDropDown
         label="Product Name"
         selectedValue={data.product_name}
@@ -76,7 +71,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       <TextInput
         ref={refLotNumber}
         style={styles.input}
-        textColor="black"
+        textColor={styles.input_text.color}
         label="Lot Number"
         placeholder="enter lot number."
         mode="outlined"
@@ -86,7 +81,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       <TextInput
         ref={refInternal}
         style={styles.input}
-        textColor="black"
+        textColor={styles.input_text.color}
         label="Workorder"
         placeholder="enter internal reference/workorder."
         mode="outlined"
@@ -96,7 +91,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       <TextInput
         ref={refQuantity}
         style={styles.input}
-        textColor="black"
+        textColor={styles.input_text.color}
         label="Lot Quantity"
         mode="outlined"
         keyboardType="numeric"

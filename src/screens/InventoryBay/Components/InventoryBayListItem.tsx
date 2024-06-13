@@ -25,7 +25,7 @@ const InventoryBayListItem = ({ listItem, setMode, setItem }: Props) => {
         subtitle={listItem.warehouse_name}
       />
       <Card.Content>
-        <Paragraph style={styles.header_title}>{listItem.max_unique_lots}</Paragraph>
+        <Paragraph style={styles.card_paragraph}>{listItem.max_unique_lots}</Paragraph>
       </Card.Content>
     </Card>
   );

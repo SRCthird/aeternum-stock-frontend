@@ -1,6 +1,7 @@
 import useInventory from "@src/screens/Inventory/Hooks/useInventory";
 import useLog from "@src/screens/Log/hooks/useLogs";
 import { ProductLot } from "@src/screens/ProductLot/Hooks/useProductLot";
+import styles from "@src/utils/styles";
 import { mode } from "@src/utils/types";
 import moment from "moment";
 import { Dispatch, SetStateAction } from "react";
@@ -20,39 +21,36 @@ const LotProfile = ({ item, setMode }: Props) => {
 
   return (
     <ScrollView>
-      <Card style={{ 
-        margin: 10,
-        backgroundColor: 'white'
-      }}>
+      <Card style={styles.card_body}>
         <Card.Title 
-          titleStyle={{ color: 'black' }}
+          titleStyle={styles.header_title}
           title={item.lot_number} 
-          subtitleStyle={{ color: 'black' }}
+          subtitleStyle={styles.header_title}
           subtitle={item.product_name} 
         />
         <Divider />
         <Card.Content>
-          <Title style={{ color: 'black'}}>Current Location</Title>
+          <Title style={styles.header_title}>Current Location</Title>
           {result.length > 0 ? result.map((inventory) => (
             <Card.Content key={inventory.id}>
-              <Paragraph style={{ color: 'black'}}>Location: {inventory.location}</Paragraph>
-              <Paragraph style={{ color: 'black'}}>Quantity: {inventory.quantity}</Paragraph>
-              <Caption style={{ color: 'black'}}>Created at: {formatDate(inventory.created_at)}</Caption>
-              {inventory.comments && <Paragraph style={{ color: 'black'}}>Comments: {inventory.comments}</Paragraph>}
+              <Paragraph style={styles.header_title}>Location: {inventory.location}</Paragraph>
+              <Paragraph style={styles.header_title}>Quantity: {inventory.quantity}</Paragraph>
+              <Caption style={styles.header_title}>Created at: {formatDate(inventory.created_at)}</Caption>
+              {inventory.comments && <Paragraph style={styles.header_title}>Comments: {inventory.comments}</Paragraph>}
             </Card.Content>
-          )) : <Paragraph style={{ color: 'black'}}>Not found in Inventory</Paragraph>}
+          )) : <Paragraph style={styles.header_title}>Not found in Inventory</Paragraph>}
         </Card.Content>
         <Divider />
         <Card.Content>
-          <Title style={{ color: 'black'}}>Log History</Title>
+          <Title style={styles.header_title}>Log History</Title>
           {logs.map((log) => (
             <Card.Content key={log.id}>
               <Divider />
-              <Paragraph style={{ color: 'black'}}>Transfer: {log.from_location}  to  {log.to_location}</Paragraph>
-              <Paragraph style={{ color: 'black'}}>Quantity Moved: {log.quantity_moved}</Paragraph>
-              <Caption style={{ color: 'black'}}>Date: {formatDate(log.date_time)}</Caption>
-              <Paragraph style={{ color: 'black'}}>User: {log.user}</Paragraph>
-              {log.comments && <Paragraph style={{ color: 'black'}}>Comments: {log.comments}</Paragraph>}
+              <Paragraph style={styles.header_title}>Transfer: {log.from_location}  to  {log.to_location}</Paragraph>
+              <Paragraph style={styles.header_title}>Quantity Moved: {log.quantity_moved}</Paragraph>
+              <Caption style={styles.header_title}>Date: {formatDate(log.date_time)}</Caption>
+              <Paragraph style={styles.header_title}>User: {log.user}</Paragraph>
+              {log.comments && <Paragraph style={styles.header_title}>Comments: {log.comments}</Paragraph>}
             </Card.Content>
           ))}
         </Card.Content>

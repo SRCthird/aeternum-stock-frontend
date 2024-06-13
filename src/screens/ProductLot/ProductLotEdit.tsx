@@ -9,6 +9,7 @@ import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import NumberInput from "@src/components/NumberInput";
 import SearchableDropDown from "@src/components/SearchableDropDown";
+import styles from "@src/utils/styles";
 
 type Props = {
   key_: number;
@@ -65,27 +66,18 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
   }, [submit]);
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 10,
-    }}>
+    <View style={styles.container}>
       <TextInput
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor={styles.input_text.color}
         label="Lot Number"
         mode="outlined"
         defaultValue={item.lot_number}
         onChangeText={text => { setData({ ...data, lot_number: text }) }}
       />
       <TextInput
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor={styles.input_text.color}
         label="Internal Reference"
         mode="outlined"
         defaultValue={item.internal_reference}

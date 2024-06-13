@@ -12,6 +12,7 @@ import DeleteButton from "@src/components/DeleteButton";
 import handlePatch from "./Utility/HandlePatch";
 import SearchableDropDown from "@src/components/SearchableDropDown";
 import { useAccount } from "@src/context/AccountContext";
+import styles from "@src/utils/styles";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -110,13 +111,7 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
   }
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 10,
-      width: '100%'
-    }}>
+    <View style={styles.container}>
       <SearchableDropDown
         label="Lot Number"
         selectedValue={data.lot_number}
@@ -125,7 +120,7 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
         }}
         items={lots}
       />
-      <Text>From location: {item.location}</Text>
+      <Text style={styles.input}>From location: {item.location}</Text>
       <SearchableDropDown
         label="To Location"
         items={locations}
@@ -144,7 +139,7 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
       />
       <TextInput
         style={styles.input}
-        textColor="black"
+        textColor={styles.input_text.color}
         label="Comments"
         value={data.comments}
         onChangeText={(comments) => {
@@ -155,7 +150,7 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
       <TextInput
         disabled={true}
         style={styles.input}
-        textColor="black"
+        textColor={styles.input_text.color}
         label="Updated By"
         value={data.updated_by}
         mode="outlined"
@@ -170,27 +165,6 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  input: {
-    marginBottom: 10,
-    maxWidth: 700,
-    width: '100%',
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-  },
-  button: {
-    marginBottom: 10,
-    maxWidth: 700,
-    width: '100%',
-    alignSelf: 'center',
-  },
-});
 
 export default InventoryEdit;
 

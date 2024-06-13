@@ -5,6 +5,7 @@ import LogListItem from "./LogListItem"
 import { mode } from "@src/utils/types"
 import HiddenTop from "@src/components/HiddenTop"
 import { TextInput } from "react-native-paper"
+import styles from "@src/utils/styles"
 
 type Props = {
   headerNode: ReactNode
@@ -31,28 +32,19 @@ const LogList = ({ headerNode, setItem, setMode }: Props) => {
           }
           finalHeight={100}
           searchNode={
-            <View style={{
-              width: '100%',
-              padding: 10,
-              paddingTop: 30,
-            }}>
+            <View style={styles.search_body}>
               <TextInput
                 placeholder="Search..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                style={{
-                  width: '100%',
-                  backgroundColor: 'white',
-                }}
-                textColor="black"
+                style={styles.search_input}
+                textColor={styles.input_text.color}
               />
             </View>
           }
           contentNode={
             <FlatList
-              style={{
-                width: '100%',
-              }}
+              style={{ width: '100%' }}
               data={
                 logs.filter((item) =>
                   item.user.includes(searchQuery) ||

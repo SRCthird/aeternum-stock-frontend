@@ -11,6 +11,7 @@ import DropDown from "@src/components/DropDown";
 import useWarehouseList from "../Warehouse/Hooks/useWarehouseList";
 import { Picker } from "@react-native-picker/picker";
 import NumberInput from "@src/components/NumberInput";
+import styles from "@src/utils/styles";
 
 type Props = {
   key_: number;
@@ -47,17 +48,10 @@ const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
   }, [submit]);
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 10,
-    }}>
+    <View style={styles.container}>
       <TextInput
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor={styles.input_text.color}
         label="Name"
         placeholder="Enter Inventory Bay name"
         mode="outlined"

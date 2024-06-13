@@ -1,5 +1,6 @@
 import { useAccount } from "@context/AccountContext";
 import { useAuth } from "@src/context/AuthContext";
+import styles from "@src/utils/styles";
 import { useState } from "react";
 import { Menu } from "react-native-paper";
 
@@ -25,7 +26,7 @@ const UserMenu = ({ navigation, Appbar }: Props) => {
       visible={menuVisible}
       onDismiss={closeMenu}
       anchor={
-        <Appbar.Action icon="account" color="grey" onPress={openMenu} />
+        <Appbar.Action icon="account" color={styles.accents.color} onPress={openMenu} />
       }
     >
       <Menu.Item

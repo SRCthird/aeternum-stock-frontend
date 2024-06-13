@@ -3,6 +3,7 @@ import { Appbar, Menu } from 'react-native-paper';
 import { RootStackParamList } from '@screens';
 import { StackNavigationProp } from "@react-navigation/stack";
 import UserMenu from '@src/screens/User/components/UserMenu';
+import styles from '@src/utils/styles';
 
 type Props = {
   title: string;
@@ -17,16 +18,17 @@ const AdminHeader = ({ title, navigation }: Props) => {
 
   return (
     <Appbar.Header
-      style={{
-        height: 50,
-        backgroundColor: 'white',
-      }}
+      style={styles.header_bar}
     >
       <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
         anchor={
-          <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
+          <Appbar.Action 
+            icon="menu" 
+            color={styles.accents.color} 
+            onPress={openMenu}
+          />
         }
       >
         <Menu.Item
@@ -46,7 +48,7 @@ const AdminHeader = ({ title, navigation }: Props) => {
       </Menu>
       <Appbar.Content 
         title={title}
-        titleStyle={{ color: 'black' }}
+        titleStyle={styles.header_title}
       />
       <UserMenu 
         navigation={navigation}

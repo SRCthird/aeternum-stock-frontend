@@ -6,6 +6,7 @@ import HiddenTop from "@src/components/HiddenTop";
 import { TextInput } from "react-native-paper";
 import useProductLot, { ProductLot } from "@src/screens/ProductLot/Hooks/useProductLot";
 import ProductLotListItem from "@src/screens/ProductLot/Components/ProductLotListItem";
+import styles from "@src/utils/styles";
 
 type Props = {
   headerNode: ReactNode;
@@ -30,29 +31,20 @@ const ProductListView = ({ headerNode, setMode, setItem }: Props) => {
           </View>
         }
         searchNode={
-          <View style={{
-            width: '100%',
-            padding: 10,
-            paddingTop: 30,
-          }}>
+          <View style={styles.search_body}>
             <TextInput
               placeholder="Search..."
               value={searchQuery}
               onChangeText={setSearchQuery}
-              style={{
-                width: '100%',
-                backgroundColor: 'white',
-              }}
-              textColor="black"
+              style={styles.search_input}
+              textColor={styles.input_text.color}
             />
           </View>
         }
         finalHeight={100}
         contentNode={
           <FlatList
-            style={{
-              width: '100%',
-            }}
+            style={{ width: '100%' }}
             data={result.filter((item) =>
               item.lot_number.includes(searchQuery) ||
               item.internal_reference.includes(searchQuery) ||

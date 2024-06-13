@@ -29,7 +29,6 @@ const UserIndex = ({ navigation }: Props) => {
           <ViewProfile
             setMode={setMode}
             user={selectedUser}
-            navigation={navigation}
           />
         </View>
       );

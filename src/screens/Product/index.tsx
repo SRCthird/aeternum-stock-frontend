@@ -24,7 +24,7 @@ const ProductIndex = ({ navigation }: Props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {mode === 'view' && (
+      {mode === 'view' ? (
         <ProductView
           headerNode={
             <ProductHeader
@@ -38,6 +38,14 @@ const ProductIndex = ({ navigation }: Props) => {
           setMode={setMode}
           setItem={setItem}
         />
+      ) : (
+        <ProductHeader
+          title="Product"
+          setMode={setMode}
+          setItem={setItem}
+          setKey={setKey}
+          navigation={navigation}
+        />
       )}
       {mode === 'edit' && (
         <ProductEdit
@@ -46,8 +54,6 @@ const ProductIndex = ({ navigation }: Props) => {
           setKey={setKey}
           setMode={setMode}
           item={item}
-          setItem={setItem}
-          navigation={navigation}
         />
       )}
       {mode === 'add' && (
@@ -56,7 +62,6 @@ const ProductIndex = ({ navigation }: Props) => {
           key_={key}
           setKey={setKey}
           setMode={setMode}
-          navigation={navigation}
         />
       )}
     </View>

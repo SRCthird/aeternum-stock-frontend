@@ -4,6 +4,7 @@ import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, TextInput, Text, RadioButton } from 'react-native-paper';
 import { User } from "../Authenticate/Hooks/useUser";
 import { api } from "../Authenticate/Login";
+import styles from "@src/utils/styles";
 
 type Props = {
   user: User;
@@ -78,25 +79,25 @@ const EditProfile = ({ user, setUser, setMode, admin }: Props) => {
       />
       {admin ? (
         <>
-          <Text style={styles.roleLabel}>Role</Text>
+          <Text style={styles.card_label}>Role</Text>
           <RadioButton.Group 
             onValueChange={value => {
               setData({ ...data, role: value })
             }} 
             value={data.role}
           >
-            <View style={styles.radioButtonContainer}>
+            <View style={styles.card_container}>
               <Text>Operator</Text>
               <RadioButton value="Operator" />
             </View>
-            <View style={styles.radioButtonContainer}>
+            <View style={styles.action_container}>
               <Text>Admin</Text>
               <RadioButton value="Admin" />
             </View>
           </RadioButton.Group>
         </>
       ) : (
-        <Text style={styles.roleLabel}>{"Role: " + user.role}</Text>
+        <Text style={styles.card_label}>{"Role: " + user.role}</Text>
       )}
       <Button mode="contained" onPress={handleSave} style={styles.button}>
         Save Changes
@@ -104,29 +105,5 @@ const EditProfile = ({ user, setUser, setMode, admin }: Props) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  input: {
-    marginBottom: 15,
-  },
-  roleLabel: {
-    fontSize: 16,
-    marginBottom: 8,
-    marginLeft: 10,
-  },
-  radioButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 10,
-  },
-  button: {
-    marginTop: 20,
-  },
-});
-
 
 export default EditProfile;

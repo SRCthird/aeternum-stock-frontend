@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
 import { TextInput, Button, Appbar } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
 import { authState as mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateUser } from './Utils';
+import styles from '@src/utils/styles';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -52,7 +53,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           value={username}
           onChangeText={setUsername}
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refPass.current.focus()}
         />
         <TextInput
@@ -62,7 +63,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           onChangeText={setPassword}
           secureTextEntry
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refEndpoint.current.focus()}
         />
         <TextInput
@@ -71,7 +72,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           value={endpoint}
           onChangeText={setEndpoint}
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={() => refApiKey.current.focus()}
         />
         <TextInput
@@ -80,7 +81,7 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           value={apiKey}
           onChangeText={setApiKey}
           style={styles.input}
-          textColor="black"
+          textColor={styles.input_text.color}
           onSubmitEditing={handleLinkAccount}
         />
         <Button mode="contained" onPress={handleLinkAccount} style={styles.button}>
@@ -90,27 +91,6 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  input: {
-    marginBottom: 10,
-    maxWidth: 700,
-    width: '100%',
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-  },
-  button: {
-    marginBottom: 10,
-    maxWidth: 700,
-    width: '100%',
-    alignSelf: 'center',
-  },
-});
 
 export default LinkAccount;
 

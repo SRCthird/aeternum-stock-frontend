@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
-import { Text, Avatar, Card } from 'react-native-paper';
+import { Avatar, Card, Paragraph } from 'react-native-paper';
 import { User } from "@src/screens/Authenticate/Hooks/useUser";
+import styles from '@src/utils/styles';
 
 interface Props {
   user: User;
@@ -12,7 +12,7 @@ const UserListItem = ({ user, onUserSelect }: Props) => {
 
   return (
     <Card
-      style={styles.card}
+      style={styles.card_body}
       onPress={() => {
         onUserSelect(user);
       }}
@@ -23,22 +23,11 @@ const UserListItem = ({ user, onUserSelect }: Props) => {
         left={(props) => <Avatar.Image {...props} source={{ uri: avatarUrl }} />}
       />
       <Card.Content>
-        <Text style={styles.position}>{user.position || 'No position'}</Text>
+        <Paragraph>{user.position || 'No position'}</Paragraph>
       </Card.Content>
     </Card>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    margin: 8,
-    elevation: 2,
-  },
-  position: {
-    fontSize: 14,
-    marginTop: 4,
-  },
-});
 
 export default UserListItem;
 

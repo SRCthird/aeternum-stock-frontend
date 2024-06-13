@@ -8,6 +8,7 @@ import { api } from '@screens/Authenticate/Login';
 import { mode } from '@utils/types';
 import SaveButton from "@src/components/SaveButton";
 import DeleteButton from "@src/components/DeleteButton";
+import styles from "@src/utils/styles";
 
 type Props = {
   key_: number;
@@ -65,17 +66,10 @@ const WarehouseEdit = ({ key_, setKey, setMode, item }: Props) => {
   }, [submit]);
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 10,
-    }}>
+    <View style={styles.container}>
       <TextInput
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor={styles.input_text.color}
         label="name"
         mode="outlined"
         defaultValue={item.name}

@@ -4,6 +4,7 @@ import { mode } from "@src/utils/types";
 import { InventoryBay } from "../Hooks/useInventoryBay";
 import { RootStackParamList } from "@screens";
 import { StackNavigationProp } from "@react-navigation/stack";
+import styles from "@src/utils/styles";
 
 type Props = {
   title: string;
@@ -20,17 +21,12 @@ const InventoryBayHeader = ({ title, setKey, setMode, setItem, navigation }: Pro
   const closeMenu = () => setMenuVisible(false);
 
   return (
-    <Appbar style={{
-      height: 80,
-      width: '100%',
-      paddingTop: 25,
-      backgroundColor: 'white',
-    }}>
+    <Appbar style={styles.header_bar}>
       <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
         anchor={
-          <Appbar.Action icon="menu" color="grey" onPress={openMenu} />
+          <Appbar.Action icon="menu" color={styles.accents.color} onPress={openMenu} />
         }
       >
         <Menu.Item
@@ -43,7 +39,7 @@ const InventoryBayHeader = ({ title, setKey, setMode, setItem, navigation }: Pro
       </Menu>
       <Appbar.Content
         title={title}
-        titleStyle={{ color: 'black' }}
+        titleStyle={styles.header_title}
       />
       <Appbar.Action icon="plus" onPress={() => {
         setMode('add');

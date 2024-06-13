@@ -40,38 +40,32 @@ const WarehouseIndex = ({ navigation }: Props) => {
           }
         />
       ) : (
-        <View style={{
-          flex: 1,
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-        }}>
-          <WarehouseHeader
-            title={title}
-            navigation={navigation}
-            setKey={setKey}
-            setMode={setMode}
-            setItem={setItem}
-          />
-          {mode === 'edit' && (
-            <WarehouseEdit
-              key={key}
-              key_={key}
-              setKey={setKey}
-              setMode={setMode}
-              item={item}
-              setItem={setItem}
-              navigation={navigation}
-            />
-          )}
-          {mode === 'add' && (
-            <WarehouseAdd
-              key={key}
-              key_={key}
-              setKey={setKey}
-              setMode={setMode}
-            />
-          )}
-        </View>
+        <WarehouseHeader
+          title={title}
+          navigation={navigation}
+          setKey={setKey}
+          setMode={setMode}
+          setItem={setItem}
+        />
+      )}
+      {mode === 'edit' && (
+        <WarehouseEdit
+          key={key}
+          key_={key}
+          setKey={setKey}
+          setMode={setMode}
+          item={item}
+          setItem={setItem}
+          navigation={navigation}
+        />
+      )}
+      {mode === 'add' && (
+        <WarehouseAdd
+          key={key}
+          key_={key}
+          setKey={setKey}
+          setMode={setMode}
+        />
       )}
     </View>
   );

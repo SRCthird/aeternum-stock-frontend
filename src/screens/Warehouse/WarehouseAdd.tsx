@@ -5,6 +5,7 @@ import { View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from '@utils/types';
 import SaveButton from "@src/components/SaveButton";
+import styles from "@src/utils/styles";
 
 type Props = {
   key_: number;
@@ -35,17 +36,10 @@ const WarehouseAdd = ({ key_, setKey, setMode }: Props) => {
   }, [submit]);
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 10,
-    }}>
+    <View style={styles.container}>
       <TextInput
-        style={{
-          minWidth: '100%',
-          margin: 10,
-        }}
+        style={styles.input}
+        textColor={styles.input_text.color}
         label="name"
         placeholder="enter warehouse name"
         mode="outlined"

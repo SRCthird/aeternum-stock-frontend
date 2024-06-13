@@ -16,9 +16,7 @@ const UserList = ({ onUserSelect }: Props) => {
       <Text>{error}</Text>
     ) : (
       <FlatList
-        style={{
-          width: '100%',
-        }}
+        style={{ width: '100%' }}
         data={users}
         renderItem={({ item }) => (
           <UserListItem 

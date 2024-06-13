@@ -6,6 +6,7 @@ import HiddenTop from '@src/components/HiddenTop';
 import { View } from "react-native";
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import { TextInput } from 'react-native-paper';
+import styles from '@src/utils/styles';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -25,20 +26,13 @@ const InventoryView = ({ setMode, setItem, headerNode }: Props) => {
     ) : (
       <HiddenTop
         searchNode={
-          <View style={{
-            width: '100%',
-            padding: 10,
-            paddingTop: 30,
-          }}>
+          <View style={styles.search_body}>
             <TextInput
               placeholder="Search..."
               value={searchQuery}
               onChangeText={setSearchQuery}
-              style={{
-                width: '100%',
-                backgroundColor: 'white',
-              }}
-              textColor="black"
+              style={styles.search_input}
+              textColor={styles.input_text.color}
             />
           </View>
         }
@@ -50,9 +44,7 @@ const InventoryView = ({ setMode, setItem, headerNode }: Props) => {
         }
         contentNode={
           <FlatList
-            style={{
-              width: '100%',
-            }}
+            style={{ width: '100%' }}
             data={result.filter((item) => 
                 item.location.includes(searchQuery) ||
                 item.lot_number.includes(searchQuery) ||

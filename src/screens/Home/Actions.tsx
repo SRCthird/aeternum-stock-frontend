@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { mode } from './types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '..';
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import styles from '@src/utils/styles';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -16,42 +17,23 @@ const Actions = ({ setMode, setTitle, navigation }: Props) => {
     setTitle('Actions');
   }, []);
 
-  const styles = StyleSheet.create({
-    action: {
-      backgroundColor: '#219ebc',
-      padding: 30,
-      marginBottom: 5,
-      width: '100%',
-      alignItems: 'center',
-    },
-    optionText: {
-      color: '#ffffff',
-      fontSize: 18,
-    },
-  })
-
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 5,
-    }}>
-      <TouchableOpacity style={styles.action} onPress={() => { setMode('create') }}>
-        <Text style={styles.optionText}>Create Item</Text>
+    <View style={styles.action_container}>
+      <TouchableOpacity style={styles.action_body} onPress={() => { setMode('create') }}>
+        <Text style={styles.action_text}>Create Item</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.action} onPress={() => { setMode('transfer') }}>
-        <Text style={styles.optionText}>Inventory Transfer</Text>
+      <TouchableOpacity style={styles.action_body} onPress={() => { setMode('transfer') }}>
+        <Text style={styles.action_text}>Inventory Transfer</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.action} onPress={() => { setMode('release') }}>
-        <Text style={styles.optionText}>Release Item</Text>
+      <TouchableOpacity style={styles.action_body} onPress={() => { setMode('release') }}>
+        <Text style={styles.action_text}>Release Item</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.action} onPress={() => { setMode('scrap') }}>
-        <Text style={styles.optionText}>Scrap Items</Text>
+      <TouchableOpacity style={styles.action_body} onPress={() => { setMode('scrap') }}>
+        <Text style={styles.action_text}>Scrap Items</Text>
       </TouchableOpacity>
       <View style={{ flex: 1 }} />
-      <TouchableOpacity style={styles.action} onPress={() => { navigation.navigate('FindLot') }}>
-        <Text style={styles.optionText}>Find Lot</Text>
+      <TouchableOpacity style={styles.action_body} onPress={() => { navigation.navigate('FindLot') }}>
+        <Text style={styles.action_text}>Find Lot</Text>
       </TouchableOpacity>
     </View>
   );

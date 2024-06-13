@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
 import { Log } from "../hooks/useLogs";
 import moment from "moment";
-import { Card } from "react-native-paper";
+import { Card, Paragraph } from "react-native-paper";
+import styles from "@src/utils/styles";
 
 type Props = {
   log: Log
@@ -15,50 +15,28 @@ const LogListItem = ({ log }: Props) => {
   }
 
   return (
-    <Card style={styles.container} >
-      <View style={styles.line}>
-        <Text style={styles.text}>{log.lot_number}</Text>
-        <Text style={styles.text}>{log.quantity_moved}</Text>
-      </View>
-      <View style={styles.line}>
-        <Text style={styles.text}>{log.from_location}</Text>
-        <Text style={styles.text}>to</Text>
-        <Text style={styles.text}>{log.to_location}</Text>
-      </View>
-      <View style={styles.line}>
-        <Text style={styles.text}>{log.user}</Text>
-        <Text style={styles.text}>{formatDate(log.date_time)}</Text>
-      </View>
-      <View style={styles.comments}>
-        <Text style={styles.text}>Comments:</Text>
-      </View>
-      <View style={styles.line}>
-        <Text style={styles.text}>{log.comments}</Text>
-      </View>
+    <Card style={styles.card_body} >
+      <Card.Content style={styles.card_line}>
+        <Paragraph>{log.lot_number}</Paragraph>
+        <Paragraph>{log.quantity_moved}</Paragraph>
+      </Card.Content>
+      <Card.Content style={styles.card_line}>
+        <Paragraph>{log.from_location}</Paragraph>
+        <Paragraph>to</Paragraph>
+        <Paragraph>{log.to_location}</Paragraph>
+      </Card.Content>
+      <Card.Content style={styles.card_line}>
+        <Paragraph>{log.user}</Paragraph>
+        <Paragraph>{formatDate(log.date_time)}</Paragraph>
+      </Card.Content>
+      <Card.Content style={styles.card_comments}>
+        <Paragraph>Comments:</Paragraph>
+      </Card.Content>
+      <Card.Content style={styles.card_line}>
+        <Paragraph>{log.comments}</Paragraph>
+      </Card.Content>
     </Card>
   )
 }
-
-const styles = StyleSheet.create({
-  line: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-  },
-  text: {
-    fontSize: 16
-  },
-  container: {
-    borderWidth: 1,
-    borderColor: "#000",
-    margin: 10,
-  },
-  comments: {
-    borderTopWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-  }
-})
 
 export default LogListItem;

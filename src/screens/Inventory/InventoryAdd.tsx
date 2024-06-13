@@ -12,6 +12,7 @@ import useLotLookup from "../ProductLot/Hooks/useLotLookup";
 import { useAccount } from "@src/context/AccountContext";
 import SearchableDropDown from "@src/components/SearchableDropDown";
 import { AxiosError } from "axios";
+import styles from "@src/utils/styles";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -73,12 +74,7 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
   }, [submit]);
 
   return (
-    <View style={{
-      flex: 1,
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      padding: 10,
-    }}>
+    <View style={styles.container}>
       <SearchableDropDown
         label="Lot Number"
         placeholder="Select a lot number"
@@ -107,13 +103,8 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
       />
       <TextInput
         disabled={true}
-        style={{
-          marginBottom: 10,
-          maxWidth: 700,
-          width: '100%',
-          alignSelf: 'center',
-          backgroundColor: '#fff',
-        }}
+        style={styles.input}
+        textColor={styles.input_text.color}
         label="Created By"
         value={user.email}
         mode="outlined"
