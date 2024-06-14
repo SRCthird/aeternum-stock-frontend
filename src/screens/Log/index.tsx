@@ -7,12 +7,14 @@ import { mode } from "@src/utils/types";
 import LogHeader from "./components/LogHeader";
 import { Log } from "./hooks/useLogs";
 import LogListItem from "./components/LogListItemAll";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Log'>;
 }
 
 const LogIndex = ({ navigation }: Props) => {
+  const styles = useTheme();
   const [mode, setMode] = useState<mode>('view');
   const [key, setKey] = useState<number>(0);
   const [item, setItem] = useState<Log>({
@@ -29,7 +31,7 @@ const LogIndex = ({ navigation }: Props) => {
   switch (mode) {
     case 'view':
       return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
           <LogList
             headerNode={
               <LogHeader
@@ -47,7 +49,7 @@ const LogIndex = ({ navigation }: Props) => {
       )
     default:
       return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
           <LogHeader
             label="View log"
             setMode={setMode}
