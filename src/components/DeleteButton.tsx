@@ -1,3 +1,4 @@
+import { useTheme } from "@src/context/ThemeContext";
 import { Text } from "react-native";
 import { Button } from "react-native-paper";
 
@@ -6,20 +7,13 @@ type Props = {
 }
 
 const DeleteButton = ({ onPress }: Props) => {
+  const styles = useTheme();
   return (
     <Button
-      style={{
-        backgroundColor: '#ff006e',
-        marginBottom: 10,
-        maxWidth: 700,
-        width: '100%',
-        alignSelf: 'center',
-        height: 70,
-        justifyContent: 'center'
-      }}
+      style={[styles.button, styles.delete]}
       onPress={onPress}
     >
-      <Text style={{ color: '#ffffff', fontSize: 18 }}>Delete</Text>
+      <Text style={styles.delete}>Delete</Text>
     </Button>
   )
 }
