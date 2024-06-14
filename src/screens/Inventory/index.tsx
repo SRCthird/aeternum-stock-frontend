@@ -9,6 +9,7 @@ import InventoryAdd from "./InventoryAdd";
 import { mode } from "@utils/types";
 import InventoryHeader from "./Components/InventoryHeader";
 import { RouteProp } from "@react-navigation/native";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Inventory'>;
@@ -16,6 +17,7 @@ type Props = {
 }
 
 const InventoryIndex = ({ navigation, route }: Props) => {
+  const styles = useTheme();
   const [state, setState] = useState<'release' | 'scrap' | null>(route.params?.state || null);
   const [key, setKey] = useState<number>(0);
   const [mode, setMode] = useState<mode>('view');
@@ -31,7 +33,7 @@ const InventoryIndex = ({ navigation, route }: Props) => {
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       {mode === 'view' ? (
         <InventoryView
           key={key}

@@ -7,12 +7,14 @@ import { ProductLot } from "../ProductLot/Hooks/useProductLot";
 import FindLotHeader from "./components/FindLotHeader";
 import FindLotList from "./components/FindLotList";
 import FindLotItem from "./components/FindLotItem";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'FindLot'>;
 }
 
 export default function FindLot({ navigation }: Props) {
+  const styles = useTheme();
   const [key, setKey] = useState(0);
   const [mode, setMode] = useState<mode>('view');
   const [item, setItem] = useState<ProductLot>({
@@ -24,7 +26,7 @@ export default function FindLot({ navigation }: Props) {
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={[styles.container, { flex: 1 }]}>
       {mode === 'view' ? (
         <FindLotList
           headerNode={

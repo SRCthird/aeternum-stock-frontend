@@ -8,12 +8,14 @@ import WarehouseEdit from "./WarehouseEdit";
 import WarehouseAdd from "./WarehouseAdd";
 import { mode } from '@utils/types';
 import WarehouseHeader from "./Components/WarehouseHeader";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Warehouse'>;
 }
 
 const WarehouseIndex = ({ navigation }: Props) => {
+  const styles = useTheme();
   const [key, setKey] = useState<number>(0);
   const [mode, setMode] = useState<mode>('view');
   const [title, setTitle] = useState<string>('Warehouse');
@@ -23,7 +25,7 @@ const WarehouseIndex = ({ navigation }: Props) => {
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       {mode === 'view' ? (
         <WarehouseView
           key={key}

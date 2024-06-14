@@ -9,11 +9,13 @@ import ViewProfile from "./ViewProfile";
 import EditProfile from "./EditProfile";
 import UserList from "./UserList";
 import { User } from "../Authenticate/Hooks/useUser";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'User'>;
 }
 const UserIndex = ({ navigation }: Props) => {
+  const styles = useTheme();
   const [mode, setMode] = useState<mode>('view');
   const { user, setUser } = useAccount();
   const [selectedUser, setSelectedUser] = useState<User>(user);
@@ -21,7 +23,7 @@ const UserIndex = ({ navigation }: Props) => {
   switch (mode) {
     case 'view':
       return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
           <UserHeader
             setMode={setMode}
             navigation={navigation}
@@ -34,7 +36,7 @@ const UserIndex = ({ navigation }: Props) => {
       );
     case 'edit':
       return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
           <UserHeader
             setMode={setMode}
             navigation={navigation}
@@ -48,7 +50,7 @@ const UserIndex = ({ navigation }: Props) => {
       );
     case 'add':
       return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
           <UserHeader
             setMode={setMode}
             navigation={navigation}

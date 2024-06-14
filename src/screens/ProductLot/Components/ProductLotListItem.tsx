@@ -22,7 +22,7 @@ const ProductListItem = ({ listItem, setMode, setItem }: Props) => {
         <Paragraph style={styles.card_paragraph}>{listItem.lot_number}</Paragraph>
         <Paragraph style={styles.card_paragraph}>{listItem.product_name}</Paragraph>
       </Card.Content>
-      <Card.Content style={styles.container}>
+      <Card.Content>
         <Paragraph style={styles.card_paragraph}>{listItem.internal_reference}</Paragraph>
         <Paragraph style={styles.card_paragraph}>{"Total: " + listItem.quantity}</Paragraph>
       </Card.Content>

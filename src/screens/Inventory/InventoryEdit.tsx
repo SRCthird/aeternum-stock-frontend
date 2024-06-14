@@ -121,7 +121,7 @@ const InventoryEdit = ({ setKey, item, setMode, state }: Props) => {
         }}
         items={lots}
       />
-      <Text style={styles.input}>From location: {item.location}</Text>
+      <Text style={[styles.input, styles.input_text]}>From location: {item.location}</Text>
       <SearchableDropDown
         label="To Location"
         items={locations}

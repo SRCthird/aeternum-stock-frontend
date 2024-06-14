@@ -8,12 +8,14 @@ import ProductEdit from "./ProductEdit";
 import ProductAdd from "./ProductAdd";
 import { mode } from "@utils/types";
 import ProductHeader from "./Components/ProductHeader";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Product'>;
 }
 
 const ProductIndex = ({ navigation }: Props) => {
+  const styles = useTheme();
   const [key, setKey] = useState(0);
   const [mode, setMode] = useState<mode>('view');
   const [item, setItem] = useState<Product>({
@@ -23,7 +25,7 @@ const ProductIndex = ({ navigation }: Props) => {
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       {mode === 'view' ? (
         <ProductView
           headerNode={

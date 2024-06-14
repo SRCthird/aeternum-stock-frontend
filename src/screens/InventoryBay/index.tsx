@@ -8,12 +8,14 @@ import InventoryBayEdit from "./InventoryBayEdit";
 import InventoryBayAdd from "./InventoryBayAdd";
 import { mode } from "@utils/types";
 import InventoryBayHeader from "./Components/InventoryBayHeader";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'InventoryBay'>;
 }
 
 const InventoryBayIndex = ({ navigation }: Props) => {
+  const styles = useTheme();
   const [key, setKey] = useState<number>(0);
   const [mode, setMode] = useState<mode>('view');
   const [title, setTitle] = useState<string>('Inventory Bay');
@@ -35,7 +37,7 @@ const InventoryBayIndex = ({ navigation }: Props) => {
   }, [mode]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       {mode === 'view' ? (
         <InventoryBayView
           key={key}

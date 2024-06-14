@@ -24,7 +24,7 @@ const LogList = ({ headerNode, setItem, setMode }: Props) => {
     ) : error ? (
       <Text>{error}</Text>
     ) : (
-      <View style={{ width: '100%', flex: 1 }}>
+      <View style={styles.container}>
         <HiddenTop
           headerNode={
             <View style={{ width: '100%' }}>

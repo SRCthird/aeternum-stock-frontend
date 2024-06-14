@@ -8,12 +8,14 @@ import ProductLotAdd from "./ProductLotAdd";
 import { mode } from "@utils/types";
 import ProductHeader from "./Components/ProductHeader";
 import ProductLotView from "./ProductLotView";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductLot'>;
 }
 
 const ProductLotIndex = ({ navigation }: Props) => {
+  const styles = useTheme();
   const [key, setKey] = useState(0);
   const [mode, setMode] = useState<mode>('view');
   const [item, setItem] = useState<ProductLot>({
@@ -25,9 +27,7 @@ const ProductLotIndex = ({ navigation }: Props) => {
   });
 
   return (
-    <View style={{
-      flex: 1,
-    }}>
+    <View style={styles.container}>
       {mode === 'view' ? (
         <ProductLotView
           headerNode={
