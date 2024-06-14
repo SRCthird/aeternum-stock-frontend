@@ -90,7 +90,12 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
         textColor={styles.input_text.color}
         onSubmitEditing={handleLogin}
       />
-      <Button mode="contained" onPress={handleLogin} style={styles.button}>
+      <Button 
+        mode="contained" 
+        onPress={handleLogin} 
+        style={styles.button}
+        textColor={styles.input.backgroundColor}
+      >
         Submit
       </Button>
       <Button mode="text" onPress={() => { setMode('createAccount') }} style={styles.button}>
