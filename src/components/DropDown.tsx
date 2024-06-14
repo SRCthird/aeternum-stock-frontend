@@ -20,15 +20,7 @@ const DropDown = ({ label, placeHolder, selectedValue, loading, onValueChange, s
       style={styles.input}
     >
       <Text
-        style={{
-          position: 'absolute',
-          backgroundColor: '#f2f2f2',
-          top: -10,
-          left: 10,
-          paddingHorizontal: 5,
-          fontSize: 12,
-          color: '#6d6875',
-        }}
+        style={styles.dropdown}
       >
         {label}
       </Text>

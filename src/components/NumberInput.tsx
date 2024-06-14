@@ -1,3 +1,4 @@
+import { useTheme } from '@src/context/ThemeContext';
 import { TextInput } from 'react-native-paper';
 
 type Props = {
@@ -10,16 +11,11 @@ type Props = {
 };
 
 const NumberInput = ({ value, defaultValue, label, max, onChange, onSubmitEditing }: Props) => {
+  const styles = useTheme();
   return (
     <TextInput
-      style={{
-        marginBottom: 10,
-        maxWidth: 700,
-        width: '100%',
-        alignSelf: 'center',
-        backgroundColor: '#fff',
-      }}
-      textColor="black"
+      style={styles.input}
+      textColor={styles.input_text.color}
       label={label}
       mode="outlined"
       keyboardType="numeric"

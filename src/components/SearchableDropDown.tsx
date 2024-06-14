@@ -1,3 +1,4 @@
+import { useTheme } from '@src/context/ThemeContext';
 import { useEffect, useState, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, TouchableWithoutFeedback, Modal, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
@@ -12,6 +13,7 @@ type Props = {
 };
 
 const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubmitEditing, placeholder }: Props) => {
+  const styles = useTheme();
   const [filter, setFilter] = useState(selectedValue);
   const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -39,16 +41,10 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
         value={filter}
         onFocus={() => setShowDropdown(true)}
         placeholder={placeholder || 'Tap to search...'}
-        style={{
-          marginBottom: 10,
-          maxWidth: 700,
-          width: '100%',
-          alignSelf: 'center',
-          backgroundColor: '#fff',
-        }}
-        textColor="black"
+        style={styles.input}
+        textColor={styles.input_text.color}
         underlineColor="transparent"
-        activeOutlineColor="#6d6875"
+        activeOutlineColor={styles.accents.color}
         mode="outlined"
         editable={!showDropdown}
       />
@@ -65,14 +61,8 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
           <TextInput
             ref={inputRef}
             value={filter}
-            style={{
-              marginBottom: 10,
-              maxWidth: 700,
-              width: '100%',
-              alignSelf: 'center',
-              backgroundColor: '#fff',
-            }}
-            textColor="black"
+            style={styles.input}
+            textColor={styles.input_text.color}
             onChangeText={setFilter}
             onSubmitEditing={() => {
               if (filteredItems.length > 0) {
@@ -83,14 +73,13 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
               onSubmitEditing?.();
             }}
             autoFocus={true}
-            activeOutlineColor="#6d6875"
+            activeOutlineColor={styles.accents.color}
             mode="outlined"
           />
           <View style={{ height: 30 }} />
           <FlatList
             style={{
               maxWidth: '100%',
-              backgroundColor: 'white',
               borderRadius: 4,
             }}
             data={filteredItems}
@@ -114,37 +103,5 @@ const SearchableDropDown = ({ label, items, selectedValue, onValueChange, onSubm
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    minWidth: '100%',
-    margin: 10
-  },
-  input: {
-    fontSize: 16
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)'
-  },
-  dropdown: {
-    position: 'absolute',
-    top: 50,
-    left: 10,
-    right: 10,
-    borderRadius: 4,
-  },
-  modalInput: {
-    fontSize: 16
-  },
-  item: {
-    width: '100%',
-    borderBottomWidth: 1,
-    borderColor: '#ddd'
-  },
-  itemText: {
-    padding: 10
-  }
-});
 
 export default SearchableDropDown;
