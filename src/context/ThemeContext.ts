@@ -37,7 +37,7 @@ export const useTheme = () => {
     background_variant: "#1e1e1e",
     surface: "#1e1e1e",
     error: "#cf6679",
-    success: "#03dac6",
+    success: "#57cc99",
     on_primary: "#000000",
     on_secondary: "#000000",
     on_background: "#ffffff",
@@ -82,6 +82,16 @@ export const useTheme = () => {
       width: '100%',
       alignSelf: 'center',
     },
+    save: {
+      backgroundColor: palette.success,
+      color: palette.on_success,
+      fontSize: 18
+    },
+    delete: {
+      backgroundColor: palette.error,
+      color: palette.on_error,
+      fontSize: 18
+    },
     header_bar: {
       height: 50,
       backgroundColor: palette.background,
@@ -93,6 +103,7 @@ export const useTheme = () => {
       color: palette.on_surface
     },
     action_container: {
+      backgroundColor: palette.background,
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: 'center',
@@ -111,7 +122,7 @@ export const useTheme = () => {
     },
     card_body: {
       margin: 10,
-      backgroundColor: palette.background
+      backgroundColor: palette.background_variant
     },
     card_title: {
       fontSize: 24,
@@ -167,6 +178,33 @@ export const useTheme = () => {
       width: '100%',
       backgroundColor: palette.background_variant,
     },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      padding: 5
+    },
+    dropdown: {
+      position: 'absolute',
+      top: 50,
+      left: 10,
+      right: 10,
+      borderRadius: 4,
+      backgroundColor: palette.surface,
+      fontSize: 12,
+      color: palette.on_surface,
+    },
+    modalInput: {
+      fontSize: 16
+    },
+    item: {
+      width: '100%',
+      borderBottomWidth: 1,
+      borderColor: palette.background_variant
+    },
+    itemText: {
+      color: palette.on_background,
+      padding: 10
+    }
   })
 }
 
