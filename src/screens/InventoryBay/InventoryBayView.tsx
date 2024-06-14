@@ -5,7 +5,7 @@ import { FlatList, Text, View } from "react-native";
 import InventoryBayListItem from "./Components/InventoryBayListItem";
 import HiddenTop from "@src/components/HiddenTop";
 import { TextInput } from 'react-native-paper';
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   headerNode: ReactNode;
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const InventoryBayView = ({ headerNode, setMode, setItem }: Props) => {
+  const styles = useTheme();
   const { result, error, isLoading } = useInventoryBay({});
   const [searchQuery, setSearchQuery] = useState<string>('');
 

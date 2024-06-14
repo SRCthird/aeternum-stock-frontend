@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@screens";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 import { mode } from "@src/utils/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
@@ -13,6 +13,7 @@ type Props = {
 }
 
 const LogHeader = ({ label, setKey, setMode, navigation }: Props) => {
+  const styles = useTheme();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);

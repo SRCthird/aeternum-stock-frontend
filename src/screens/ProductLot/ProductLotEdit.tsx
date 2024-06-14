@@ -9,7 +9,7 @@ import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import NumberInput from "@src/components/NumberInput";
 import SearchableDropDown from "@src/components/SearchableDropDown";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   key_: number;
@@ -19,6 +19,7 @@ type Props = {
 }
 
 const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
+  const styles = useTheme();
   const { result: products } = useProductList();
 
   const [data, setData] = useState<ProductLot>(item);

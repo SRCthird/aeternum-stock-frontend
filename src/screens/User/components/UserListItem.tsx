@@ -1,6 +1,6 @@
 import { Avatar, Card, Paragraph } from 'react-native-paper';
 import { User } from "@src/screens/Authenticate/Hooks/useUser";
-import styles from '@src/utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 interface Props {
   user: User;
@@ -8,6 +8,7 @@ interface Props {
 }
 
 const UserListItem = ({ user, onUserSelect }: Props) => {
+  const styles = useTheme();
   const avatarUrl = user.image || 'https://www.example.com/default-avatar.png';
 
   return (

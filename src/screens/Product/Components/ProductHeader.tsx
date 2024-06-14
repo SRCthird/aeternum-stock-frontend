@@ -4,7 +4,7 @@ import { mode } from "@src/utils/types";
 import { Product } from "../Hooks/useProduct";
 import { RootStackParamList } from "@screens";
 import { StackNavigationProp } from "@react-navigation/stack";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   title: string;
@@ -15,6 +15,7 @@ type Props = {
 }
 
 const ProductHeader = ({ title, setKey, setMode, setItem, navigation }: Props) => {
+  const styles = useTheme();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);

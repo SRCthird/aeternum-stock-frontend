@@ -4,7 +4,7 @@ import { mode } from "@src/utils/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
 import { Inventory } from "../Hooks/useInventory";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const InventoryHeader = ({ setKey, setMode, setItem, navigation }: Props) => {
+  const styles = useTheme();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);

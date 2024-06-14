@@ -12,7 +12,7 @@ import NumberInput from "@src/components/NumberInput";
 import DropDown from "@src/components/DropDown";
 import useWarehouseList from "../Warehouse/Hooks/useWarehouseList";
 import { Picker } from "@react-native-picker/picker";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   key_: number;
@@ -25,6 +25,7 @@ type Props = {
 
 
 const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: Props) => {
+  const styles = useTheme();
   const { result: warehouses } = useWarehouseList();
 
   const [data, setData] = useState<InventoryBay>(item);

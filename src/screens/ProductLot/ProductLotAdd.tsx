@@ -7,7 +7,7 @@ import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import useProductList from "../Product/Hooks/useProductList";
 import SearchableDropDown from "@src/components/SearchableDropDown";
-import styles from '@utils/styles';
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -16,6 +16,7 @@ type Props = {
 }
 
 const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
+  const styles = useTheme();
   const refLotNumber = useRef<TextInput>();
   const refInternal = useRef<TextInput>();
   const refQuantity = useRef<TextInput>();

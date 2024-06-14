@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-picker/picker"
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 import { ReactNode, } from "react";
 import { Text, View } from "react-native"
 
@@ -13,6 +13,7 @@ type Props = {
 }
 
 const DropDown = ({ label, placeHolder, selectedValue, loading, onValueChange, selection }: Props) => {
+  const styles = useTheme();
 
   return (
     <View

@@ -4,7 +4,7 @@ import { mode } from "@utils/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
 import { ProductLot } from "../Hooks/useProductLot";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'ProductLot'>;
@@ -15,6 +15,7 @@ type Props = {
 }
 
 const ProductHeader = ({ navigation, label, setMode, setKey, setItem }: Props) => {
+  const styles = useTheme();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);

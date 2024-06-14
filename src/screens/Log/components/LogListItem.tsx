@@ -4,7 +4,7 @@ import { Card, Paragraph } from "react-native-paper";
 import { Dispatch, SetStateAction } from "react";
 import { mode } from "@src/utils/types";
 import { AntDesign } from '@expo/vector-icons';
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   log: Log
@@ -13,6 +13,7 @@ type Props = {
 }
 
 const LogListItem = ({ log, setItem, setMode }: Props) => {
+  const styles = useTheme();
 
   const formatDate = (date?: Date) => {
     const dt = moment(date);

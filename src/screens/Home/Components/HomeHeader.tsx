@@ -4,7 +4,7 @@ import { RootStackParamList } from '@screens';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { mode } from '../types';
 import UserMenu from '@src/screens/User/components/UserMenu';
-import styles from '@src/utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   title: string;
@@ -13,6 +13,7 @@ type Props = {
 }
 
 const Header = ({ title, setMode, navigation }: Props) => {
+  const styles = useTheme();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);

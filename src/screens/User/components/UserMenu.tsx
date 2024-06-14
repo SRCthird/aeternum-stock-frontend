@@ -1,6 +1,6 @@
 import { useAccount } from "@context/AccountContext";
 import { useAuth } from "@src/context/AuthContext";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 import { useState } from "react";
 import { Menu } from "react-native-paper";
 
@@ -9,6 +9,7 @@ type Props = {
   Appbar: any;
 }
 const UserMenu = ({ navigation, Appbar }: Props) => {
+  const styles = useTheme();
   const { user } = useAccount();
   const { setAuth } = useAuth();
 

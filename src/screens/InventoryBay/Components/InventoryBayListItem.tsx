@@ -1,6 +1,6 @@
+import { useTheme } from '@src/context/ThemeContext';
 import { InventoryBay } from '../Hooks/useInventoryBay';
 import { mode } from "@utils/types";
-import styles from '@src/utils/styles';
 import { Card, Paragraph } from 'react-native-paper';
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
   setItem: (item: InventoryBay) => void;
 }
 const InventoryBayListItem = ({ listItem, setMode, setItem }: Props) => {
+  const styles = useTheme();
 
   return (
     <Card

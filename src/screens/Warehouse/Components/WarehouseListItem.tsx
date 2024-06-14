@@ -1,7 +1,7 @@
+import { useTheme } from '@src/context/ThemeContext';
 import { Warehouse } from '../Hooks/useWarehouse';
 import { mode } from '@utils/types';
 import { Card } from 'react-native-paper';
-import styles from '@src/utils/styles';
 
 type Props = {
   listItem: Warehouse;
@@ -9,6 +9,7 @@ type Props = {
   setItem: (item: Warehouse) => void;
 }
 const WarehouseListItem = ({ listItem, setMode, setItem }: Props) => {
+  const styles = useTheme();
 
   return (
     <Card

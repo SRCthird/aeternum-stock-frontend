@@ -4,7 +4,7 @@ import { mode } from "@src/utils/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
 import UserMenu from "./UserMenu";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -12,6 +12,7 @@ type Props = {
 }
 
 const UserHeader = ({ setMode, navigation }: Props) => {
+  const styles = useTheme();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);

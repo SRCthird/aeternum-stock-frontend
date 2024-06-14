@@ -6,7 +6,7 @@ import HiddenTop from '@src/components/HiddenTop';
 import { View } from "react-native";
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import { TextInput } from 'react-native-paper';
-import styles from '@src/utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -15,6 +15,7 @@ type Props = {
 }
 
 const InventoryView = ({ setMode, setItem, headerNode }: Props) => {
+  const styles = useTheme();
   const { result, error, isLoading } = useInventory({});
   const [searchQuery, setSearchQuery] = useState<string>('');
 

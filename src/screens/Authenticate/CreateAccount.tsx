@@ -1,16 +1,18 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
 import { TextInput, Button, Appbar } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
 import { authState as mode } from '.';
 import { postUser, validateUser } from './Utils';
-import styles from '@src/utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
 }
 
 const CreateAccount = ({ setMode }: Props) => {
+  const styles = useTheme();
+
   const refPass = useRef<TextInput>();
   const refVerifyPass = useRef<TextInput>();
   const refFirst = useRef<TextInput>();

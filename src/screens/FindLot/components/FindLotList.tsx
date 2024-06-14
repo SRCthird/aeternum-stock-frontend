@@ -6,7 +6,7 @@ import HiddenTop from "@src/components/HiddenTop";
 import { TextInput } from "react-native-paper";
 import useProductLot, { ProductLot } from "@src/screens/ProductLot/Hooks/useProductLot";
 import ProductLotListItem from "@src/screens/ProductLot/Components/ProductLotListItem";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   headerNode: ReactNode;
@@ -15,6 +15,7 @@ type Props = {
 }
 
 const ProductListView = ({ headerNode, setMode, setItem }: Props) => {
+  const styles = useTheme();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { result, error, isLoading } = useProductLot({});
 

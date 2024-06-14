@@ -3,7 +3,7 @@ import { mode } from './types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '..';
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import styles from '@src/utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -12,6 +12,7 @@ type Props = {
 }
 
 const Actions = ({ setMode, setTitle, navigation }: Props) => {
+  const styles = useTheme();
 
   useEffect(() => {
     setTitle('Actions');

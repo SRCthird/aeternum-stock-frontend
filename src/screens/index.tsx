@@ -35,6 +35,7 @@ const Stack = createStackNavigator();
 const Screens = () => {
   return (
     <Authenticate>
+
       <Stack.Navigator screenOptions={{
         headerShown: false
       }}>

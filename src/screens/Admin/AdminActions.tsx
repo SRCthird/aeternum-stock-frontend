@@ -1,13 +1,14 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '..';
-import styles from '@src/utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Admin'>;
 }
 
 const AdminActions = ({ navigation }: Props) => {
+  const styles = useTheme();
   return (
     <View style={styles.action_container}>
       <TouchableOpacity style={styles.action_body} onPress={() => { navigation.navigate('Product') }}>

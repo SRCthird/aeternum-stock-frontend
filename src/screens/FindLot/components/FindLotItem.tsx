@@ -1,7 +1,7 @@
+import { useTheme } from "@src/context/ThemeContext";
 import useInventory from "@src/screens/Inventory/Hooks/useInventory";
 import useLog from "@src/screens/Log/hooks/useLogs";
 import { ProductLot } from "@src/screens/ProductLot/Hooks/useProductLot";
-import styles from "@src/utils/styles";
 import { mode } from "@src/utils/types";
 import moment from "moment";
 import { Dispatch, SetStateAction } from "react";
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const LotProfile = ({ item, setMode }: Props) => {
+  const styles = useTheme();
   const { logs } = useLog({ lot_number: item.lot_number });
   const { result } = useInventory({ lot_number: item.lot_number });
 

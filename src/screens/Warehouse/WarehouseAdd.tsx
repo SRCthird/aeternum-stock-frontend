@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from '@utils/types';
 import SaveButton from "@src/components/SaveButton";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   key_: number;
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const WarehouseAdd = ({ key_, setKey, setMode }: Props) => {
+  const styles = useTheme();
   const [data, setData] = useState<Warehouse>({
     id: 0,
     name: '',

@@ -5,7 +5,7 @@ import LogListItem from "./LogListItem"
 import { mode } from "@src/utils/types"
 import HiddenTop from "@src/components/HiddenTop"
 import { TextInput } from "react-native-paper"
-import styles from "@src/utils/styles"
+import { useTheme } from "@src/context/ThemeContext"
 
 type Props = {
   headerNode: ReactNode
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const LogList = ({ headerNode, setItem, setMode }: Props) => {
+  const styles = useTheme();
   const [searchQuery, setSearchQuery] = useState<string>('')
   const { logs, error, loading } = useLog({})
 

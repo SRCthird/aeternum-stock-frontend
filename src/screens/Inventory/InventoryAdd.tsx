@@ -12,7 +12,7 @@ import useLotLookup from "../ProductLot/Hooks/useLotLookup";
 import { useAccount } from "@src/context/AccountContext";
 import SearchableDropDown from "@src/components/SearchableDropDown";
 import { AxiosError } from "axios";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -21,6 +21,8 @@ type Props = {
 }
 
 const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
+  const styles = useTheme();
+
   const { user } = useAccount();
   const { result: lots } = useProductLotList();
   const { result: locations } = useInventoryBayList();

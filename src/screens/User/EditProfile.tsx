@@ -4,7 +4,7 @@ import { Alert, View } from 'react-native';
 import { Button, TextInput, Text, RadioButton } from 'react-native-paper';
 import { User } from "../Authenticate/Hooks/useUser";
 import { api } from "../Authenticate/Login";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   user: User;
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const EditProfile = ({ user, setUser, setMode, admin }: Props) => {
+  const styles = useTheme();
   const [data, setData] = useState<User>(user);
 
   const handleSave = () => {

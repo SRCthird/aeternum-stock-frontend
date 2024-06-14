@@ -4,13 +4,14 @@ import { User } from "../Authenticate/Hooks/useUser"
 import { Image, View } from 'react-native'
 import { Card, Title, Paragraph, Caption } from 'react-native-paper'
 import { useAccount } from "@src/context/AccountContext"
-import styles from "@src/utils/styles"
+import { useTheme } from "@src/context/ThemeContext"
 
 type Props = {
   user: User;
   setMode?: Dispatch<SetStateAction<mode>>
 }
 const ViewProfile = ({ user, setMode }: Props) => {
+  const styles = useTheme();
   const [allowEdit, setAllowEdit] = useState(false)
   const { user: currentUser } = useAccount();
 

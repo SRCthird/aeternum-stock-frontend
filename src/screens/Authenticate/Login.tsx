@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { View, Image, StyleSheet, Alert } from 'react-native';
+import { View, Image, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { authState as mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
 import axios from 'axios';
-import styles from '@utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -16,6 +16,8 @@ type Props = {
 export const api = axios.create();
 
 const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
+  const styles = useTheme();
+  
   const refPassword = useRef<TextInput>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

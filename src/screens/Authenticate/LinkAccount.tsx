@@ -5,7 +5,7 @@ import * as Crypto from 'expo-crypto';
 import { authState as mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { validateUser } from './Utils';
-import styles from '@src/utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -14,6 +14,8 @@ type Props = {
 }
 
 const LinkAccount = ({ setMode, _user, _password }: Props) => {
+  const styles = useTheme();
+  
   const refPass = useRef<TextInput>();
   const refEndpoint = useRef<TextInput>();
   const refApiKey = useRef<TextInput>();
@@ -43,9 +45,15 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Appbar>
-        <Appbar.BackAction onPress={() => setMode('login')} />
-        <Appbar.Content title="Link Account" />
+      <Appbar style={styles.header_bar}>
+        <Appbar.BackAction 
+          onPress={() => setMode('login')}
+          color={styles.accents.color}
+        />
+        <Appbar.Content 
+          title="Link Account" 
+          titleStyle={styles.header_title}
+        />
       </Appbar>
       <View style={styles.container}>
         <TextInput

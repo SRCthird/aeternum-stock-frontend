@@ -3,8 +3,8 @@ import { mode } from "@utils/types";
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Caption, Card, Paragraph } from 'react-native-paper';
-import styles from '@src/utils/styles';
 import { api } from '@src/screens/Authenticate/Login';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   listItem: Inventory;
@@ -12,6 +12,7 @@ type Props = {
   setItem: (item: Inventory) => void;
 }
 const InventoryListItem = ({ listItem, setMode, setItem }: Props) => {
+  const styles = useTheme();
   const [edited, setEdited] = useState(false);
   const [product, setProduct] = useState("")
 

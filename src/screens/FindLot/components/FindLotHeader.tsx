@@ -2,10 +2,10 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@screens";
 import UserMenu from "@src/screens/User/components/UserMenu";
-import styles from "@src/utils/styles";
 import { mode } from "@utils/types";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'FindLot'>;
@@ -15,6 +15,7 @@ type Props = {
 }
 
 const FindLotHeader = ({ navigation, label, setMode }: Props) => {
+  const styles = useTheme(); 
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);

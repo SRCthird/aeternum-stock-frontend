@@ -1,13 +1,14 @@
+import { useTheme } from "@src/context/ThemeContext";
 import { Log } from "../hooks/useLogs";
 import moment from "moment";
 import { Card, Paragraph } from "react-native-paper";
-import styles from "@src/utils/styles";
 
 type Props = {
   log: Log
 }
 
 const LogListItem = ({ log }: Props) => {
+  const styles = useTheme();
 
   const formatDate = (date?: Date) => {
     const dt = moment(date);

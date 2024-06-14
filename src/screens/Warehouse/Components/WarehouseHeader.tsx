@@ -4,7 +4,7 @@ import { mode } from '@utils/types';
 import { Dispatch, SetStateAction, useState } from "react";
 import { Appbar, Menu } from "react-native-paper";
 import { Warehouse } from "../Hooks/useWarehouse";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 interface Props {
   title: string;
@@ -15,6 +15,7 @@ interface Props {
 }
 
 const WarehouseHeader = ({ title, navigation, setMode, setItem, setKey }: Props) => {
+  const styles = useTheme();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);

@@ -5,7 +5,7 @@ import { FlatList, Text, View } from "react-native";
 import ProductListItem from "./Components/ProductListItem";
 import HiddenTop from "@src/components/HiddenTop";
 import { mode } from "@src/utils/types";
-import styles from "@src/utils/styles";
+import { useTheme } from "@src/context/ThemeContext";
 
 type Props = {
   setMode: Dispatch<SetStateAction<mode>>;
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const ProductListView = ({ setMode, setItem, headerNode }: Props) => {
+  const styles = useTheme();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { result, error, isLoading } = useProduct({});
 

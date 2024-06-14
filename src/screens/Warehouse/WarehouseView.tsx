@@ -5,7 +5,7 @@ import { mode } from '@utils/types';
 import { ReactNode, useState } from 'react';
 import HiddenTop from '@src/components/HiddenTop';
 import { TextInput } from 'react-native-paper';
-import styles from '@src/utils/styles';
+import { useTheme } from '@src/context/ThemeContext';
 
 type Props = {
   headerNode: ReactNode;
@@ -14,6 +14,7 @@ type Props = {
 }
 
 const WarehouseView = ({ headerNode, setMode, setItem }: Props) => {
+  const styles = useTheme();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { result, error, isLoading } = useWarehouse({});
 
