@@ -59,6 +59,7 @@ const LogIndex = ({ navigation }: Props) => {
           <LogListItem
             log={item}
           />
+          <View style={{ flex: 1 }} />
         </View>
       )
   }
