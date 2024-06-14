@@ -1,4 +1,23 @@
 import { StyleSheet } from "react-native";
+import { Platform } from "react-native";
+
+const palette = {
+  primary: "#d0bcff",
+  primary_variant: "#e4c1f9",
+  secondary: "#219ebc",
+  secondary_variant: "#00b4d8",
+  background: "#ffffff",
+  background_variant: "#fff",
+  surface: "#edf6f9",
+  error: "#fc0b77",
+  success: "#80ed99",
+  on_primary: "#ffffff",
+  on_secondary: "#ffffff",
+  on_background: "#000000",
+  on_surface: "#343a40",
+  on_error: "#ffffff",
+  on_success: "#ffffff"
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -18,12 +37,17 @@ const styles = StyleSheet.create({
     maxWidth: 700,
     width: '100%',
     alignSelf: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: palette.background_variant,
   },
   input_text: {
-    color: 'black'
+    color: palette.on_background
   },
-  button: {
+  button: Platform.OS === "ios" ? {
+    marginBottom: 10,
+    width: 700,
+    minWidth: '100%',
+    alignSelf: 'center',
+  }: {
     marginBottom: 10,
     maxWidth: 700,
     width: '100%',
@@ -31,13 +55,13 @@ const styles = StyleSheet.create({
   },
   header_bar: {
     height: 50,
-    backgroundColor: 'white',
+    backgroundColor: palette.background,
   },
   header_title: {
-    color: 'black'
+    color: palette.on_background
   },
   accents: {
-    color: 'gray'
+    color: palette.on_surface
   },
   action_container: {
     flex: 1,
@@ -46,34 +70,34 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   action_body: {
-    backgroundColor: '#219ebc',
+    backgroundColor: palette.secondary,
     padding: 30,
     marginBottom: 5,
     width: '100%',
     alignItems: 'center',
   },
   action_text: {
-    color: '#ffffff',
+    color: palette.on_secondary,
     fontSize: 18,
   },
   card_body: {
     margin: 10,
-    backgroundColor: 'white'
+    backgroundColor: palette.background
   },
   card_title: {
     fontSize: 24,
-    color: "black",
+    color: palette.on_background,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   card_paragraph: {
     fontSize: 18,
-    color: 'black',
+    color: palette.on_background,
     textAlign: 'center',
     marginBottom: 10,
   },
   card_caption: {
-    color: 'black'
+    color: palette.on_background,
   },
   image: {
     width: 150,
@@ -92,7 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     marginLeft: 10,
-    color: 'black'
+    color: palette.on_background,
   },
   card_container: {
     flexDirection: 'row',
@@ -112,7 +136,7 @@ const styles = StyleSheet.create({
   },
   search_input: {
     width: '100%',
-    backgroundColor: 'white',
+    backgroundColor: palette.background_variant,
   },
 })
 
