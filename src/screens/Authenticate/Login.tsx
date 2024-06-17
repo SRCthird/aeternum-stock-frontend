@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { View, Image, Alert } from 'react-native';
+import { View, Alert, ImageBackground, Image, useColorScheme } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { authState as mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,7 +17,8 @@ export const api = axios.create();
 
 const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
   const styles = useTheme();
-  
+  const theme = useColorScheme();
+
   const refPassword = useRef<TextInput>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -66,45 +67,64 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={{ flex: 1 }} />
-      <View style={styles.title_card}>
-        <Image
-          source={require('../../../assets/Title2.png')}
+    <ImageBackground
+      source={
+        theme === 'light' ? require('assets/background/space-light.png') : require('assets/background/space.png')
+      }
+      style={{
+        flex: 1,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      imageStyle={{ resizeMode: 'cover' }}
+    >
+      <View style={{
+        width: '90%',
+        height: '90%',
+        borderRadius: 15,
+        backgroundColor: styles.input.backgroundColor,
+        opacity: 0.7
+      }}>
+        <View style={{ flex: 1 }} />
+        <View style={styles.title_card}>
+          <Image
+            source={require('../../../assets/Title2.png')}
+          />
+        </View>
+        <View style={{ flex: 1 }} />
+        <TextInput
+          label="Username"
+          value={username}
+          onChangeText={setUsername}
+          style={styles.input}
+          textColor={styles.input_text.color}
+          onSubmitEditing={() => refPassword.current.focus()}
         />
+        <TextInput
+          ref={refPassword}
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+          textColor={styles.input_text.color}
+          onSubmitEditing={handleLogin}
+        />
+        <Button
+          mode="contained"
+          onPress={handleLogin}
+          style={styles.button}
+          textColor={styles.input.backgroundColor}
+        >
+          Submit
+        </Button>
+        <Button mode="text" onPress={() => { setMode('createAccount') }} style={styles.button}>
+          Create Account
+        </Button>
+        <View style={{ flex: 3 }} />
       </View>
-      <View style={{ flex: 1 }} />
-      <TextInput
-        label="Username"
-        value={username}
-        onChangeText={setUsername}
-        style={styles.input}
-        textColor={styles.input_text.color}
-        onSubmitEditing={() => refPassword.current.focus()}
-      />
-      <TextInput
-        ref={refPassword}
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-        textColor={styles.input_text.color}
-        onSubmitEditing={handleLogin}
-      />
-      <Button 
-        mode="contained" 
-        onPress={handleLogin} 
-        style={styles.button}
-        textColor={styles.input.backgroundColor}
-      >
-        Submit
-      </Button>
-      <Button mode="text" onPress={() => { setMode('createAccount') }} style={styles.button}>
-        Create Account
-      </Button>
-      <View style={{ flex: 3 }} />
-    </View>
+    </ImageBackground>
   );
 };
 

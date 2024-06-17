@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, ImageBackground, useColorScheme } from 'react-native';
 import { TextInput, Button, Appbar } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
 import { authState as mode } from '.';
@@ -15,7 +15,8 @@ type Props = {
 
 const LinkAccount = ({ setMode, _user, _password }: Props) => {
   const styles = useTheme();
-  
+  const theme = useColorScheme();
+
   const refPass = useRef<TextInput>();
   const refEndpoint = useRef<TextInput>();
   const refApiKey = useRef<TextInput>();
@@ -44,59 +45,80 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Appbar style={styles.header_bar}>
-        <Appbar.BackAction 
-          onPress={() => setMode('login')}
-          color={styles.accents.color}
-        />
-        <Appbar.Content 
-          title="Link Account" 
-          titleStyle={styles.header_title}
-        />
-      </Appbar>
-      <View style={styles.container}>
-        <TextInput
-          label="Username"
-          value={username}
-          onChangeText={setUsername}
-          style={styles.input}
-          textColor={styles.input_text.color}
-          onSubmitEditing={() => refPass.current.focus()}
-        />
-        <TextInput
-          ref={refPass}
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          style={styles.input}
-          textColor={styles.input_text.color}
-          onSubmitEditing={() => refEndpoint.current.focus()}
-        />
-        <TextInput
-          ref={refEndpoint}
-          label="Endpoint"
-          value={endpoint}
-          onChangeText={setEndpoint}
-          style={styles.input}
-          textColor={styles.input_text.color}
-          onSubmitEditing={() => refApiKey.current.focus()}
-        />
-        <TextInput
-          ref={refApiKey}
-          label="API Key"
-          value={apiKey}
-          onChangeText={setApiKey}
-          style={styles.input}
-          textColor={styles.input_text.color}
-          onSubmitEditing={handleLinkAccount}
-        />
-        <Button mode="contained" onPress={handleLinkAccount} style={styles.button}>
-          Link Account
-        </Button>
+    <ImageBackground
+      source={
+        theme === 'light' ? require('assets/background/space-light.png') : require('assets/background/space.png')
+      }
+      style={{
+        flex: 1,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      imageStyle={{ resizeMode: 'cover' }}
+    >
+      <View style={{
+        width: '90%',
+        height: '90%',
+        borderRadius: 15,
+        backgroundColor: styles.input.backgroundColor,
+        opacity: 0.7,
+        overflow: 'hidden'
+      }}>
+        <Appbar style={styles.header_bar}>
+          <Appbar.BackAction
+            onPress={() => setMode('login')}
+            color={styles.accents.color}
+          />
+          <Appbar.Content
+            title="Link Account"
+            titleStyle={styles.header_title}
+          />
+        </Appbar>
+        <View style={styles.container}>
+          <TextInput
+            label="Username"
+            value={username}
+            onChangeText={setUsername}
+            style={styles.input}
+            textColor={styles.input_text.color}
+            onSubmitEditing={() => refPass.current.focus()}
+          />
+          <TextInput
+            ref={refPass}
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+            textColor={styles.input_text.color}
+            onSubmitEditing={() => refEndpoint.current.focus()}
+          />
+          <TextInput
+            ref={refEndpoint}
+            label="Endpoint"
+            value={endpoint}
+            onChangeText={setEndpoint}
+            style={styles.input}
+            textColor={styles.input_text.color}
+            onSubmitEditing={() => refApiKey.current.focus()}
+          />
+          <TextInput
+            ref={refApiKey}
+            label="API Key"
+            value={apiKey}
+            onChangeText={setApiKey}
+            style={styles.input}
+            textColor={styles.input_text.color}
+            onSubmitEditing={handleLinkAccount}
+          />
+          <View style={{ flex: 1 }} />
+          <Button mode="contained" onPress={handleLinkAccount} style={styles.button}>
+            Link Account
+          </Button>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
