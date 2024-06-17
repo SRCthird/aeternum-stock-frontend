@@ -45,18 +45,6 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
   };
 
   return (
-    <ImageBackground
-      source={
-        theme === 'light' ? require('assets/background/space-light.png') : require('assets/background/space.png')
-      }
-      style={{
-        flex: 1,
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-      imageStyle={{ resizeMode: 'cover' }}
-    >
       <View style={{
         width: '90%',
         height: '90%',
@@ -118,7 +106,6 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
           </Button>
         </View>
       </View>
-    </ImageBackground>
   );
 };
 
