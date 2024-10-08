@@ -4,6 +4,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "icon": "./assets/icon.png",
   "userInterfaceStyle": "automatic",
+  "homepage": "/inventory/",
   "splash": {
     "image": "./assets/splash.png",
     "resizeMode": "contain",
@@ -11,14 +12,16 @@
   },
   "scripts": {
     "start": "expo start",
-    "start:backend": "cd backend && npm run start:dev",
+    "start:prod": "serve -s dist -l 8080 --ssl-cert C:/Aeternum-Stock/backend/ssl/certificate.cer --ssl-key C:/Aeternum-Stock/backend/ssl/private.key",
     "android": "expo start --android",
     "android:build": "expo build:android",
     "ios": "expo start --ios",
     "ios:build": "expo build:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "web:build": "expo export --platform web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~3.2.1",
     "@expo/vector-icons": "^14.0.0",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.0.1",
@@ -32,10 +35,13 @@
     "expo": "^51.0.8",
     "expo-crypto": "~13.0.2",
     "expo-dev-client": "~4.0.14",
+    "expo-image": "~1.12.12",
     "expo-sqlite": "~14.0.3",
     "expo-status-bar": "~1.12.1",
+    "expo-system-ui": "~3.0.6",
     "moment": "^2.30.1",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.74.1",
     "react-native-crypto-js": "^1.0.0",
     "react-native-date-picker": "^5.0.0",
@@ -46,11 +52,8 @@
     "react-native-screens": "^3.30.1",
     "react-native-sqlite-storage": "^6.0.1",
     "react-native-svg": "15.2.0",
-    "react-dom": "18.2.0",
     "react-native-web": "~0.19.10",
-    "@expo/metro-runtime": "~3.2.1",
-    "expo-system-ui": "~3.0.6",
-    "expo-image": "~1.12.12"
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

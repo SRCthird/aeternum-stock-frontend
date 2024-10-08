@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { View, Alert, ImageBackground, useColorScheme } from 'react-native';
+import { View, Alert, ImageBackground, useColorScheme, Platform } from 'react-native';
 import { TextInput, Button, Appbar } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
 import { authState as mode } from '.';
@@ -39,7 +39,11 @@ const LinkAccount = ({ setMode, _user, _password }: Props) => {
         AsyncStorage.setItem(`${username}:apiKey`, apiKey);
       })
       .catch(err => {
-        Alert.alert('Error', err.message);
+        if (Platform.OS === 'web') {
+          alert(`Error:${err.message}`)
+        } else {
+          Alert.alert('Error', err.message);
+        }
       });
     setMode('login');
   };

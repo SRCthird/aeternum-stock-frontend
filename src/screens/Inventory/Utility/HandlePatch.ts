@@ -1,4 +1,4 @@
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import { Inventory } from "../Hooks/useInventory";
 import { mode } from "@utils/types";
 import { api } from '@screens/Authenticate/Login';
@@ -12,6 +12,14 @@ type Props = {
   newItem: Inventory;
 }
 
+const fixAlert = (title: string, text: string) => {
+  if (Platform.OS === 'web') {
+    alert(`${title}\n${text}`)
+  } else {
+    Alert.alert(title, text)
+  }
+}
+
 const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Props) => {
   const fullMove = async (id: number, item: Inventory) => {
     api.patch(`/api/inventory/${id}`, {...item})
@@ -22,13 +30,13 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
       })
       .catch(err => {
         if (err.response.status === 400) {
-          Alert.alert('Error', 'Lot does not exist.');
+          fixAlert('Error', 'Lot does not exist.');
         } else if (err.response.status === 422) {
-          Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
+          fixAlert('Error', 'Inventory quantity exceeds product lot quantity');
         } else if (err.response.status === 428) {
-          Alert.alert('Error', 'Inventory bay does not exist');
+          fixAlert('Error', 'Inventory bay does not exist');
         } else {
-          Alert.alert('Error', err.message);
+          fixAlert('Error', err.message);
         }
       });
   }
@@ -42,13 +50,13 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
       })
       .catch(err => {
         if (err.response.status === 400) {
-          Alert.alert('Error', 'Lot does not exist.');
+          fixAlert('Error', 'Lot does not exist.');
         } else if (err.response.status === 422) {
-          Alert.alert('Error', 'Inventory quantity exceeds product lot quantity');
+          fixAlert('Error', 'Inventory quantity exceeds product lot quantity');
         } else if (err.response.status === 428) {
-          Alert.alert('Error', 'Inventory bay does not exist');
+          fixAlert('Error', 'Inventory bay does not exist');
         } else {
-          Alert.alert('Error', err.message);
+          fixAlert('Error', err.message);
         }
       });
   }
@@ -64,25 +72,25 @@ const handlePatch = async ({ setKey, setMode, setSubmit, oldItem, newItem }: Pro
       .catch(err => {
         if (err.response.status === 400) {
           subtractOld(item, subtracted);
-          Alert.alert('Error', 'Inventory bay is at capacity for unique lots');
+          fixAlert('Error', 'Inventory bay is at capacity for unique lots');
         } else if (err.response.status === 422) {
           subtractOld(item, subtracted);
-          Alert.alert('Error', 'Product lot does not exist');
+          fixAlert('Error', 'Product lot does not exist');
         } else if (err.response.status === 428) {
           subtractOld(item, subtracted);
-          Alert.alert('Error', 'Inventory bay does not exist');
+          fixAlert('Error', 'Inventory bay does not exist');
         } else if (err.response.status === 409) {
           subtractOld(item, subtracted);
-          Alert.alert('Error', 'Overflow of lot size. Check lot quantity.');
+          fixAlert('Error', 'Overflow of lot size. Check lot quantity.');
         } else {
-          Alert.alert('Error', err.message);
+          fixAlert('Error', err.message);
         }
       });
   }
 
   newItem.from_location = oldItem.location;
   if (newItem.location === oldItem.location) {
-    Alert.alert('Error', 'Location must be different from the original location.');
+    fixAlert('Error', 'Location must be different from the original location.');
     return;
   }
   if (newItem.quantity === oldItem.quantity) {

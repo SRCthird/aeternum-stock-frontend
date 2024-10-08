@@ -8,6 +8,7 @@ import SaveButton from "@src/components/SaveButton";
 import useProductList from "../Product/Hooks/useProductList";
 import SearchableDropDown from "@src/components/SearchableDropDown";
 import { useTheme } from "@src/context/ThemeContext";
+import { fixAlert } from "@src/components/deleteAlert";
 
 type Props = {
   setKey: Dispatch<SetStateAction<number>>;
@@ -35,7 +36,7 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
   useEffect(() => {
     if (!submit) return;
     if (data.quantity <= 0) {
-      Alert.alert('Invalid quantity', 'Quantity must be greater than 0.');
+      fixAlert('Invalid quantity', 'Quantity must be greater than 0.');
       return;
     }
     const { id: _, ...putData } = data;
@@ -48,11 +49,11 @@ const ProductLotAdd = ({ setKey, setMode, setItem }: Props) => {
       })
       .catch(err => {
         if (err.response.status === 404) {
-          Alert.alert('Product does not exist', 'Please check the product name and try again.');
+          fixAlert('Product does not exist', 'Please check the product name and try again.');
         } else if (err.response.status === 409) {
-          Alert.alert('Conflict', 'Lot number or workorder already exists.');
+          fixAlert('Conflict', 'Lot number or workorder already exists.');
         } else {
-          Alert.alert('Error', err.message);
+          fixAlert('Error', err.message);
         }
       });
     setSubmit(false);

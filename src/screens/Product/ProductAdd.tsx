@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { TextInput } from 'react-native-paper';
 import { Product } from "./Hooks/useProduct";
-import { Alert, View } from "react-native";
+import { Alert, Platform, View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
 import { useTheme } from "@src/context/ThemeContext";
+import { fixAlert } from "@src/components/deleteAlert";
 
 type Props = {
   key_: number;
@@ -32,7 +33,7 @@ const ProductAdd = ({ key_, setKey, setMode }: Props) => {
         setMode('view');
       })
       .catch(err => {
-        Alert.alert('Error', err.message);
+        fixAlert('Error', err.message);
       });
     setSubmit(false);
   }, [submit]);

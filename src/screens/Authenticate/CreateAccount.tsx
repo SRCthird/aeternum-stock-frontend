@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { View, Alert, ImageBackground, useColorScheme } from 'react-native';
+import { View, Alert, ImageBackground, useColorScheme, Platform } from 'react-native';
 import { TextInput, Button, Appbar } from 'react-native-paper';
 import * as Crypto from 'expo-crypto';
 import { authState as mode } from '.';
@@ -30,7 +30,11 @@ const CreateAccount = ({ setMode }: Props) => {
 
   const handleCreateAccount = async () => {
     if (password !== verifyPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+      if (Platform.OS === 'web') {
+        alert('Error:\nPasswords do not match')
+      } else {
+        Alert.alert('Error', 'Passwords do not match');
+      }
       return;
     }
 
@@ -51,11 +55,19 @@ const CreateAccount = ({ setMode }: Props) => {
             setMode('login');
           })
           .catch(err => {
-            Alert.alert('Error', err.message);
+            if (Platform.OS === 'web') {
+              alert(`Error:\n${err.message}`)
+            } else {
+              Alert.alert('Error', err.message);
+            }
           });
       })
       .catch(err => {
-        Alert.alert('Error', err.message);
+        if (Platform.OS === 'web') {
+          alert(`Error:\n${err.message}`)
+        } else {
+          Alert.alert('Error', err.message);
+        }
       });
   };
 

@@ -3,7 +3,7 @@ import { Appbar, Menu, TextInput } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@screens";
 import { InventoryBay } from "./Hooks/useInventoryBay";
-import { Alert, View } from "react-native";
+import { Alert, Platform, View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
@@ -13,6 +13,8 @@ import DropDown from "@src/components/DropDown";
 import useWarehouseList from "../Warehouse/Hooks/useWarehouseList";
 import { Picker } from "@react-native-picker/picker";
 import { useTheme } from "@src/context/ThemeContext";
+import { deleteAlert, fixAlert } from "@src/components/deleteAlert";
+import { AxiosError } from "axios";
 
 type Props = {
   key_: number;
@@ -31,34 +33,6 @@ const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: 
   const [data, setData] = useState<InventoryBay>(item);
   const [submit, setSubmit] = useState(false);
 
-  const deleteAlert = (item: InventoryBay) => {
-    Alert.alert(
-      "Delete Inventory Bay",
-      "Are you sure you want to delete this Inventory Bay?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        {
-          text: "Yes", onPress: () => (
-            api.delete('/api/inventory-bay/' + item.id)
-              .then(_ => {
-                setMode('view');
-              })
-              .catch(err => {
-                if (err.response.status === 406) {
-                  Alert.alert("Error", "Bay has inventory items, delete or move the items first.");
-                } else {
-                  Alert.alert("Error", "Failed to delete bay.\n" + err.message);
-                }
-              })
-          )
-        }
-      ]
-    );
-  }
-
   useEffect(() => {
     if (!submit) return;
     api.patch('/api/inventory-bay/' + item.id, data)
@@ -67,7 +41,11 @@ const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: 
         setMode('view');
       })
       .catch(err => {
-        Alert.alert("Error", "Failed to update bay.\n" + err.message);
+        if (Platform.OS === 'web') {
+          alert(`Error\nFailed to update bay.\n${err.message}`)
+        } else {
+          Alert.alert("Error", "Failed to update bay.\n" + err.message);
+        }
       });
     setSubmit(false);
   }, [submit]);
@@ -101,7 +79,20 @@ const InventoryBayEdit = ({ key_, setKey, setMode, item, setItem, navigation }: 
       />
       <View style={{ flex: 1 }}></View>
       <SaveButton setSubmit={setSubmit} />
-      <DeleteButton onPress={() => deleteAlert(item)} />
+      <DeleteButton onPress={() => deleteAlert({
+        item:item,
+        setMode:setMode,
+        catchMethod:(err: AxiosError) => {
+          if (err.response?.status === 406) {
+            fixAlert("Error", "Bay has inventory items, delete or move the items first.");
+          } else {
+            fixAlert("Error", "Failed to delete bay.\n" + err.message);
+          }
+        },
+        title:"Delete Inventory Bay",
+        text:"Are you sure you want to delete this Inventory Bay?",
+        apiPath: "/api/inventory-bay/"
+      })} />
     </View>
   );
 }

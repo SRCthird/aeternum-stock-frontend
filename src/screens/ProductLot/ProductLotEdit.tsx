@@ -10,6 +10,8 @@ import { mode } from "@utils/types";
 import NumberInput from "@src/components/NumberInput";
 import SearchableDropDown from "@src/components/SearchableDropDown";
 import { useTheme } from "@src/context/ThemeContext";
+import { deleteAlert, fixAlert } from "@src/components/deleteAlert";
+import { AxiosError } from "axios";
 
 type Props = {
   key_: number;
@@ -25,34 +27,6 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
   const [data, setData] = useState<ProductLot>(item);
   const [submit, setSubmit] = useState(false);
 
-  const deleteAlert = (item: ProductLot) => {
-    Alert.alert(
-      "Scrap lot",
-      "Are you sure you want to scrap this lot?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        {
-          text: "Yes", onPress: () => (
-            api.delete('/api/product-lot/' + item.id)
-              .then(_ => {
-                setMode('view');
-              })
-              .catch(err => {
-                if (err.response.status === 406) {
-                  Alert.alert("Error", "Lot has inventory dependencies.");
-                } else {
-                  Alert.alert("Error", "Failed to delete product.\n" + err.message);
-                }
-              })
-          )
-        }
-      ]
-    );
-  }
-
   useEffect(() => {
     if (!submit) return;
     api.patch('/api/product-lot/' + item.id, data)
@@ -61,7 +35,7 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
         setMode('view');
       })
       .catch(err => {
-        Alert.alert("Error", "Failed to update product.\n" + err.message);
+        fixAlert("Error", "Failed to update product.\n" + err.message);
       });
     setSubmit(false);
   }, [submit]);
@@ -102,7 +76,21 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
       <SaveButton setSubmit={setSubmit} />
       <DeleteButton
         onPress={() => {
-          deleteAlert(item)
+          deleteAlert({
+            item: item,
+            setMode: setMode,
+            catchMethod: (err: AxiosError) => {
+              if (err.response?.status === 406) {
+                fixAlert("Error", "Lot has inventory dependencies.");
+              } else {
+                fixAlert("Error", "Failed to delete product.\n" + err.message);
+              }
+            },
+
+            title: "Scrap lot",
+            text: "Are you sure you want to scrap this lot?",
+            apiPath: '/api/product-lot/',
+          })
         }}
       />
     </View>

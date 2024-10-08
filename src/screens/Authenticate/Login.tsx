@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { View, Alert, ImageBackground, Image, useColorScheme } from 'react-native';
+import { View, Alert, ImageBackground, Image, useColorScheme, Platform } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { authState as mode } from '.';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,7 +28,11 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
       try {
         await AsyncStorage.clear();
       } catch (error) {
-        Alert.alert('Error', `${error}`);
+        if (Platform.OS === 'web') {
+          alert(`Error:\n${error}`)
+        } else {
+          Alert.alert('Error', `${error}`);
+        }
       }
       return;
     }
@@ -42,6 +46,9 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
     if (hashedPassword === storedHashedPassword) {
       const endpoint = await AsyncStorage.getItem(`${username}:endpoint`);
       if (!endpoint) {
+        if (Platform.OS === 'web') {
+          alert('Error\nNo endpoint found')
+        } else {}
         Alert.alert('Error', 'No endpoint found');
         return;
       };
@@ -49,6 +56,9 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
 
       const key = await AsyncStorage.getItem(`${username}:apiKey`);
       if (!key) {
+        if (Platform.OS === 'web') {
+          alert("No API key found")
+        } else {}
         Alert.alert("No API key found");
       } else {
         api.defaults.headers['x-api-key'] = key;
@@ -62,6 +72,9 @@ const LoginScreen = ({ setMode, setUser, passPassword }: Props) => {
       passPassword(password);
       setMode('link');
     } else {
+        if (Platform.OS === 'web') {
+          alert('Error\nInvalid username or password')
+        } else {}
       Alert.alert('Error', 'Invalid username or password');
     }
   };

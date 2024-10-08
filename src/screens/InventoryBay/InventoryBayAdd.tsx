@@ -3,7 +3,7 @@ import { TextInput } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@screens";
 import { InventoryBay } from "./Hooks/useInventoryBay";
-import { Alert, View } from "react-native";
+import { Alert, Platform, View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
@@ -43,7 +43,11 @@ const InventoryBayAdd = ({ key_, setKey, setMode, navigation }: Props) => {
         setMode('view');
       })
       .catch(err => {
-        Alert.alert('Error', err.message);
+        if (Platform.OS === 'web') {
+          alert(`Error:\n${err.message}`)
+        } else {
+          Alert.alert('Error', err.message);
+        }
       });
     setSubmit(false);
   }, [submit]);

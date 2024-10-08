@@ -1,6 +1,6 @@
 import LoginScreen, { api } from "./Login";
 import { ReactNode, useEffect, useState } from "react";
-import { Alert, ImageBackground, Text, View, useColorScheme } from "react-native";
+import { Alert, ImageBackground, Platform, Text, View, useColorScheme } from "react-native";
 import CreateAccount from "./CreateAccount";
 import LinkAccount from "./LinkAccount";
 import { User } from "./Hooks/useUser";
@@ -38,7 +38,11 @@ const Authenticate = ({ children }: Props) => {
         })
         .catch(err => {
           if (err instanceof CanceledError) return;
-          Alert.alert('Error', 'Invalid username or password');
+          if (Platform.OS === 'web') {
+            alert('Error\nInvalid username or password')
+          } else {
+            Alert.alert('Error', 'Invalid username or password');
+          }
         });
     }
     if (user !== "" && auth === 'loggedIn') handleLogin();

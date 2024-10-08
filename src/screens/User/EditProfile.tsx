@@ -5,6 +5,7 @@ import { Button, TextInput, Text, RadioButton } from 'react-native-paper';
 import { User } from "../Authenticate/Hooks/useUser";
 import { api } from "../Authenticate/Login";
 import { useTheme } from "@src/context/ThemeContext";
+import { fixAlert } from "@src/components/deleteAlert";
 
 type Props = {
   user: User;
@@ -27,10 +28,10 @@ const EditProfile = ({ user, setUser, setMode, admin }: Props) => {
       })
       .catch(err => {
         if (err.response.status === 409) {
-          Alert.alert('Error', 'Username already exists');
+          fixAlert('Error', 'Username already exists');
           return;
         }
-        Alert.alert('Error', err.message || 'Failed to update profile');
+        fixAlert('Error', err.message || 'Failed to update profile');
       });
   };
 
@@ -103,9 +104,9 @@ const EditProfile = ({ user, setUser, setMode, admin }: Props) => {
           </RadioButton.Group>
         </View>
       ) : (
-        <Text 
+        <Text
           style={{
-            ...styles.input, 
+            ...styles.input,
             ...styles.input_text,
             backgroundColor: 'transparent'
           }}

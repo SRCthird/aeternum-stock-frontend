@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { createUser } from "../Hooks/useUser";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 
 export const postUserRemote = (endpoint: string, apiKey: string, user: createUser) => {
   return axios.post(endpoint + '/api/user', user, {
@@ -31,7 +31,11 @@ export const validateUserLocal = async (username: string, password: string) => {
   const userPass = await AsyncStorage.getItem(`user:${username}`);
   if (userPass === null) return;
   if (userPass === password) {
-    Alert.alert('Warning', 'This user already exists in local storage');
+    if (Platform.OS === 'web') {
+      alert('Warning:\nThis user already exists in local storage')
+    } else {
+      Alert.alert('Warning', 'This user already exists in local storage');
+    }
     return;
   }
   throw new Error('User already exists in local storage')

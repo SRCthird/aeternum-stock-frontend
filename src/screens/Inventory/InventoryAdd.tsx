@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TextInput } from 'react-native-paper';
 import { Inventory } from "./Hooks/useInventory";
-import { Alert, View } from "react-native";
+import { Alert, Platform, View } from "react-native";
 import { api } from '@screens/Authenticate/Login';
 import { mode } from "@utils/types";
 import SaveButton from "@src/components/SaveButton";
@@ -18,6 +18,14 @@ type Props = {
   setKey: Dispatch<SetStateAction<number>>;
   setMode: (mode: mode) => void;
   defaultItem?: { lot_number: string, quantity: number };
+}
+
+const fixAlert = (title: string, text: string) => {
+  if (Platform.OS === 'web') {
+    alert(`${title}\n${text}`)
+  } else {
+    Alert.alert(title, text)
+  }
 }
 
 const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
@@ -61,15 +69,15 @@ const InventoryAdd = ({ setKey, setMode, defaultItem }: Props) => {
       })
       .catch((err: AxiosError) => {
         if (err.response?.status === 413) {
-          Alert.alert('Error', 'Inventory bay is at capacity or doesn\'t exist');
+          fixAlert('Error', 'Inventory bay is at capacity or doesn\'t exist');
         } else if (err.response?.status === 422) {
-          Alert.alert('Error', 'Product lot does not exist');
+          fixAlert('Error', 'Product lot does not exist');
         } else if (err.response?.status === 428) {
-          Alert.alert('Error', 'Inventory bay does not exist');
+          fixAlert('Error', 'Inventory bay does not exist');
         } else if (err.response?.status === 409) {
-          Alert.alert('Error', 'Overflow of lot size. Check lot quantity.');
+          fixAlert('Error', 'Overflow of lot size. Check lot quantity.');
         } else {
-          Alert.alert('Error', err.message);
+          fixAlert('Error', err.message);
         }
       });
     setSubmit(false);

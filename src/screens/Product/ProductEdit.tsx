@@ -7,6 +7,8 @@ import { mode } from "@utils/types";
 import DeleteButton from "@src/components/DeleteButton";
 import SaveButton from "@src/components/SaveButton";
 import { useTheme } from "@src/context/ThemeContext";
+import { deleteAlert, fixAlert } from "@src/components/deleteAlert";
+import { AxiosError } from "axios";
 
 type Props = {
   key_: number;
@@ -15,39 +17,10 @@ type Props = {
   item: Product;
 }
 
-
 const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
   const styles = useTheme();
   const [data, setData] = useState<Product>(item);
   const [submit, setSubmit] = useState(false);
-
-  const deleteAlert = (item: Product) => {
-    Alert.alert(
-      "Delete Product",
-      "Are you sure you want to delete this product?",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        {
-          text: "Yes", onPress: () => (
-            api.delete('/api/product/' + item.id)
-              .then(_ => {
-                setMode('view');
-              })
-              .catch(err => {
-                if (err.response.status === 409) {
-                  Alert.alert("Error", "Product is in use.");
-                } else {
-                  Alert.alert("Error", "Failed to delete product.\n" + err.message);
-                }
-              })
-          )
-        }
-      ]
-    );
-  }
 
   useEffect(() => {
     if (!submit) return;
@@ -57,32 +30,48 @@ const ProductEdit = ({ key_, setKey, setMode, item }: Props) => {
         setMode('view');
       })
       .catch(err => {
-        Alert.alert("Error", "Failed to update product.\n" + err.message);
+        fixAlert("Error", "Failed to update product.\n" + err.message);
       });
     setSubmit(false);
   }, [submit]);
 
   return (
     <View style={{ flex: 1 }}>
-        <TextInput
-          style={styles.input}
-          textColor={styles.input_text.color}
-          label="name"
-          mode="outlined"
-          defaultValue={item.name}
-          onChangeText={text => { setData({ ...data, name: text }) }}
-        />
-        <TextInput
-          style={styles.input}
-          textColor={styles.input_text.color}
-          label="description"
-          mode="outlined"
-          defaultValue={item.description}
-          onChangeText={text => { setData({ ...data, description: text }) }}
-        />
-        <View style={{ flex: 1 }}></View>
-        <SaveButton setSubmit={setSubmit} />
-        <DeleteButton onPress={() => deleteAlert(item)} />
+      <TextInput
+        style={styles.input}
+        textColor={styles.input_text.color}
+        label="name"
+        mode="outlined"
+        defaultValue={item.name}
+        onChangeText={text => { setData({ ...data, name: text }) }}
+      />
+      <TextInput
+        style={styles.input}
+        textColor={styles.input_text.color}
+        label="description"
+        mode="outlined"
+        defaultValue={item.description}
+        onChangeText={text => { setData({ ...data, description: text }) }}
+      />
+      <View style={{ flex: 1 }}></View>
+      <SaveButton setSubmit={setSubmit} />
+      <DeleteButton onPress={() =>
+        deleteAlert({
+          item: item,
+          setMode: setMode,
+          catchMethod: (err: AxiosError) => {
+            if (err.response?.status === 409) {
+              fixAlert("Error", "Product is in use.");
+            } else {
+              fixAlert("Error", "Failed to delete product.\n" + err.message);
+            }
+          },
+
+          title: "Delete Product",
+          text: "Are you sure you want to delete this product?",
+          apiPath: '/api/product/',
+        })
+      } />
     </View>
   );
 }
