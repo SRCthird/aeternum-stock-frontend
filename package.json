@@ -18,7 +18,7 @@
     "ios": "expo start --ios",
     "ios:build": "expo build:ios",
     "web": "expo start --web",
-    "web:build": "expo export --platform web"
+    "web:build": "expo export --platform web && cp web/index.html dist/index.html"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.1",
