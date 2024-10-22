@@ -14,8 +14,10 @@ const UserMenu = ({ navigation, Appbar }: Props) => {
   const { setAuth } = useAuth();
 
   const [menuVisible, setMenuVisible] = useState(false);
-
-  const openMenu = () => setMenuVisible(true);
+  const openMenu = () => {
+    setTimeout(() => setMenuVisible(true), 100);
+  };
+  //const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
   const logout = () => {
